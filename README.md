@@ -1,6 +1,6 @@
 # Cadre Fenua – Objectif cadre de santé
 
-Jeu sérieux d'entraînement quotidien (environ 1 h par jour, 45 séances) pour préparer le métier de cadre de santé en Polynésie française : métier, système de santé du fenua, CHPF et fonction publique du Pays, droit et statut (normes, discipline, code du travail), management, organisation, qualité et droits du patient, projet et santé publique, concours et entretien.
+Jeu sérieux d'entraînement quotidien (environ 1 h par jour, 45 séances : 72 fiches, 270 questions) pour préparer le métier de cadre de santé en Polynésie française : métier, système de santé du fenua, CHPF et fonction publique du Pays, droit et statut (normes, discipline, code du travail), management, organisation, qualité et droits du patient, projet et santé publique, concours et entretien.
 
 ## Utilisation
 
@@ -22,7 +22,7 @@ Tout le contenu est dans le tableau `L` au début du script de `index.html`, un 
 - `o` : questions d'oral `[juré (DS, CSS, MED, DRH), question, [points attendus]]`
 - `e` : sujet d'écrit `[sujet, [pistes]]`
 
-Chaque niveau attend 5 fiches, 15 QCM, 3 situations et 5 questions d'oral.
+Chaque niveau attend 8 fiches, 30 QCM, 3 situations et 5 questions d'oral (les 3 fiches et 15 QCM supplémentaires de chaque niveau sont dans le tableau `EXT`).
 
 ## Avertissement
 
@@ -39,8 +39,25 @@ Outil d'entraînement rédigé en novembre 2026. Les chiffres et conditions de c
 - Chrono sans pause, attendus visibles seulement au débriefing, note sur 20 avec la grille du jury, historique des résultats.
 - Données : tableaux `X` (questions difficiles), `RELANCES`, `CRIT` (grille), `DOCS` (documents de l'écrit).
 
+## Simulations
+
+- **Atelier planning** (`PSC`) : Facile (construire la semaine), Moyen (réparer après deux arrêts), Difficile (semaine de tension, 15 min). Contrôle en direct du repos de 11 h, des 48 h, du jour de repos, de la couverture et de l'équité ; solution de référence vérifiée par un solveur.
+- **Dilemmes du cadre** (`DIL`) : 14 situations avec effets à court terme et conséquences à long terme.
+- **Une semaine de cadre** (`EV`) : 21 situations dont certaines n'apparaissent qu'en fonction des choix précédents (effet domino), 6 indicateurs.
+- **Niveaux** (Profil) : Normal, Difficile (chrono 45 s, corrections à la fin), Expert (25 s, indicateurs masqués, pénalités renforcées).
+
+## Installer sur Android
+
+1. Publier le dépôt avec GitHub Pages.
+2. Ouvrir l'adresse dans Chrome → bouton « Installer » (Profil) ou menu ⋮ → « Installer l'application ».
+3. Pour un fichier .apk : coller l'adresse sur pwabuilder.com → Android.
+
+Fichiers nécessaires : `index.html`, `manifest.webmanifest`, `sw.js`, `icon-192.png`, `icon-512.png`.
+
+## Publier une mise à jour
+
+Modifier `APP_V` dans `index.html` et `VERSION` dans `sw.js`, puis pousser sur GitHub. Dans l'application : Profil → « Mettre à jour ».
+
 ## Lecture audio
 
-- Le dossier `audio/` contient une version lue de chaque fiche et des documents de l'écrit (voix de synthèse française, 47 fichiers MP3). Dépose-le sur GitHub à côté de `index.html`.
-- Le bouton « 🔊 Écouter » utilise la voix du téléphone quand le navigateur en a une (Chrome, Safari) ; sinon il lit le fichier enregistré. Dans les lecteurs intégrés sans voix (comme l'appli Claude), seules les fiches et les documents de l'écrit sont lus.
-- Nom des fichiers : `f<niveau>-<fiche>.mp3` (à partir de 0) et `d<document>.mp3`. Si tu modifies une fiche, régénère son fichier.
+Le bouton « 🔊 Écouter » utilise la voix du téléphone (Chrome, Safari ou application installée).
