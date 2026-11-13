@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Cadre Fenua – Objectif cadre de santé</title>
+<style>
+:root{--bg:#f5f1e8;--card:#fffdf8;--ink:#14323a;--mut:#5d7379;--line:#e2dbcb;--lag:#0f6e78;--lag2:#d9eeee;--cor:#d9552f;--ok:#2c8a57;--okb:#e2f3e8;--ko:#b8402a;--kob:#f9e4de;--gold:#c8962e}
+@media(prefers-color-scheme:dark){:root{--bg:#0e2227;--card:#16323a;--ink:#eef4f2;--mut:#9fb6ba;--line:#27474f;--lag:#4fc0c5;--lag2:#1d4750;--cor:#f08a66;--ok:#6fd39a;--okb:#1c4634;--ko:#f39a85;--kob:#4c2a24;--gold:#e6bd62}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;-webkit-text-size-adjust:100%}
+#app{max-width:720px;margin:0 auto;padding:14px 14px 96px}
+h1{font:700 26px/1.15 Georgia,"Times New Roman",serif;margin:6px 0 2px;letter-spacing:-.01em}
+h2{font:700 20px/1.2 Georgia,serif;margin:18px 0 8px}
+h3{font-size:16px;margin:0 0 4px}
+p{margin:6px 0}
+small,.mut{color:var(--mut);font-size:13.5px}
+.band{height:10px;border-radius:6px;margin:0 0 12px;background:repeating-linear-gradient(135deg,var(--lag) 0 10px,var(--cor) 10px 14px,var(--gold) 14px 18px,var(--lag) 18px 28px)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;margin:10px 0}
+.hero{background:var(--lag);color:#fff;border:0}
+.hero small,.hero .mut{color:#d6efef}
+@media(prefers-color-scheme:dark){.hero{background:#0f6e78}}
+button{font:inherit;color:inherit;cursor:pointer}
+.btn{display:block;width:100%;border:0;border-radius:12px;padding:13px 14px;background:var(--cor);color:#fff;font-weight:700;margin-top:10px;text-align:center}
+.btn.sec{background:transparent;color:var(--lag);border:2px solid var(--lag)}
+.btn.wh{background:#fff;color:#0f6e78}
+.btn:disabled{opacity:.45}
+.row{display:flex;gap:10px;align-items:center}
+.row>*{flex:1}
+.stat{text-align:center;padding:10px 4px}
+.stat b{display:block;font:700 22px Georgia,serif}
+.bar{height:9px;background:var(--line);border-radius:9px;overflow:hidden;margin:8px 0}
+.bar i{display:block;height:100%;background:var(--gold);border-radius:9px}
+.lvl{display:flex;gap:12px;align-items:flex-start}
+.num{flex:0 0 38px;height:38px;border-radius:50%;background:var(--lag2);color:var(--lag);display:grid;place-items:center;font-weight:800}
+.days{display:flex;gap:6px;margin-top:8px}
+.day{flex:1;border:1px solid var(--line);background:var(--bg);border-radius:10px;padding:8px 0;text-align:center;font-weight:700;font-size:14px}
+.day.done{background:var(--okb);border-color:var(--ok);color:var(--ok)}
+.day.cur{border:2px solid var(--cor);color:var(--cor)}
+.day.lock{opacity:.4}
+.step{display:flex;gap:10px;align-items:center;width:100%;text-align:left;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px;margin:8px 0}
+.step .ic{flex:0 0 34px;height:34px;border-radius:9px;background:var(--lag2);display:grid;place-items:center;font-size:17px}
+.step.done{border-color:var(--ok)}
+.step .sc{margin-left:auto;font-weight:700;color:var(--ok);white-space:nowrap}
+.q{font-weight:650;font-size:17px;margin:2px 0 10px}
+.opt{display:block;width:100%;text-align:left;border:1.5px solid var(--line);background:var(--bg);border-radius:11px;padding:12px;margin:7px 0}
+.opt.good{background:var(--okb);border-color:var(--ok)}
+.opt.bad{background:var(--kob);border-color:var(--ko)}
+.fb{border-left:4px solid var(--lag);background:var(--lag2);padding:10px 12px;border-radius:0 10px 10px 0;margin-top:10px;font-size:15px}
+.fiche ul{margin:6px 0;padding-left:20px}.fiche li{margin:4px 0}
+.top{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.back{border:0;background:var(--lag2);color:var(--lag);border-radius:10px;padding:8px 12px;font-weight:700}
+.au{margin-left:auto;border:0;background:var(--lag2);color:var(--lag);border-radius:10px;padding:8px 12px;font-weight:700}
+.jur{display:flex;gap:10px;align-items:center;margin-bottom:8px}
+.av{flex:0 0 44px;height:44px;border-radius:50%;display:grid;place-items:center;color:#fff;font-weight:800}
+.timer{font:700 34px/1 Georgia,serif;text-align:center;margin:10px 0;font-variant-numeric:tabular-nums}
+textarea{width:100%;min-height:110px;border:1.5px solid var(--line);border-radius:11px;padding:10px;font:inherit;background:var(--bg);color:var(--ink)}
+label.ck{display:flex;gap:10px;align-items:flex-start;padding:9px 4px;border-bottom:1px solid var(--line)}
+label.ck input{margin-top:4px;width:19px;height:19px;flex:0 0 19px}
+nav{position:fixed;left:0;right:0;bottom:0;background:var(--card);border-top:1px solid var(--line);display:flex;justify-content:center;padding-bottom:env(safe-area-inset-bottom)}
+nav button{flex:1;max-width:144px;border:0;background:none;padding:8px 2px 9px;font-size:12px;color:var(--mut)}
+nav button span{display:block;font-size:19px}
+nav button.on{color:var(--cor);font-weight:700}
+details.card summary{cursor:pointer}select{font:inherit;padding:6px;border-radius:8px;border:1.5px solid var(--line);background:var(--bg);color:var(--ink)}
+.tag{display:inline-block;background:var(--lag2);color:var(--lag);border-radius:20px;padding:2px 10px;font-size:12.5px;font-weight:700}
+.warn{border-left:4px solid var(--gold)}
+a{color:var(--lag)}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<nav id="nav"></nav>
+<script>
+"use strict";
+/* ===================== LE CONSEIL (jury fictif) ===================== */
+const J={
+DS:{n:"Mme Teura",r:"Directrice des soins",c:"#0f6e78"},
+CSS:{n:"M. Raimana",r:"Cadre supérieur de santé",c:"#8a5a2b"},
+MED:{n:"Dr Hinano",r:"Médecin, cheffe de pôle",c:"#b8402a"},
+DRH:{n:"Mme Vaea",r:"Ressources humaines",c:"#5a4a8a"}};
+const GRILLE=["Introduction : contexte + problématique posée clairement","Plan annoncé et réellement suivi (2 ou 3 parties)","Au moins 3 notions du niveau mobilisées et expliquées","Positionnement de cadre explicite (« je ferais… parce que… »)","Lien concret avec le contexte polynésien","Conclusion qui répond à la problématique et ouvre","Relecture : orthographe, phrases courtes, lisibilité"];
+
+/* ===================== CONTENU : 8 NIVEAUX =====================
+ f = fiches [titre, html] · q = QCM [question,[bonne réponse, autres…],explication]
+ c = mises en situation {t,s,o:[[option,points 0-2,retour]]} · o = oraux [juré,question,[points attendus]]
+ e = écrit [sujet,[pistes]]                                        */
+const L=[
+{t:"Le métier de cadre de santé",s:"Missions, posture, place dans l'hôpital",
+f:[
+["Qui est le cadre de santé ?","<ul><li>Un professionnel <b>paramédical</b> (filière infirmière, rééducation ou médico-technique) qui a obtenu le <b>diplôme de cadre de santé</b> après une formation en IFCS.</li><li>Il encadre une unité de soins ou un secteur d'activité : c'est le <b>manager de proximité</b>.</li><li>Il est à l'interface entre la direction, les médecins, l'équipe, les patients et les familles.</li><li>Le « <b>faisant fonction</b> » exerce ces missions sans avoir encore le diplôme.</li><li>Attention : la sage-femme est une profession <b>médicale</b>. Elle n'entre pas dans la liste des professions ouvrant à l'IFCS ; son encadrement suit une filière propre (coordination en maïeutique).</li></ul>"],
+["Les grandes missions","<ul><li><b>Manager l'équipe</b> : animer, évaluer, accompagner, recadrer, fédérer.</li><li><b>Organiser les soins et l'activité</b> : planning, répartition des tâches, continuité, gestion des lits.</li><li><b>Garantir la qualité et la sécurité</b> des soins : procédures, signalement, amélioration continue.</li><li><b>Gérer les ressources</b> : effectifs, matériel, commandes, suivi d'indicateurs.</li><li><b>Former</b> : accueil des nouveaux, encadrement des étudiants, développement des compétences.</li><li><b>Conduire des projets</b> et relayer le projet d'établissement.</li></ul>"],
+["Changer de posture","<ul><li>Passer du <b>« faire »</b> au <b>« faire faire »</b> et au « faire avec » : le cadre ne soigne plus, il rend le soin possible.</li><li><b>Double loyauté</b> : porter les décisions de l'institution ET faire remonter la parole de l'équipe.</li><li><b>Équité</b> : même règle pour tous, y compris les anciens collègues.</li><li><b>Juste distance</b> : proche, disponible, mais pas « copain ».</li><li><b>Exemplarité</b> : ponctualité, respect des règles, confidentialité.</li><li>Savoir <b>décider</b>, expliquer sa décision, et l'assumer.</li></ul>"],
+["Où se situe le cadre ?","<ul><li><b>Ligne hiérarchique soignante</b> : directeur·rice des soins → cadre supérieur de santé (pôle) → cadre de santé (unité) → équipe.</li><li><b>Lien avec les médecins</b> : il est <b>fonctionnel</b>, pas hiérarchique. Le cadre et le chef de service forment un <b>binôme</b>.</li><li>Le chef de service décide du projet médical ; le cadre organise les moyens soignants pour le réaliser.</li><li>En cas de désaccord durable : on en parle au cadre supérieur, on ne règle pas ses comptes devant l'équipe.</li></ul>"],
+["Les voies du métier","<ul><li><b>Cadre d'unité</b> (soins, médico-technique, rééducation).</li><li><b>Cadre formateur</b> en institut de formation.</li><li><b>Missions transversales</b> : qualité, hygiène, gestion des lits, projets.</li><li>Évolutions : cadre supérieur de santé, puis direction des soins (concours spécifique).</li><li>Ce que les jurys cherchent : un <b>projet réfléchi</b>, de la lucidité sur soi, la capacité à prendre du recul.</li></ul>"]],
+q:[
+["Le cadre de santé de proximité est avant tout…",["le manager d'une équipe et le garant de l'organisation des soins","le soignant le plus expérimenté du service","l'adjoint administratif du médecin","le représentant du personnel"],"Il manage, organise et garantit la qualité : il ne se définit plus par le soin direct."],
+["Où prépare-t-on le diplôme de cadre de santé ?",["En IFCS (institut de formation des cadres de santé)","En IFSI","À l'université uniquement","Dans le service, par ancienneté"],"IFCS : institut de formation des cadres de santé."],
+["Quelle durée d'exercice faut-il pour se présenter au concours d'entrée en IFCS ?",["4 ans en équivalent temps plein","1 an","2 ans","10 ans"],"Quatre ans d'exercice à temps plein (ou équivalent) dans sa profession."],
+["Un « faisant fonction » de cadre, c'est…",["un professionnel qui exerce les missions de cadre sans avoir le diplôme","un cadre à la retraite","un cadre supérieur par intérim","un étudiant cadre en stage"],"Souvent une étape avant le concours : on teste la fonction."],
+["Qui est le supérieur hiérarchique direct du cadre d'unité ?",["Le cadre supérieur de santé","Le chef de service","Le président de la CME","Le pharmacien"],"La ligne hiérarchique est soignante : cadre supérieur puis direction des soins."],
+["Le lien entre le cadre et le médecin chef de service est…",["fonctionnel : une collaboration en binôme","hiérarchique : le médecin note le cadre","inexistant","syndical"],"Ils travaillent ensemble mais le médecin n'est pas le supérieur hiérarchique du cadre."],
+["Devenir cadre, c'est d'abord passer…",["du « faire » au « faire faire »","du jour à la nuit","du public au privé","du soin à la comptabilité"],"Le changement de posture est la question centrale des jurys."],
+["La sage-femme peut-elle entrer en IFCS avec son seul diplôme ?",["Non : c'est une profession médicale, hors de la liste des professions ouvrant à l'IFCS","Oui, sans condition","Oui, après 2 ans","Oui, si elle a travaillé en maternité"],"L'IFCS est réservé aux professions paramédicales listées par le décret de 1995."],
+["Combien de modules compte la formation en IFCS ?",["6","3","10","12"],"Six modules, dont la fonction d'encadrement, la santé publique et l'initiation à la recherche."],
+["Combien de temps dure la formation de cadre de santé ?",["42 semaines (environ 10 mois)","6 semaines","3 ans","18 mois"],"42 semaines en alternance cours / stages."],
+["Laquelle de ces tâches n'est PAS une mission du cadre ?",["Prescrire un traitement","Élaborer le planning","Conduire les entretiens annuels","Analyser un événement indésirable"],"La prescription relève du médecin (et de la sage-femme dans son champ)."],
+["Quel texte a créé le diplôme de cadre de santé ?",["Le décret n° 95-926 du 18 août 1995","La loi du 4 mars 2002","La loi HPST de 2009","Le statut d'autonomie de 2004"],"Décret du 18 août 1995, complété par un arrêté du même jour."],
+["Où exerce un cadre formateur ?",["Dans un institut de formation","Au bloc opératoire","À la direction des finances","Au SAMU"],"Il forme les futurs professionnels de santé."],
+["« Double loyauté » du cadre signifie…",["porter les décisions de l'institution et faire remonter la parole de l'équipe","obéir au médecin et à la famille","travailler dans deux services","avoir deux employeurs"],"Le cadre est un trait d'union, pas un écran."],
+["Un ancien collègue devenu votre agent demande une faveur de planning. Le principe à tenir :",["l'équité : la même règle pour tous","l'amitié avant tout","refuser systématiquement tout","lui déléguer le planning"],"L'équité protège le cadre et l'équipe."]],
+c:[
+{t:"L'ancienne collègue",s:"Tu viens d'être nommé cadre dans le service où tu étais soignant. Une collègue proche te demande, « comme avant », de lui arranger ses week-ends sans passer par la procédure.",o:[
+["Tu lui expliques en tête-à-tête que la règle est la même pour tous et tu l'invites à faire sa demande par la voie normale.",2,"Équité + explication en privé : tu poses le cadre sans humilier."],
+["Tu acceptes cette fois pour ne pas abîmer la relation.",0,"Tu crées un précédent et une injustice que l'équipe verra très vite."],
+["Tu refuses sèchement devant les autres pour montrer que tu as changé.",0,"L'autorité ne se prouve pas par l'humiliation publique."],
+["Tu dis que tu vas voir, et tu laisses traîner.",1,"Tu évites le conflit mais tu ne poses rien : le problème reviendra."]]},
+{t:"La demande du chef de service",s:"Le chef de service te demande de changer l'horaire des transmissions dès demain, sans avoir consulté l'équipe.",o:[
+["Tu échanges avec lui sur l'objectif, tu proposes un délai court pour préparer l'équipe et tester, puis tu informes ton cadre supérieur.",2,"Binôme respecté, objectif médical entendu, équipe associée, hiérarchie informée."],
+["Tu appliques dès demain sans discuter : c'est le chef.",1,"Le lien est fonctionnel, pas hiérarchique. Appliquer sans préparer risque l'échec."],
+["Tu refuses : l'organisation soignante ne le regarde pas.",0,"Le projet médical guide l'organisation : refuser de collaborer casse le binôme."],
+["Tu te plains du médecin à l'équipe.",0,"Déloyal et clivant."]]},
+{t:"Le retard du premier jour",s:"Premier jour comme cadre. Un agent arrive avec 20 minutes de retard pendant les transmissions, devant toute l'équipe.",o:[
+["Tu laisses finir les transmissions puis tu le reçois seul le jour même : faits, raison, rappel de la règle.",2,"Réaction rapide, en privé, centrée sur les faits."],
+["Tu fais une remarque ironique devant tout le monde.",0,"Humiliation publique : tu perds la confiance de l'équipe."],
+["Tu ne dis rien, c'est ton premier jour.",0,"Ce que tu tolères le premier jour devient la norme."],
+["Tu envoies un mail général sur la ponctualité.",1,"Rappel utile mais qui évite la personne concernée."]]}],
+o:[
+["DS","Pourquoi voulez-vous devenir cadre de santé ?",["Un déclencheur concret tiré de mon parcours","Des expériences de coordination, de tutorat ou de projet","Ma conception du rôle : rendre le soin possible pour l'équipe","Ce que je veux apporter à l'établissement et aux patients","Pas de fuite du soin : je le dis clairement"]],
+["CSS","Quelle différence entre un bon soignant et un bon cadre ?",["Le soignant agit auprès du patient, le cadre agit sur l'organisation et l'équipe","Passage du faire au faire faire","Vision collective, équité, décision","La compétence clinique aide à la légitimité mais ne suffit pas","Un exemple concret"]],
+["MED","Qu'attendez-vous de la collaboration avec le chef de service ?",["Un binôme : lien fonctionnel et non hiérarchique","Des points réguliers, des objectifs partagés","Des désaccords traités en privé","Chacun dans son champ : projet médical / organisation soignante","Le patient comme boussole commune"]],
+["DRH","Présentez votre parcours en trois minutes.",["Structure chronologique ou par compétences, annoncée","Trois temps forts, pas une liste de postes","Les compétences transférables vers l'encadrement","Le lien avec le poste visé","Une conclusion tournée vers le projet"]],
+["DS","Quelles sont vos limites ?",["Une vraie limite, pas une fausse qualité","Un exemple où elle m'a gêné","Ce que je fais concrètement pour progresser","Lucidité sans autodénigrement"]]],
+e:["« Le cadre de santé : entre proximité et distance. » Discutez à partir de votre expérience.",["Proximité : connaître le terrain, être disponible, légitimité","Distance : équité, décision, loyauté institutionnelle","La juste distance se construit, exemples à l'appui"]]},
+
+{t:"Le fenua et son système de santé",s:"Institutions, géographie, acteurs, financement",
+f:[
+["Un Pays autonome","<ul><li>La Polynésie française est une collectivité d'outre-mer dotée de l'<b>autonomie</b> (loi organique du 27 février 2004).</li><li>Le <b>Pays</b> est compétent pour la <b>santé</b>, la protection sociale et sa propre fonction publique. L'État garde le régalien (justice, sécurité, défense…).</li><li>Institutions : Président de la Polynésie française, gouvernement, <b>Assemblée de la Polynésie française</b> (APF), CESEC.</li><li>Textes locaux : <b>lois du pays</b>, délibérations, arrêtés en conseil des ministres (CM). On les consulte sur <b>Lexpol</b>.</li><li>Conséquence : un texte de métropole ne s'applique pas automatiquement. Réflexe du cadre : <b>vérifier le texte local</b>.</li></ul>"],
+["Géographie = organisation","<ul><li><b>5 archipels</b> : Société, Tuamotu, Gambier, Marquises, Australes ; 118 îles sur une surface grande comme l'Europe.</li><li>Environ 279 000 habitants, dont près des trois quarts à Tahiti et Moorea.</li><li>L'<b>insularité</b> pèse sur tout : délais, transport, isolement des patients et des familles.</li><li><b>Evasan</b> = évacuation sanitaire, entre les îles vers Tahiti, ou hors du territoire pour les soins non disponibles.</li><li>La <b>télémédecine</b> se développe pour limiter les déplacements.</li></ul>"],
+["Les acteurs","<ul><li><b>Ministère de la santé</b> du Pays : la politique de santé.</li><li><b>Direction de la santé</b> : prévention, santé publique et structures de proximité (centres médicaux, dispensaires, infirmeries, postes de secours) + les hôpitaux de <b>Taravao</b>, <b>Moorea (Afareaitu)</b>, <b>Uturoa (Raiatea)</b> et <b>Taiohae (Nuku Hiva)</b>.</li><li><b>ARASS</b> (Agence de régulation de l'action sanitaire et sociale, créée en 2017) : régulation, autorisations.</li><li><b>CHPF</b> : l'hôpital de référence, au Taaone (Pirae).</li><li>Secteur privé : cliniques à Papeete, professionnels libéraux.</li></ul>"],
+["CPS et PSG : qui paie ?","<ul><li>La <b>CPS</b> (Caisse de prévoyance sociale) gère la protection sociale.</li><li>La <b>PSG</b> (protection sociale généralisée) existe depuis 1995, avec trois régimes : <b>salariés</b> (RGS), <b>non-salariés</b> (RNS) et <b>solidarité</b> (RSPF).</li><li>L'hôpital public est financé principalement par une <b>dotation globale</b>.</li><li>Pour le cadre : chaque journée d'hospitalisation évitable, chaque examen doublé, a un coût collectif.</li></ul>"],
+["Planifier l'offre de soins","<ul><li>Le <b>schéma d'organisation sanitaire</b> (SOS) répartit l'offre de soins sur le territoire.</li><li>La <b>loi du pays n° 2020-4 du 16 janvier 2020</b> encadre l'organisation sanitaire (autorisations d'activité, etc.).</li><li>Idée directrice des plans récents : renforcer les <b>soins de santé primaires</b> et la prévention, recentrer le CHPF sur le recours.</li><li>À l'oral : savoir situer son unité dans ce paysage (d'où viennent mes patients, où vont-ils après ?).</li></ul>"]],
+q:[
+["De quelle année date le statut d'autonomie actuel ?",["2004","1984","1995","2017"],"Loi organique du 27 février 2004."],
+["Qui est compétent pour la santé en Polynésie française ?",["Le Pays","L'État","Les communes","L'Union européenne"],"La santé est une compétence du Pays."],
+["Combien d'archipels compte la Polynésie française ?",["5","3","7","12"],"Société, Tuamotu, Gambier, Marquises, Australes."],
+["Que signifie ARASS ?",["Agence de régulation de l'action sanitaire et sociale","Association des responsables des soins et services","Agence régionale d'aide sociale et sanitaire","Autorité de recrutement des agents de santé"],"Créée en 2017."],
+["En quelle année l'ARASS a-t-elle été créée ?",["2017","1995","2004","2022"],"Arrêté du 12 octobre 2017."],
+["Où se trouve l'hôpital de Taiohae ?",["À Nuku Hiva, aux Marquises","À Raiatea","À Tubuai","À Rangiroa"],"Hôpital Louis-Rollin, Nuku Hiva."],
+["Où se trouve l'hôpital d'Uturoa ?",["À Raiatea","À Bora Bora","À Moorea","À Huahine"],"Aux Îles Sous-le-Vent."],
+["De qui relèvent les hôpitaux de Taravao, Moorea, Uturoa et Taiohae ?",["De la Direction de la santé","Du CHPF","De la CPS","Des communes"],"Ce sont des structures de la Direction de la santé."],
+["Depuis quand existe la protection sociale généralisée (PSG) ?",["1995","1956","2004","2020"],"La PSG date de 1995."],
+["Le RSPF est…",["le régime de solidarité","le régime des salariés","le régime des fonctionnaires d'État","une mutuelle privée"],"Régime de solidarité de la Polynésie française."],
+["Une « evasan » est…",["une évacuation sanitaire","un examen de santé annuel","une vaccination","un événement sanitaire grave"],"Entre les îles ou hors du territoire."],
+["Quel outil répartit l'offre de soins sur le territoire ?",["Le schéma d'organisation sanitaire (SOS)","Le plan blanc","Le règlement intérieur","Le projet de service"],"Le SOS décline la stratégie de santé."],
+["Quel type de texte l'Assemblée vote-t-elle dans le domaine de la loi ?",["La loi du pays","Le décret","L'ordonnance","La circulaire"],"Les lois du pays sont propres à la Polynésie française."],
+["Où consulter les textes officiels locaux ?",["Sur Lexpol","Sur Ameli","Sur Parcoursup","Sur le site de la HAS"],"Lexpol : diffusion du droit en Polynésie française."],
+["Un texte hospitalier de métropole s'applique-t-il automatiquement au fenua ?",["Non, il faut vérifier le texte localement applicable","Oui, toujours","Oui, après 6 mois","Seulement à Tahiti"],"Compétence du Pays : réflexe de vérification."]],
+c:[
+{t:"Pas de vol avant mardi",s:"Un patient des Tuamotu est sortant vendredi. Aucun vol retour avant mardi. Les urgences demandent ton lit.",o:[
+["Tu actives l'assistante sociale et le dispositif d'hébergement des évasanés, tu vérifies la famille à Tahiti, et tu organises la sortie du lit dans la journée.",2,"Tu libères le lit sans abandonner le patient : anticipation sociale + coordination."],
+["Tu gardes le patient jusqu'à mardi, c'est plus simple.",0,"Quatre jours de lit aigu bloqués alors que les urgences attendent."],
+["Tu fais sortir le patient, à lui de se débrouiller.",0,"Sortie non sécurisée d'un patient isolé : risque et faute de bientraitance."],
+["Tu demandes aux urgences d'attendre lundi.",0,"Tu reportes ton problème sur un service en tension."]]},
+{t:"La famille au chevet",s:"Une dizaine de proches entourent jour et nuit un patient âgé. La voisine de chambre se plaint, les soins sont gênés.",o:[
+["Tu rencontres la famille, tu reconnais l'importance de leur présence, et tu fixes avec eux un référent et un tour de présence compatible avec le repos et les soins.",2,"Respect du lien familial polynésien + cadre clair négocié."],
+["Tu fais appliquer strictement les horaires de visite par la sécurité.",0,"Légal mais brutal : rupture de confiance assurée."],
+["Tu laisses faire, c'est culturel.",0,"La voisine a aussi des droits, et la sécurité des soins prime."],
+["Tu déplaces la voisine sans rien dire à la famille.",1,"Tu soulages la voisine mais tu ne règles rien."]]},
+{t:"Le consentement en reo tahiti",s:"Une patiente âgée ne parle que le reo tahiti. L'infirmière, arrivée de métropole, doit recueillir son consentement pour un geste. La petite-fille propose de traduire.",o:[
+["Tu cherches un professionnel locuteur dans l'équipe ou l'établissement, tu associes la famille en soutien, et tu fais tracer comment l'information a été donnée.",2,"Information loyale, compréhensible, tracée : c'est la condition du consentement."],
+["Tu laisses la petite-fille traduire seule, c'est suffisant.",1,"Pratique, mais un proche peut filtrer ou adoucir l'information."],
+["Tu fais signer la patiente, elle a l'air d'accord.",0,"Un consentement non éclairé n'est pas un consentement."],
+["Tu reportes le geste sans organiser de solution.",0,"Perte de chance et lit bloqué."]]}],
+o:[
+["DS","Présentez le système de santé polynésien en deux minutes.",["Compétence du Pays (autonomie 2004)","Ministère, Direction de la santé, ARASS","CHPF hôpital de référence + 4 hôpitaux de la Direction de la santé","Secteur privé et libéral","CPS / PSG pour le financement","Contrainte de l'insularité, evasans"]],
+["MED","Quelles spécificités du fenua influencent l'organisation d'une unité ?",["Insularité : sorties, evasans, familles éloignées","Place de la famille élargie","Langues et compréhension","Poids des maladies chroniques","Difficultés de recrutement et turn-over","Une conséquence concrète pour mon unité"]],
+["DRH","Qui finance l'hôpital, et qu'est-ce que cela change pour un cadre ?",["CPS et PSG, dotation globale","Les trois régimes","Ressources limitées : pertinence des soins et des séjours","Le cadre agit sur la durée de séjour, le matériel, les effectifs"]],
+["CSS","Comment tenez-vous compte de la culture polynésienne dans les soins ?",["Famille comme partenaire, avec un cadre négocié","Langue : s'assurer de la compréhension","Respect des anciens (matahiapo), spiritualité","Médecine traditionnelle : écouter sans juger, sécurité d'abord","Accueil des professionnels arrivants"]],
+["DS","Quels sont les grands enjeux de santé publique du fenua ?",["Obésité, diabète, maladies cardiovasculaires et rénales","Rhumatisme articulaire aigu, maladies infectieuses tropicales","Addictions, santé mentale","Vieillissement","Prévention et soins primaires pour désengorger l'hôpital"]]],
+e:["L'insularité : simple contrainte ou levier pour repenser l'organisation des soins ?",["Contraintes : délais, coûts, isolement","Leviers : anticipation des sorties, télémédecine, lien avec les structures des îles","Rôle du cadre dans le parcours du patient"]]},
+
+{t:"Le CHPF et la fonction publique du Pays",s:"Connaître son futur employeur et son statut",
+f:[
+["Carte d'identité du CHPF","<ul><li><b>Établissement public administratif</b> du Pays, créé par une délibération du 4 novembre 1983.</li><li>Installé au <b>Taaone, à Pirae</b>, depuis fin 2010 (auparavant à Mamao, Papeete).</li><li>Hôpital de <b>référence et de dernier recours</b> : urgences, SAMU, réanimation, maternité, cancérologie, psychiatrie…</li><li>Fin 2024 : <b>439 lits</b> de médecine-chirurgie-obstétrique et <b>66 lits</b> de psychiatrie, plus des places d'hôpital de jour et de pédopsychiatrie.</li><li>C'est le seul hôpital public du Pays doté de la personnalité morale.</li></ul>"],
+["Gouvernance","<ul><li>Conseil d'administration, direction générale, directions fonctionnelles dont la <b>direction des soins</b>.</li><li><b>CME</b> : commission médicale d'établissement, la voix des médecins.</li><li><b>Pôles</b> d'activité : regroupements de services ; leur généralisation est en cours.</li><li><b>Projet d'établissement</b> : projet médical, projet de soins, projet social, gestion, logistique, système d'information.</li><li>Le cadre décline ces orientations dans un <b>projet d'unité</b>.</li></ul>"],
+["Les enjeux actuels","<ul><li>Rapport 2025 de la Chambre territoriale des comptes : statut jugé inadapté, financement dépendant des subventions, comptes et facturation à fiabiliser.</li><li>Pistes citées : <b>unité de gériatrie</b>, <b>service post-urgences</b>, préparation d'une <b>certification qualité</b>.</li><li><b>Recrutement et turn-over</b> : postes vacants, nombreux contractuels.</li><li><b>Tension sur les lits</b> : au-delà d'environ 85 % d'occupation, l'hôpital est en surtension ; une cellule de gestion des lits suit la situation.</li><li>À l'oral : citer ces enjeux sans critiquer, et dire ce qu'un cadre peut faire à son niveau.</li></ul>"],
+["La fonction publique du Pays","<ul><li>Statut général : <b>délibération n° 95-215 AT du 14 décembre 1995</b>.</li><li><b>4 catégories</b> : A, B, C, D. Des <b>cadres d'emplois</b> régis par des statuts particuliers.</li><li>Les <b>cadres de santé</b> forment un cadre d'emplois de <b>catégorie A</b> de la filière santé.</li><li>Les concours sont organisés par la <b>DTI</b> (Direction des talents et de l'innovation, ex-DGRH).</li><li>À côté des fonctionnaires : des agents non titulaires (contrats).</li><li>Obligations : obéissance hiérarchique, secret et discrétion professionnels, neutralité, probité. Droits : rémunération après service fait, formation, protection, droit syndical.</li></ul>"],
+["Le concours de cadre de santé du Pays","<ul><li>Session 2025 : <b>concours externe sur titres</b>.</li><li>Conditions affichées : <b>nationalité française</b>, avoir entre <b>18 et 62 ans</b> au 1er janvier de l'année.</li><li>Titres : le <b>diplôme de cadre de santé</b>, avec un diplôme d'infirmier, de rééducation ou médico-technique.</li><li>Sélection sur dossier et <b>entretien avec un jury</b>.</li><li>Les lauréats sont inscrits sur une liste d'aptitude, puis nommés stagiaires avant titularisation.</li><li><b>Vérifie toujours l'arrêté d'ouverture</b> de la session visée sur le site de la DTI : les conditions peuvent changer.</li></ul>"]],
+q:[
+["Où se trouve le CHPF ?",["Au Taaone, à Pirae","À Mamao, à Papeete","À Taravao","À Faa'a"],"Site du Taaone, commune de Pirae."],
+["Où était l'hôpital avant le Taaone ?",["À Mamao","À Paofai","À Arue","À Punaauia"],"L'ancien hôpital de Mamao, à Papeete."],
+["Depuis quand l'hôpital est-il au Taaone ?",["Fin 2010","1983","1995","2017"],"Déménagement fin 2010."],
+["Quel est le statut juridique du CHPF ?",["Établissement public administratif","Société anonyme","Association","Service de l'État"],"Un EPA du Pays."],
+["Combien de lits de médecine-chirurgie-obstétrique fin 2024 ?",["439","120","900","66"],"439 lits MCO selon la Chambre territoriale des comptes."],
+["Combien de lits de psychiatrie ?",["66","439","12","200"],"66 lits."],
+["Que signifie CME ?",["Commission médicale d'établissement","Comité de management des équipes","Conseil des métiers de l'encadrement","Centre médical d'évacuation"],"Instance représentant les médecins."],
+["À partir de quel taux d'occupation la direction parle-t-elle de surtension ?",["Environ 85 %","50 %","70 %","100 %"],"Au-delà de 85 %, la marge de manœuvre disparaît."],
+["Quel texte fixe le statut général de la fonction publique du Pays ?",["La délibération n° 95-215 AT du 14 décembre 1995","Le décret du 18 août 1995","La loi du 4 mars 2002","La loi du pays n° 2020-4"],"Le socle statutaire local."],
+["Combien de catégories hiérarchiques dans la fonction publique du Pays ?",["4 : A, B, C, D","3 : A, B, C","2","5"],"Quatre catégories."],
+["Dans quelle catégorie sont les cadres de santé ?",["A","B","C","D"],"Catégorie A, filière santé."],
+["Quel service organise les concours du Pays ?",["La DTI","La CPS","L'ARASS","Le CHPF"],"Direction des talents et de l'innovation (ex-DGRH)."],
+["Le concours de cadre de santé 2025 était…",["un concours externe sur titres","un concours écrit de 4 heures","un tirage au sort","un examen professionnel interne uniquement"],"Sur titres, avec entretien."],
+["Quelle limite d'âge supérieure figurait dans l'avis 2025 ?",["62 ans au 1er janvier","35 ans","45 ans","Aucune"],"Entre 18 et 62 ans."],
+["Que recommandait notamment la Chambre territoriale des comptes en 2025 ?",["Créer une unité de gériatrie et un service post-urgences","Fermer la maternité","Supprimer les pôles","Transférer l'hôpital à Mamao"],"Avec la préparation d'une certification qualité."]],
+c:[
+{t:"97 % d'occupation",s:"8 h. La cellule de gestion des lits appelle : l'hôpital est à 97 %, les urgences ont besoin de trois lits. Ton unité est pleine.",o:[
+["Tu fais le tour avec le médecin : sorties possibles ce matin, sorties à préparer, freins (transport, social, examens), et tu rappelles la cellule avec des horaires précis.",2,"Réponse factuelle, en binôme, avec des engagements horaires."],
+["Tu réponds que tu es complet.",0,"Vrai, mais tu n'apportes rien à un problème collectif."],
+["Tu fais sortir trois patients sans avis médical.",0,"La sortie est une décision médicale."],
+["Tu acceptes trois lits supplémentaires dans le couloir sans prévenir personne.",0,"Sécurité et effectifs non évalués."]]},
+{t:"La publication Facebook",s:"Un agent publie une photo du service avec un commentaire acerbe sur la direction. Un patient est reconnaissable à l'arrière-plan.",o:[
+["Tu lui demandes de retirer la publication tout de suite, tu le reçois pour rappeler secret et discrétion professionnels, tu écoutes son malaise et tu informes ton cadre supérieur.",2,"Urgence (retrait), rappel des obligations, écoute de la cause, remontée hiérarchique."],
+["Tu commentes la publication pour défendre la direction.",0,"Tu aggraves la diffusion et tu te mets en faute aussi."],
+["Tu ne fais rien : c'est sa vie privée.",0,"Le patient est identifiable : le secret professionnel est violé."],
+["Tu demandes directement une sanction sans le recevoir.",1,"Les faits sont graves, mais on entend toujours l'agent d'abord."]]},
+{t:"Elle veut partir en clinique",s:"Une excellente infirmière en contrat de six mois t'annonce qu'une clinique lui propose un CDI.",o:[
+["Tu la reçois, tu cherches ce qui la retiendrait (stabilité, formation, projet), tu remontes vite sa situation à la hiérarchie et tu lui donnes une réponse honnête et datée.",2,"Fidéliser, c'est agir sur ce qui dépend de toi et être transparent sur le reste."],
+["Tu lui promets une titularisation.",0,"Tu n'as pas ce pouvoir : promesse intenable."],
+["Tu lui dis que personne n'est irremplaçable.",0,"C'est exactement ce qui alimente le turn-over."],
+["Tu lui souhaites bonne chance.",1,"Respectueux, mais tu n'as rien tenté."]]}],
+o:[
+["DS","Que savez-vous du CHPF ?",["Statut : établissement public administratif du Pays","Taaone, Pirae, depuis fin 2010","Hôpital de référence et de dernier recours","Ordre de grandeur des lits (439 MCO, 66 psychiatrie)","Enjeux : recrutement, tension sur les lits, pôles, qualité","Pourquoi cela me donne envie d'y travailler"]],
+["DRH","Quels sont les droits et les obligations d'un fonctionnaire ?",["Obéissance hiérarchique (sauf ordre manifestement illégal)","Secret et discrétion professionnels","Neutralité, probité, service de l'intérêt général","Droits : rémunération après service fait, formation, protection, droit syndical","Le cadre fait vivre ces règles dans l'équipe"]],
+["MED","Le turn-over est élevé. Comment fidélisez-vous dans votre unité ?",["Accueil et intégration structurés","Planning équitable et prévisible","Reconnaissance, entretiens, formation","Ambiance d'équipe et projet d'unité","Honnêteté sur ce qui ne dépend pas de moi, remontée des freins"]],
+["CSS","Qu'est-ce qu'un projet d'établissement, et quel est votre rôle ?",["Feuille de route pluriannuelle","Ses volets : médical, soins, social, gestion…","Je le décline en projet d'unité","J'explique le sens à l'équipe","Je fais remonter les réalités du terrain"]],
+["DS","Pourquoi le service public hospitalier plutôt que le privé ?",["Valeurs : égalité d'accès, continuité","Hôpital de recours pour tout le fenua","Diversité des situations et des métiers","Motivation personnelle sincère","Sans dénigrer le privé"]]],
+e:["Attirer et garder les soignants : que peut faire le cadre de proximité ?",["Ce qui dépend du cadre : accueil, planning, reconnaissance, formation","Ce qui ne dépend pas de lui : statut, salaire, mais qu'il fait remonter","Indicateurs pour suivre"]]},
+
+{t:"Droit et statut : ce qu'un cadre doit savoir",s:"Normes, service public, statut, discipline, code du travail",
+f:[
+["Qui décide quoi : les textes au fenua","<ul><li>Au sommet : la <b>Constitution</b> (article 74) et la <b>loi organique du 27 février 2004</b> qui répartit les compétences entre l'État et le Pays.</li><li>Les lois et décrets de l'État ne s'appliquent ici que dans les matières de l'État, ou s'ils le prévoient.</li><li><b>Lois du pays</b> : votées par l'Assemblée dans le domaine de la loi. Ce sont juridiquement des <b>actes administratifs</b>, contrôlés par le <b>Conseil d'État</b>.</li><li><b>Délibérations</b> de l'Assemblée (ex. le statut de la fonction publique), puis <b>arrêtés pris en conseil des ministres</b> (CM), arrêtés du Président et des ministres.</li><li>Dans l'établissement : règlement intérieur, notes de service, procédures.</li><li>Tout est publié au <b>JOPF</b> et consultable sur <b>Lexpol</b>. Le juge de l'administration est le <b>tribunal administratif de la Polynésie française</b>.</li><li>Réflexe : une note de service ne peut pas contredire une délibération ; un cadre cite le bon niveau de texte.</li></ul>"],
+["Service public et décision administrative","<ul><li>Trois principes du service public : <b>continuité</b> (le service ne s'arrête pas), <b>égalité</b> (mêmes droits pour tous les usagers), <b>adaptabilité</b> (le service évolue). S'y ajoute la <b>neutralité</b>.</li><li>Traduction dans une unité : planning sans trou, pas de passe-droit, organisation qui change quand les besoins changent.</li><li>Une <b>décision défavorable</b> à un agent (refus, sanction) doit être écrite, <b>motivée</b>, notifiée, avec les voies de recours.</li><li><b>Faute de service</b> : commise dans l'exercice des fonctions, c'est l'administration qui répond. <b>Faute personnelle</b> : détachable du service, l'agent en répond.</li><li><b>Protection fonctionnelle</b> : le Pays doit protéger l'agent menacé ou injurié dans ses fonctions.</li><li>Tout agent public qui a connaissance d'un crime ou d'un délit dans ses fonctions doit le signaler au procureur (article 40 du code de procédure pénale).</li></ul>"],
+["Le statut général, article par article","<ul><li>Délibération n° 95-215 AT du 14 décembre 1995. <b>Art. 4</b> : nationalité française, droits civiques, casier compatible, aptitude physique.</li><li><b>Art. 11</b> : se consacrer à ses fonctions, pas d'activité privée lucrative (sauf exceptions prévues).</li><li><b>Art. 12-13</b> : secret professionnel et discrétion professionnelle.</li><li><b>Art. 14</b> : obéir aux instructions du supérieur, <b>sauf ordre manifestement illégal et de nature à compromettre gravement un intérêt public</b>.</li><li><b>Art. 7-9</b> : droit syndical ; droit de grève, avec service minimum possible pour la continuité.</li><li><b>Art. 10</b> : protection par le Pays. <b>Art. 26</b> : rémunération après service fait. <b>Art. 27</b> : congés. <b>Art. 30-31</b> : formation, hygiène et sécurité.</li><li><b>Art. 64 bis</b> : <b>39 heures</b> par semaine.</li><li><b>Art. 60</b> : stage d'un an en principe avant titularisation. Positions : activité, détachement, disponibilité, congé parental.</li><li>Instances : <b>CAP</b> (commission administrative paritaire, par cadre d'emplois) pour les situations individuelles ; <b>CTP</b> (comité technique paritaire) pour l'organisation et les conditions de travail.</li></ul>"],
+["La discipline","<ul><li><b>4 groupes</b> de sanctions (art. 85). <b>1er</b> : avertissement, blâme (seul le blâme est au dossier, effacé après 3 ans sans nouvelle sanction). <b>2e</b> : radiation du tableau d'avancement, abaissement d'échelon, exclusion temporaire de 15 jours au plus, déplacement d'office. <b>3e</b> : rétrogradation, exclusion de 6 mois à 2 ans. <b>4e</b> : révocation.</li><li>Le pouvoir disciplinaire appartient au <b>Président de la Polynésie française</b> ; les chefs de service et directeurs d'établissement ont délégation pour le 1er groupe. Au-delà : avis de la CAP en conseil de discipline.</li><li><b>Suspension</b> : mesure conservatoire en cas de faute grave, 4 mois au plus, traitement maintenu. Ce n'est pas une sanction.</li><li><b>Droits de la défense</b> : griefs écrits, accès au dossier, assistance d'un défenseur, délai pour se préparer.</li><li>Rôle du cadre : constater les <b>faits</b>, entendre l'agent rapidement, réunir des preuves licites, rédiger un <b>rapport circonstancié</b>, proposer une mesure <b>proportionnée</b>. Il ne sanctionne pas lui-même.</li><li>Interdits : la <b>sanction déguisée</b> (retirer des week-ends, changer de poste pour punir), deux sanctions pour une même faute.</li><li>Insuffisance professionnelle et abandon de poste ne sont pas des fautes disciplinaires : procédures distinctes.</li></ul>"],
+["Trois statuts dans une équipe, et le code du travail","<ul><li><b>Fonctionnaires</b> : statut général + statut particulier de leur cadre d'emplois.</li><li><b>ANT</b> (agents non titulaires) : contrat de <b>droit public</b>, délibération n° 2004-15 APF du 22 janvier 2004, durées limitées.</li><li><b>ANFA</b> (agents non fonctionnaires de l'administration) : <b>droit privé</b>, convention collective, donc <b>code du travail</b>.</li><li>Le <b>code du travail polynésien</b> (loi du pays n° 2011-15 du 4 mai 2011) s'applique aux salariés de droit privé : cliniques, prestataires, ANFA.</li><li>Ses repères : <b>39 h</b> par semaine ; <b>10 h</b> par jour et <b>48 h</b> par semaine au maximum ; repos de <b>11 h</b> consécutives par jour et <b>24 h</b> par semaine ; heures supplémentaires majorées ; <b>2,5 jours ouvrables</b> de congés payés par mois.</li><li>Pour un ANT ou un ANFA, l'<b>entretien préalable</b> est obligatoire avant toute sanction ; le licenciement d'un salarié protégé exige l'autorisation de l'<b>inspecteur du travail</b>.</li><li>Avant toute décision sur le temps de travail, un congé ou une faute : <b>vérifier le statut de l'agent</b> et appeler les ressources humaines. Les cycles hospitaliers (nuits, gardes) relèvent en plus des règles de l'établissement.</li></ul>"]],
+q:[
+["Durée hebdomadaire de travail dans la fonction publique du Pays :",["39 heures","35 heures","40 heures","37 heures 30"],"Article 64 bis du statut général."],
+["Durée légale du travail dans le code du travail polynésien :",["39 heures par semaine","35 heures par semaine","42 heures par semaine","48 heures par semaine"],"Article Lp. 3211-1 : les 35 heures ne s'appliquent pas au fenua."],
+["Durée quotidienne maximale de travail effectif selon le code du travail polynésien :",["10 heures","8 heures","12 heures","14 heures"],"Sauf dérogations prévues par le code."],
+["Durée hebdomadaire maximale selon ce même code :",["48 heures","39 heures","60 heures","44 heures"],"48 heures sur une même semaine."],
+["Repos quotidien minimal d'un salarié :",["11 heures consécutives","8 heures","9 heures","24 heures"],"Et 24 heures consécutives par semaine."],
+["En combien de groupes les sanctions disciplinaires sont-elles réparties ?",["4","2","3","5"],"Article 85 du statut général."],
+["Les sanctions du premier groupe sont…",["l'avertissement et le blâme","le blâme et la révocation","l'exclusion de 15 jours et le déplacement d'office","la rétrogradation et l'abaissement d'échelon"],"Seul le blâme est inscrit au dossier."],
+["L'exclusion temporaire du deuxième groupe dure au plus…",["15 jours","3 jours","2 mois","2 ans"],"L'exclusion de 6 mois à 2 ans relève du troisième groupe."],
+["La sanction du quatrième groupe est…",["la révocation","le blâme","le déplacement d'office","la suspension"],"La suspension n'est pas une sanction."],
+["La suspension d'un agent pour faute grave…",["dure 4 mois au plus, avec maintien du traitement","est une sanction du 2e groupe","se fait sans traitement","est décidée par le cadre"],"C'est une mesure conservatoire."],
+["Qui détient le pouvoir disciplinaire ?",["Le Président de la Polynésie française, avec délégation aux chefs de service pour le 1er groupe","Le cadre de santé","Le médecin chef de service","Le tribunal administratif"],"Le cadre constate, rapporte et propose."],
+["Un fonctionnaire peut refuser d'obéir si l'ordre est…",["manifestement illégal et de nature à compromettre gravement un intérêt public","désagréable","donné oralement","contraire à ses habitudes"],"Article 14 : les deux conditions sont cumulatives."],
+["Les agents non titulaires (ANT) relèvent…",["d'un statut de droit public, délibération n° 2004-15 APF","du code du travail","du statut de la fonction publique hospitalière","d'aucun texte"],"À ne pas confondre avec les ANFA, de droit privé."],
+["Juridiquement, les « lois du pays » sont…",["des actes administratifs, contrôlés par le Conseil d'État","des lois votées par le Parlement","des décrets du Premier ministre","des circulaires"],"Spécificité de la Polynésie française."],
+["Retirer ses week-ends à un agent pour le punir, c'est…",["une sanction déguisée, illégale","une sanction du 1er groupe","un droit du cadre","une mesure conservatoire"],"Une punition hors de l'échelle et hors procédure est annulable."]],
+c:[
+{t:"La feuille de présence",s:"Ta cadre supérieure t'appelle : un agent était absent samedi sans justification. Elle te demande de le noter « présent » pour éviter des ennuis à tout le monde.",o:[
+["Tu refuses de modifier le document, tu expliques pourquoi, et tu proposes de régulariser l'absence par la voie normale. Tu gardes une trace écrite de l'échange.",2,"Un faux dans un document administratif est un ordre manifestement illégal : tu n'as pas à obéir, et tu proposes une issue légale."],
+["Tu modifies : c'est un ordre de ta hiérarchie.",0,"L'obéissance s'arrête à l'ordre manifestement illégal. Tu engagerais ta responsabilité personnelle."],
+["Tu ne modifies rien et tu n'en parles plus.",1,"Tu évites le faux, mais l'absence reste non traitée."],
+["Tu préviens l'équipe que la cadre supérieure couvre l'agent.",0,"Manque de discrétion et de loyauté : on traite par la voie hiérarchique."]]},
+{t:"Troisième absence injustifiée",s:"Un aide-soignant fonctionnaire ne s'est pas présenté pour la troisième fois en deux mois. L'équipe exige que tu « fasses quelque chose ».",o:[
+["Tu le reçois dès son retour pour entendre ses explications, tu rédiges un rapport factuel daté et tu le transmets à ta hiérarchie en proposant une mesure proportionnée.",2,"Faits, contradictoire, rapport, proportionnalité : c'est exactement ton rôle."],
+["Tu lui retires ses prochains week-ends de repos.",0,"Sanction déguisée : illégale."],
+["Tu lui infliges un avertissement devant l'équipe.",0,"Tu n'as pas le pouvoir de sanction, et jamais en public."],
+["Tu attends la prochaine fois pour avoir un dossier plus solide.",0,"Les faits s'accumulent sans réponse : l'équipe perd confiance, l'agent n'est pas alerté."]]},
+{t:"« Moi, je ne suis pas fonctionnaire »",s:"Tu dois prolonger un poste de deux heures ce soir. L'agente concernée répond : « Je suis sous convention collective, vos règles ne s'appliquent pas à moi. »",o:[
+["Tu vérifies son statut et la règle applicable auprès des ressources humaines avant d'imposer quoi que ce soit, et tu cherches en parallèle une solution volontaire.",2,"Fonctionnaire, ANT ou ANFA : les règles de temps de travail ne sont pas les mêmes. On vérifie avant de décider."],
+["Tu lui réponds que dans ton unité tout le monde suit les mêmes règles.",0,"Même exigence professionnelle, oui ; même régime juridique, non."],
+["Tu cèdes et tu ne lui demandes plus jamais rien.",0,"Tu crées une inégalité dans l'équipe sans avoir vérifié."],
+["Tu lui imposes en lui disant qu'elle fera un recours si elle veut.",0,"Décision prise sans connaître la règle : risque d'illégalité."]]}],
+o:[
+["DRH","Fonctionnaire, ANT, ANFA : quelles différences, et en quoi cela vous concerne-t-il ?",["Fonctionnaire : statut général + statut particulier","ANT : contrat de droit public, délibération de 2004","ANFA : droit privé, convention collective, code du travail","Temps de travail, congés, discipline : procédures différentes","Je vérifie le statut avant de décider, avec les ressources humaines"]],
+["DS","Un agent commet une faute. Décrivez ce que vous faites, de votre bureau jusqu'à la sanction.",["Je constate des faits, je sécurise la situation","J'entends l'agent rapidement","Rapport circonstancié, preuves licites","Transmission hiérarchique avec proposition proportionnée","1er groupe : autorité délégataire ; au-delà : conseil de discipline (CAP), décision du Président","Droits de la défense, pas de sanction déguisée"]],
+["DRH","Citez les principales obligations d'un fonctionnaire du Pays.",["Se consacrer à ses fonctions, pas d'activité privée lucrative","Obéissance hiérarchique et sa limite","Secret et discrétion professionnels","Probité, neutralité, réserve, dignité","Service fait","Un exemple concret dans une unité de soins"]],
+["MED","Quels sont les principes du service public, et comment se traduisent-ils dans votre unité ?",["Continuité : planning, relèves, effectif de sécurité","Égalité : pas de passe-droit entre patients","Adaptabilité : l'organisation évolue","Neutralité","Un exemple pour chacun"]],
+["DS","On vous donne une instruction qui vous paraît illégale. Que faites-vous ?",["Je vérifie le texte, je demande une confirmation écrite","J'expose mon analyse à ma hiérarchie","Principe : j'obéis","Limite : ordre manifestement illégal ET compromettant gravement un intérêt public","Je trace, je reste loyal, je ne règle pas cela devant l'équipe"]]],
+e:["Obéir et alerter : jusqu'où va la loyauté du cadre de santé ?",["Obéissance hiérarchique et sa limite légale","Devoir d'alerte, de signalement, traçabilité","Loyauté n'est pas silence"]]},
+
+{t:"Manager une équipe",s:"Styles, motivation, communication, conflits, changement",
+f:[
+["Les styles de management","<ul><li><b>Lewin</b> : autoritaire, démocratique, laisser-faire.</li><li><b>Hersey et Blanchard</b> (management situationnel) : on adapte son style à l'autonomie de la personne (compétence + motivation) : <b>directif</b>, <b>persuasif</b>, <b>participatif</b>, <b>délégatif</b>.</li><li>Il n'y a pas de bon style unique : une nouvelle diplômée et une infirmière de 20 ans de métier ne se managent pas pareil.</li><li><b>Mintzberg</b> : le manager joue 10 rôles, regroupés en rôles interpersonnels, informationnels et décisionnels.</li></ul>"],
+["La motivation","<ul><li><b>Maslow</b> : besoins physiologiques, sécurité, appartenance, estime, accomplissement.</li><li><b>Herzberg</b> : les <b>facteurs d'hygiène</b> (salaire, conditions, planning) évitent l'insatisfaction ; les <b>facteurs moteurs</b> (reconnaissance, responsabilité, intérêt du travail) créent la motivation.</li><li>Leviers du cadre : donner du <b>sens</b>, reconnaître le travail bien fait, confier des missions, former, être juste.</li><li>La reconnaissance est gratuite et quotidienne : précise, sincère, individuelle.</li></ul>"],
+["Communiquer","<ul><li><b>Écoute active</b> : reformuler, questionner, ne pas interrompre.</li><li><b>Assertivité</b> : dire les choses clairement, sans agressivité ni fuite.</li><li>Méthode <b>DESC</b> pour un recadrage : <b>D</b>écrire les faits, <b>E</b>xprimer son ressenti, <b>S</b>pécifier ce qu'on attend, <b>C</b>onséquences positives.</li><li>Réunions : ordre du jour, durée tenue, décisions notées, compte rendu.</li><li>On félicite en public, on recadre en privé.</li></ul>"],
+["Gérer un conflit","<ul><li>Un conflit non traité s'aggrave toujours.</li><li>Étapes : recevoir chacun <b>séparément</b>, s'en tenir aux <b>faits</b>, réunir pour une <b>médiation</b>, formaliser des <b>engagements</b>, <b>suivre</b>.</li><li>Chercher la cause : personnes, organisation floue, valeurs, charge de travail.</li><li>Le cadre est <b>tiers</b>, pas juge ni copain.</li><li>Si le conflit dépasse l'unité ou touche au harcèlement : alerter la hiérarchie.</li></ul>"],
+["Conduire le changement","<ul><li>La <b>résistance</b> est normale : peur de perdre des repères, des compétences, du confort.</li><li><b>Lewin</b> : dégel, changement, regel. <b>Kotter</b> : 8 étapes, dont créer l'urgence, former une équipe pilote, obtenir des victoires rapides, ancrer.</li><li>Recette du cadre : expliquer le <b>pourquoi</b>, associer l'équipe au <b>comment</b>, former, tester, évaluer, ajuster.</li><li><b>Déléguer</b> n'est pas abandonner : objectif clair, moyens, point d'étape, droit à l'erreur.</li></ul>"]],
+q:[
+["Dans le management situationnel, combien de styles ?",["4","2","3","10"],"Directif, persuasif, participatif, délégatif."],
+["Avec une professionnelle très compétente et très motivée, le style adapté est…",["délégatif","directif","autoritaire","persuasif"],"Autonomie élevée : on délègue."],
+["Avec un nouvel arrivant peu autonome, on commence par un style…",["directif","délégatif","laisser-faire","participatif"],"On cadre, on explique, on montre."],
+["Selon Herzberg, le salaire est…",["un facteur d'hygiène","un facteur moteur","sans effet","un besoin d'accomplissement"],"Il évite l'insatisfaction mais ne motive pas durablement."],
+["Selon Herzberg, la reconnaissance est…",["un facteur moteur","un facteur d'hygiène","un besoin physiologique","un style de management"],"Elle crée la motivation."],
+["Au sommet de la pyramide de Maslow :",["l'accomplissement de soi","la sécurité","l'appartenance","les besoins physiologiques"],"L'accomplissement vient en dernier."],
+["Dans DESC, le « S » signifie…",["Spécifier ce qu'on attend","Sanctionner","Sourire","Synthétiser"],"Décrire, Exprimer, Spécifier, Conséquences."],
+["Combien de rôles du manager chez Mintzberg ?",["10","4","6","14"],"Dix rôles en trois familles."],
+["Les trois styles de Lewin :",["autoritaire, démocratique, laisser-faire","directif, persuasif, délégatif","dégel, changement, regel","hygiène, moteur, accomplissement"],"À ne pas confondre avec son modèle du changement."],
+["Les trois temps du changement selon Lewin :",["dégel, changement, regel","déni, colère, acceptation","planifier, faire, vérifier","diagnostic, action, bilan"],"Dégel – changement – regel."],
+["Combien d'étapes dans le modèle de Kotter ?",["8","3","5","12"],"De « créer l'urgence » à « ancrer le changement »."],
+["Première étape face à un conflit entre deux agents :",["les recevoir séparément pour établir les faits","les sanctionner tous les deux","attendre que cela passe","changer l'un d'eux de service"],"On écoute chacun avant toute confrontation."],
+["On recadre un agent…",["en privé, sur des faits","en public, pour l'exemple","par message","jamais"],"Félicitations en public, recadrage en privé."],
+["Déléguer, c'est…",["confier une mission avec un objectif, des moyens et un suivi","se débarrasser d'une tâche","perdre son autorité","transférer sa responsabilité"],"Le cadre reste responsable de ce qu'il délègue."],
+["Face à la résistance au changement, le premier levier est…",["expliquer le sens et associer l'équipe","imposer plus vite","ignorer les opposants","promettre une prime"],"Le pourquoi d'abord, le comment ensemble."]],
+c:[
+{t:"Jour contre nuit",s:"Deux infirmières, l'une de jour, l'autre de nuit, s'accusent mutuellement de transmissions bâclées. Le ton monte devant les aides-soignants.",o:[
+["Tu les reçois séparément, puis ensemble ; tu ramènes aux faits et tu fais définir par l'équipe un support de transmissions commun, avec un point dans un mois.",2,"Médiation + traitement de la cause organisationnelle + suivi."],
+["Tu donnes raison à celle que tu connais le mieux.",0,"Tu deviens partie au conflit."],
+["Tu leur dis de régler ça entre adultes.",0,"Le conflit touche la sécurité des soins : il te concerne."],
+["Tu changes l'une des deux d'équipe.",1,"Tu sépares, mais le problème de transmissions demeure."]]},
+{t:"Le senior démotivé",s:"Un aide-soignant expérimenté fait le minimum et répète aux jeunes que « rien ne changera jamais ».",o:[
+["Entretien individuel : tu décris les faits, tu cherches ce qui s'est éteint, tu lui proposes une mission qui valorise son expérience (tutorat), avec des attentes claires.",2,"Écoute + reconnaissance + exigences : les trois ensemble."],
+["Tu l'ignores, il est proche de la retraite.",0,"Son influence sur les jeunes est réelle."],
+["Tu le menaces d'un rapport dès la première discussion.",0,"La sanction n'est pas le premier outil face à la démotivation."],
+["Tu lui confies le tutorat sans rien lui dire de son attitude.",1,"Bonne idée, mais sans cadre il transmettra aussi son découragement."]]},
+{t:"Le nouveau logiciel",s:"Le dossier patient informatisé change dans un mois. L'équipe râle : « encore un truc qui nous fera perdre du temps ».",o:[
+["Tu expliques le pourquoi, tu nommes deux référents volontaires formés en premier, tu planifies les formations sur le temps de travail et un point quotidien la première semaine.",2,"Sens, relais dans l'équipe, formation, accompagnement au démarrage."],
+["Tu dis que c'est la direction qui l'impose et que tu n'y peux rien.",0,"Tu te désolidarises : l'équipe n'a plus de pilote."],
+["Tu attends la veille pour ne pas inquiéter.",0,"L'absence d'information nourrit la résistance."],
+["Tu envoies le guide utilisateur par mail.",1,"Utile, mais ce n'est pas un accompagnement."]]}],
+o:[
+["CSS","Quel manager serez-vous ?",["Un style adapté à la personne et à la situation","Des valeurs : équité, respect, exigence","Présence sur le terrain","Je décide et j'explique","Un exemple concret de mon parcours"]],
+["DS","Comment gérez-vous un conflit entre deux agents ?",["Je n'attends pas","Entretiens séparés, faits","Médiation, engagements écrits","Recherche de la cause organisationnelle","Suivi, et alerte hiérarchique si besoin"]],
+["DRH","Un agent refuse d'appliquer une consigne. Que faites-vous ?",["Je l'écoute : pourquoi ce refus ?","Je vérifie que la consigne est claire et légitime","Rappel du cadre en entretien, méthode DESC","Je trace","Si cela se répète : rapport et hiérarchie"]],
+["MED","Comment faire adhérer l'équipe à un changement que vous n'avez pas choisi ?",["Je me l'approprie avant de le présenter","J'explique le sens, sans me cacher derrière la direction","J'associe l'équipe au comment","Référents, formation, test","Je fais remonter les difficultés réelles"]],
+["CSS","Comment recadrer un agent plus âgé et plus expérimenté que vous ?",["Ma légitimité vient de la fonction, pas de l'âge","En privé, sur des faits","Je reconnais son expérience","Attentes claires et suivi","Même règle que pour tous"]]],
+e:["L'autorité du cadre de santé aujourd'hui : sur quoi repose-t-elle ?",["Autorité de statut, de compétence, de relation","Équité et exemplarité","Décider et expliquer"]]},
+
+{t:"Organiser et gérer les ressources",s:"Planning, absentéisme, compétences, indicateurs",
+f:[
+["Le planning","<ul><li>Trois exigences : <b>continuité des soins</b>, <b>respect de la réglementation</b> du temps de travail, <b>équité</b>.</li><li>Un <b>effectif minimum de sécurité</b> par poste, connu de tous.</li><li>Anticiper : congés demandés tôt, règles de priorité écrites et connues (roulement d'une année sur l'autre).</li><li>Tout changement est <b>tracé</b> et validé par le cadre.</li><li>Les règles précises (repos, amplitude, heures supplémentaires) dépendent des textes locaux et du règlement de l'établissement : <b>les connaître avant l'oral</b>.</li></ul>"],
+["L'absentéisme","<ul><li><b>Dans l'heure</b> : évaluer la charge, prioriser les soins, réorganiser, chercher un remplacement (équipe de suppléance, heures supplémentaires volontaires), prévenir la hiérarchie. Le rappel sur repos reste le dernier recours.</li><li><b>Dans la durée</b> : suivre l'indicateur, distinguer absences courtes répétées et longues, <b>entretien de retour</b>, analyser les causes (charge, ambiance, troubles musculo-squelettiques).</li><li>Prévenir : conditions de travail, matériel d'aide à la manutention, reconnaissance, planning stable.</li></ul>"],
+["Développer les compétences","<ul><li><b>Fiche de poste</b> : qui fait quoi.</li><li><b>Entretien annuel</b> : bilan, objectifs, besoins de formation. Il se prépare des deux côtés.</li><li><b>Plan de formation</b> : relier les demandes individuelles aux besoins de l'unité.</li><li><b>Accueil du nouvel arrivant</b> : livret, tuteur, période d'intégration, points d'étape.</li><li><b>Étudiants</b> : le cadre est garant de la qualité de l'encadrement en stage.</li></ul>"],
+["Piloter avec des indicateurs","<ul><li>Tableau de bord simple : <b>taux d'occupation</b>, <b>DMS</b> (durée moyenne de séjour), absentéisme, événements indésirables, satisfaction.</li><li><b>Gestion des lits</b> : la sortie se prépare dès l'entrée (date prévisionnelle, transport, social).</li><li><b>Charge en soins</b> : ajuster la répartition selon la lourdeur des patients.</li><li><b>Matériel et stocks</b> : commandes, péremptions, maintenance.</li><li>Un indicateur sert à décider, pas à surveiller.</li></ul>"],
+["Qualité de vie au travail","<ul><li>Risques psychosociaux : charge, manque d'autonomie, conflits de valeurs, manque de reconnaissance, insécurité.</li><li>Signaux d'alerte : irritabilité, erreurs, isolement, absences courtes.</li><li>Leviers : espaces de parole, organisation claire, soutien visible du cadre, médecine du travail, psychologue.</li><li><b>Violence</b> envers un agent : protéger, soigner, signaler, accompagner le dépôt de plainte.</li><li>Le cadre aussi doit se préserver : il ne porte pas tout seul.</li></ul>"]],
+q:[
+["Les trois exigences d'un planning :",["continuité des soins, réglementation, équité","rapidité, économie, silence","ancienneté, amitié, habitude","souplesse, improvisation, confiance"],"Les trois se tiennent."],
+["Que signifie DMS ?",["Durée moyenne de séjour","Direction médicale des soins","Dossier médical sécurisé","Dotation mensuelle de service"],"Indicateur clé de la gestion des lits."],
+["Quand prépare-t-on la sortie d'un patient ?",["Dès l'entrée","La veille","Le matin même","Quand le lit est réclamé"],"Anticiper transport, social, ordonnances."],
+["Deux infirmières sur trois sont absentes à 5 h 45. Premier réflexe :",["évaluer la charge et prioriser les soins","annuler les soins du matin","attendre 8 h","appeler la presse"],"Sécurité d'abord, puis remplacement et alerte."],
+["Le rappel d'un agent sur son repos est…",["un dernier recours","la solution normale","interdit en toute circonstance","décidé par les collègues"],"On épuise d'abord les autres solutions."],
+["L'entretien de retour après une absence sert à…",["accueillir, informer et comprendre","sanctionner","vérifier le certificat médical","annoncer un changement de poste"],"C'est un outil de prévention."],
+["La fiche de poste décrit…",["les missions et activités attendues","le salaire","le planning annuel","les sanctions possibles"],"Qui fait quoi, avec quels liens."],
+["L'entretien annuel d'évaluation doit être…",["préparé par le cadre et par l'agent","improvisé","fait dans le couloir","réservé aux agents en difficulté"],"Bilan, objectifs, formation."],
+["Qui est garant de la qualité de l'encadrement des étudiants en stage ?",["Le cadre de santé","L'étudiant","Le directeur général","La famille du patient"],"Avec les tuteurs qu'il désigne."],
+["Un bon indicateur sert d'abord à…",["décider et améliorer","surveiller les agents","remplir un classeur","justifier une sanction"],"Mesurer pour agir."],
+["Les congés d'été sont tous demandés sur la même période. Le cadre s'appuie sur…",["des règles de priorité écrites et connues de tous","l'ancienneté seulement","le premier qui demande","ses préférences"],"Avec un roulement d'une année sur l'autre."],
+["Un agent est agressé par un visiteur. Le cadre doit…",["le protéger, signaler et l'accompagner dans ses démarches","lui dire que c'est le métier","attendre qu'il se plaigne","lui demander de s'excuser"],"Soutien visible et signalement systématique."],
+["Signal d'alerte d'épuisement professionnel :",["irritabilité, erreurs et absences courtes répétées","demande de formation","ponctualité","prise de congés annuels"],"À repérer tôt."],
+["L'effectif minimum de sécurité est…",["le seuil en dessous duquel les soins ne sont plus sûrs","l'effectif idéal","un objectif budgétaire","fixé chaque matin par l'équipe"],"Il doit être défini et connu."],
+["Une modification de planning entre deux agents doit être…",["validée et tracée par le cadre","arrangée entre eux sans rien dire","interdite","décidée par le médecin"],"Responsabilité et traçabilité."]],
+c:[
+{t:"5 h 45, deux absentes",s:"Deux des trois infirmières du matin préviennent qu'elles sont malades. L'unité compte 28 patients.",o:[
+["Tu fais le point avec l'équipe de nuit, tu priorises les soins, tu sollicites la suppléance et les volontaires, tu préviens le cadre de garde et tu traces.",2,"Sécurité, solutions graduées, alerte, traçabilité."],
+["Tu rappelles d'office une infirmière en repos depuis la veille.",1,"Parfois nécessaire, mais seulement après les autres solutions."],
+["Tu demandes à l'infirmière de nuit de rester jusqu'à midi.",0,"Fatigue = risque d'erreur. Un court relais oui, une matinée non."],
+["Tu laisses l'infirmière restante se débrouiller.",0,"Mise en danger des patients et de l'agent."]]},
+{t:"Tout le monde veut juillet",s:"Six agents demandent les trois mêmes semaines de juillet. Deux menacent de se mettre en arrêt si c'est refusé.",o:[
+["Tu réunis l'équipe, tu rappelles l'effectif nécessaire et les règles de priorité, tu proposes un roulement sur deux ans, et tu reçois à part les deux agents sur leurs propos.",2,"Règle collective transparente + traitement individuel de la menace."],
+["Tu accordes aux deux qui menacent pour avoir la paix.",0,"Tu récompenses le chantage."],
+["Tu tires au sort.",1,"Équitable en apparence, mais sans mémoire d'une année sur l'autre."],
+["Tu refuses tout le monde.",0,"Injuste et démotivant."]]},
+{t:"La nouvelle diplômée",s:"Trois semaines après son arrivée, une jeune infirmière a failli se tromper de patient pour une injection. Sa tutrice dit qu'elle « n'y arrivera pas ».",o:[
+["Tu la reçois pour analyser l'erreur sans jugement, tu fais un bilan d'intégration avec la tutrice, tu fixes des objectifs sur deux semaines et tu déclares l'événement.",2,"Culture d'apprentissage + accompagnement structuré + signalement."],
+["Tu mets fin à sa période d'essai.",0,"Sans accompagnement ni objectifs, c'est prématuré."],
+["Tu lui dis que tout le monde fait des erreurs.",0,"Tu banalises un risque d'identité."],
+["Tu changes de tutrice sans en parler.",1,"Possible, mais sans bilan tu ne sais pas ce qui doit changer."]]}],
+o:[
+["DS","Comment construisez-vous un planning équitable ?",["Continuité, réglementation, équité","Effectif minimum défini","Règles de congés écrites et roulement","Souhaits recueillis à l'avance","Changements validés et tracés"]],
+["DRH","L'absentéisme augmente dans votre unité. Que faites-vous ?",["Je mesure et je qualifie (court / long, qui, quand)","Je cherche les causes : charge, ambiance, conditions","Entretiens de retour","Actions de prévention","Suivi de l'indicateur, lien avec la hiérarchie et la médecine du travail"]],
+["CSS","Comment accueillez-vous un nouvel agent ?",["Avant : poste, planning, tuteur désigné","Jour J : accueil par moi, présentation, livret","Période doublée, objectifs progressifs","Points d'étape formalisés","Lien avec la fidélisation"]],
+["MED","On manque de lits tous les jours. Que proposez-vous à votre niveau ?",["Date prévisionnelle de sortie dès l'entrée","Sorties le matin","Freins levés tôt : transport, social, examens","Point quotidien médecin-cadre","Lien avec la cellule de gestion des lits et les structures d'aval"]],
+["DRH","Comment menez-vous un entretien annuel ?",["Préparation des deux côtés","Bilan factuel de l'année","Objectifs clairs et mesurables","Besoins de formation, projet professionnel","Compte rendu partagé, suivi en cours d'année"]]],
+e:["L'absentéisme dans une unité de soins : symptôme ou fatalité ?",["Causes individuelles et organisationnelles","Actions immédiates et de fond","Indicateurs et prévention"]]},
+
+{t:"Qualité, risques et droits du patient",s:"Signaler, analyser, protéger",
+f:[
+["La démarche qualité","<ul><li>Roue de <b>Deming</b> : <b>P</b>lanifier, <b>D</b>évelopper (faire), <b>C</b>ontrôler, <b>A</b>juster (PDCA).</li><li>Outils : procédures, audits, évaluation des pratiques professionnelles (EPP), patient traceur, indicateurs.</li><li>En métropole, les hôpitaux sont certifiés par la HAS. Au CHPF, la Chambre territoriale des comptes invite à <b>préparer une future certification qualité</b>.</li><li>Le cadre fait vivre la qualité au quotidien : une procédure connue et appliquée vaut mieux que dix classeurs.</li></ul>"],
+["Gérer les risques","<ul><li><b>Événement indésirable</b> (EI) : tout événement qui a causé ou aurait pu causer un dommage. EIG = grave.</li><li><b>Signaler n'est pas dénoncer</b> : culture juste, non punitive pour l'erreur, ferme pour la faute délibérée.</li><li>Analyser : <b>CREX</b> (comité de retour d'expérience), <b>RMM</b> (revue de morbidité et de mortalité), arbre des causes, diagramme d'<b>Ishikawa</b> (5M).</li><li>Modèle de <b>Reason</b> (les tranches de fromage) : un accident traverse plusieurs barrières défaillantes ; on cherche les causes du système, pas un coupable.</li></ul>"],
+["Vigilances du quotidien","<ul><li><b>Identitovigilance</b> : bracelet, vérification de l'identité avant chaque acte.</li><li><b>Médicament</b> : règle des 5 B : bon patient, bon médicament, bonne dose, bonne voie, bon moment.</li><li><b>Hygiène</b> : hygiène des mains, précautions standard, prévention des infections associées aux soins.</li><li>Hémovigilance, matériovigilance, pharmacovigilance.</li><li>Le cadre vérifie que les règles sont <b>connues, possibles et appliquées</b>.</li></ul>"],
+["Les droits du patient","<ul><li><b>Information</b> loyale, claire, adaptée ; <b>consentement</b> libre et éclairé.</li><li><b>Personne de confiance</b>, accès au dossier, respect de la dignité et de l'intimité.</li><li><b>Secret professionnel</b> : il couvre tout ce qui est vu, entendu, compris.</li><li>Prise en charge de la <b>douleur</b>, accompagnement de la <b>fin de vie</b>, directives anticipées.</li><li>Références nationales : loi du 4 mars 2002, lois de 2005 et 2016 sur la fin de vie. Vérifie le texte applicable localement.</li></ul>"],
+["Bientraitance et responsabilité","<ul><li><b>Bientraitance</b> : une démarche collective, pas seulement l'absence de maltraitance.</li><li>Maltraitance constatée ou suspectée : <b>protéger le patient</b>, établir les faits, <b>signaler à la hiérarchie</b>. Ne jamais couvrir.</li><li><b>Contention</b> : sur prescription médicale, réévaluée, tracée.</li><li>Plainte d'une famille : recevoir, écouter, s'excuser pour le vécu, expliquer, tracer, orienter vers la voie de réclamation.</li><li>Responsabilités du cadre : disciplinaire, administrative, civile, pénale. La <b>traçabilité</b> protège le patient et les professionnels.</li></ul>"]],
+q:[
+["PDCA signifie…",["Planifier, Développer, Contrôler, Ajuster","Prévoir, Décider, Communiquer, Agir","Patient, Dossier, Consentement, Accord","Procédure, Document, Contrôle, Audit"],"La roue de Deming."],
+["Un événement indésirable est…",["un événement qui a causé ou aurait pu causer un dommage","toujours une faute","un conflit d'équipe","une plainte de famille uniquement"],"Les presque-accidents se signalent aussi."],
+["Que signifie CREX ?",["Comité de retour d'expérience","Centre de recherche et d'expertise","Cellule de recrutement externe","Contrôle renforcé des examens"],"Analyse collective des événements signalés."],
+["Que signifie RMM ?",["Revue de morbidité et de mortalité","Réunion mensuelle de management","Registre des mouvements de malades","Rapport de maintenance du matériel"],"Analyse de cas avec les médecins."],
+["Le modèle de Reason est illustré par…",["des tranches de fromage à trous","une pyramide","une roue","une arête de poisson"],"L'accident traverse plusieurs barrières."],
+["Les 5M d'Ishikawa :",["Matière, Matériel, Méthode, Main-d'œuvre, Milieu","Malade, Médecin, Médicament, Matériel, Mesure","Motivation, Management, Mission, Moyens, Mesure","Matin, Midi, Mi-journée, Minuit, Matinée"],"Le diagramme en arête de poisson."],
+["La règle des 5 B concerne…",["l'administration du médicament","l'accueil des familles","le planning","le bionettoyage"],"Bon patient, bon médicament, bonne dose, bonne voie, bon moment."],
+["Avant tout acte, on vérifie d'abord…",["l'identité du patient","le numéro de chambre","le nom du médecin","l'heure du repas"],"Identitovigilance."],
+["Une culture de sécurité « juste » veut dire…",["on ne punit pas l'erreur signalée, mais on reste ferme sur la faute délibérée","on ne sanctionne jamais","on sanctionne toute erreur","on ne signale que le grave"],"C'est ce qui permet de signaler."],
+["Le consentement du patient doit être…",["libre et éclairé","écrit dans tous les cas","donné par la famille","implicite"],"Après une information loyale et adaptée."],
+["La personne de confiance est…",["désignée par le patient pour l'accompagner et témoigner de sa volonté","le médecin traitant","toujours le conjoint","le cadre du service"],"Le patient la choisit librement."],
+["Le secret professionnel couvre…",["tout ce qui a été vu, entendu ou compris","seulement le diagnostic","seulement le dossier papier","seulement les patients connus"],"Y compris sur les réseaux sociaux."],
+["Une contention physique se met en place…",["sur prescription médicale, réévaluée et tracée","à la demande de la famille","à l'initiative de l'aide-soignant","systématiquement la nuit"],"C'est une restriction de liberté."],
+["Vous suspectez une maltraitance par un agent. Vous devez…",["protéger le patient, établir les faits et signaler à la hiérarchie","attendre des preuves pendant des semaines","en parler seulement à l'équipe","changer le patient de chambre et oublier"],"Ne jamais couvrir."],
+["Face à une famille en colère, la première chose à faire :",["la recevoir au calme et l'écouter","lui remettre le formulaire de réclamation","appeler la sécurité","lui expliquer qu'elle a tort"],"L'écoute désamorce ; l'explication vient après."]],
+c:[
+{t:"L'erreur avouée",s:"Une infirmière vient te voir en larmes : elle a donné un médicament au mauvais patient. Le médecin, prévenu, dit qu'il n'y aura pas de conséquence. Elle te supplie de ne pas déclarer.",o:[
+["Tu la rassures sur sa démarche, tu vérifies la surveillance du patient et son information, et vous faites ensemble la déclaration pour une analyse en retour d'expérience.",2,"Soutien + sécurité du patient + signalement : l'erreur devient une leçon collective."],
+["Tu ne déclares pas pour la protéger.",0,"Tu prives l'équipe de l'analyse et tu engages ta responsabilité."],
+["Tu rédiges un rapport disciplinaire.",0,"Punir l'erreur avouée tue la culture du signalement."],
+["Tu déclares sans lui en reparler.",1,"Le signalement est fait, mais tu la laisses seule."]]},
+{t:"La chute du matahiapo",s:"Un patient de 84 ans a chuté cette nuit. Sa fille crie dans le couloir qu'elle va porter plainte et prévenir les médias.",o:[
+["Tu l'accueilles dans ton bureau, tu écoutes, tu dis ce qui est su et fait pour son père, tu proposes un échange avec le médecin, tu traces et tu informes la hiérarchie.",2,"Écoute, transparence, médecin associé, traçabilité, alerte."],
+["Tu lui dis que les chutes arrivent à cet âge.",0,"Vrai et inaudible : tu nies son émotion."],
+["Tu lui promets que l'agent de nuit sera sanctionné.",0,"Tu désignes un coupable avant toute analyse."],
+["Tu l'évites et tu laisses l'infirmière gérer.",0,"C'est précisément ton rôle."]]},
+{t:"Le geste brusque",s:"Tu vois un aide-soignant retourner sèchement une patiente âgée en lui disant : « Arrête de gémir. »",o:[
+["Tu interviens tout de suite auprès de la patiente, tu reçois l'agent dans l'heure sur les faits, tu informes ton cadre supérieur et tu traces.",2,"Protection immédiate, entretien factuel, signalement."],
+["Tu attends l'entretien annuel pour lui en parler.",0,"Tolérer, c'est valider."],
+["Tu le reprends vivement devant la patiente.",1,"Tu protèges, mais le recadrage se fait en privé."],
+["Tu te dis qu'il est fatigué en ce moment.",0,"La fatigue s'entend, elle n'excuse pas."]]}],
+o:[
+["DS","Une erreur médicamenteuse survient dans votre unité. Que faites-vous ?",["Sécurité du patient d'abord : médecin, surveillance","Information du patient","Soutien du professionnel","Déclaration de l'événement indésirable","Analyse collective des causes, actions correctives","Je préviens ma hiérarchie"]],
+["MED","À quoi sert un CREX ?",["Analyser collectivement les événements signalés","Chercher les causes du système, pas un coupable","Décider d'actions concrètes avec un responsable","Suivre ces actions","Nourrir la culture de sécurité"]],
+["CSS","Comment faire vivre la qualité sans alourdir l'équipe ?",["Peu d'objectifs, choisis avec l'équipe","Des outils simples intégrés au travail","Retour systématique sur ce qui est signalé","Référents dans l'équipe","Valoriser les résultats"]],
+["DRH","Suspicion de maltraitance par un agent : conduite à tenir ?",["Protéger le patient immédiatement","Recueillir les faits, entendre l'agent","Signaler à la hiérarchie sans délai","Tracer","Accompagner l'équipe, prévenir"]],
+["DS","Qu'est-ce que la bientraitance pour vous ?",["Plus que l'absence de maltraitance","Respect du rythme, de la dignité, de la parole","Une affaire d'organisation autant que de personnes","Lien avec les conditions de travail","Un exemple concret"]]],
+e:["Comment installer une culture du signalement dans une unité ?",["Freins : peur de la sanction, manque de temps, absence de retour","Leviers : culture juste, retour d'information, exemplarité","Rôle du cadre"]]},
+
+{t:"Projet et santé publique au fenua",s:"Conduire un projet, comprendre les besoins de la population",
+f:[
+["La méthode projet","<ul><li><b>1. Diagnostic</b> : quel problème, quelles données ?</li><li><b>2. Objectifs SMART</b> : Spécifique, Mesurable, Atteignable, Réaliste, Temporellement défini.</li><li><b>3. Plan d'action</b> : qui fait quoi, quand, avec quoi.</li><li><b>4. Mise en œuvre</b> : groupe de travail, communication, test.</li><li><b>5. Évaluation</b> : indicateurs définis <b>dès le départ</b>.</li><li><b>6. Ajustement</b> et pérennisation.</li></ul>"],
+["La boîte à outils","<ul><li><b>QQOQCP</b> : Qui, Quoi, Où, Quand, Comment, Pourquoi.</li><li><b>SWOT</b> : forces, faiblesses, opportunités, menaces.</li><li><b>Ishikawa</b> : chercher les causes.</li><li><b>Pareto</b> : 20 % des causes produisent 80 % des effets.</li><li><b>Gantt</b> : le calendrier du projet.</li><li><b>Fiche action</b> : objectif, pilote, échéance, indicateur.</li></ul>"],
+["Santé publique en Polynésie","<ul><li><b>Maladies chroniques</b> : obésité, diabète, hypertension, maladies cardiovasculaires, insuffisance rénale (dialyse), cancers.</li><li><b>Rhumatisme articulaire aigu</b>, encore présent.</li><li><b>Maladies infectieuses</b> : dengue, leptospirose ; intoxications comme la ciguatéra.</li><li><b>Addictions</b> et santé mentale.</li><li><b>Vieillissement</b> de la population.</li><li>À l'hôpital : chaque séjour est une occasion de prévention et d'<b>éducation thérapeutique</b>.</li></ul>"],
+["Le parcours du patient","<ul><li>L'hospitalisation n'est qu'une <b>étape</b> : avant (médecin, dispensaire, île d'origine) et après (domicile, structure de proximité).</li><li>La sortie se <b>coordonne</b> : ordonnances, rendez-vous, transport, relais avec les soignants de l'île.</li><li>Le cadre connaît son réseau : service social, structures de la Direction de la santé, libéraux, associations.</li><li>Un parcours bien préparé évite la réhospitalisation.</li></ul>"],
+["Culture et soins","<ul><li>La <b>famille élargie</b> est une ressource : l'associer, avec un interlocuteur identifié.</li><li>Les <b>matahiapo</b> (anciens) sont respectés : attention à la manière de s'adresser à eux.</li><li>La <b>spiritualité</b> compte dans la maladie et la fin de vie.</li><li><b>Rā'au tahiti</b> (médecine traditionnelle) : demander sans juger, informer le médecin, veiller à la sécurité.</li><li>Soignants arrivant d'ailleurs : les accompagner dans la découverte de ces repères.</li></ul>"]],
+q:[
+["Dans SMART, le « M » signifie…",["Mesurable","Motivant","Médical","Mensuel"],"Sans mesure, pas d'évaluation."],
+["La première étape d'un projet :",["le diagnostic de la situation","le plan d'action","l'achat du matériel","l'évaluation finale"],"On part des faits."],
+["Quand définit-on les indicateurs d'un projet ?",["Dès le départ","À la fin","Quand la direction les demande","Jamais"],"Sinon on ne peut rien comparer."],
+["SWOT analyse…",["forces, faiblesses, opportunités, menaces","salaires, travail, organisation, temps","soins, surveillance, ordonnances, transmissions","sécurité, vigilance, ordre, traçabilité"],"Interne (forces/faiblesses) et externe (opportunités/menaces)."],
+["La loi de Pareto :",["20 % des causes produisent 80 % des effets","50 % des agents font 50 % du travail","tout projet dure 20 semaines","80 % des projets échouent"],"On s'attaque d'abord aux causes principales."],
+["Le diagramme de Gantt sert à…",["planifier les tâches dans le temps","chercher les causes","mesurer la satisfaction","classer les risques"],"Le calendrier du projet."],
+["QQOQCP sert à…",["décrire complètement une situation","noter un agent","calculer un effectif","prescrire"],"Qui, Quoi, Où, Quand, Comment, Pourquoi."],
+["Parmi ces enjeux, lequel est majeur en Polynésie française ?",["Le diabète et l'obésité","Le paludisme","La maladie de Lyme","La tuberculose bovine"],"Les maladies chroniques pèsent lourd."],
+["Le RAA est…",["le rhumatisme articulaire aigu","un régime d'assurance","un réseau d'aide aux aidants","un rapport annuel d'activité"],"Il touche surtout les enfants et les jeunes."],
+["La ciguatéra est…",["une intoxication par des poissons de lagon","une maladie transmise par le moustique","une infection urinaire","une carence en vitamines"],"Liée à une toxine d'algue."],
+["L'éducation thérapeutique vise à…",["rendre le patient acteur de sa maladie chronique","remplacer le médecin","raccourcir les consultations","faire signer une décharge"],"Compétences d'auto-soin et d'adaptation."],
+["Un patient dit utiliser du rā'au tahiti. La bonne attitude :",["l'écouter sans juger et en informer le médecin","lui interdire","l'ignorer","le noter comme non-observant"],"Sécurité (interactions) et alliance."],
+["« Matahiapo » désigne…",["les personnes âgées","les nouveau-nés","les soignants","les visiteurs"],"Les anciens."],
+["Une sortie bien préparée permet surtout…",["d'éviter la réhospitalisation","de gagner une chambre seule","de réduire le planning","d'éviter le dossier"],"Le parcours continue après l'hôpital."],
+["Un projet imposé avec un délai irréaliste : le cadre…",["alerte sa hiérarchie avec des éléments factuels et propose un phasage","accepte sans rien dire","refuse en bloc","laisse l'équipe décider"],"Loyal et lucide à la fois."]],
+c:[
+{t:"Réduire les chutes",s:"Ta cadre supérieure te confie un projet : réduire les chutes dans ton unité. Par où commences-tu ?",o:[
+["Tu analyses les chutes des douze derniers mois (qui, quand, où, comment), puis tu réunis un petit groupe pour fixer un objectif chiffré et des actions.",2,"Diagnostic d'abord, puis objectif SMART avec l'équipe."],
+["Tu commandes tout de suite des barrières de lit pour tout le monde.",0,"Solution avant le diagnostic, et les barrières peuvent aggraver les chutes."],
+["Tu rappelles à l'équipe de faire attention.",0,"Une injonction n'est pas un projet."],
+["Tu écris seul une procédure complète.",1,"Du travail, mais sans l'équipe elle restera dans le classeur."]]},
+{t:"Quatrième hospitalisation",s:"Un patient diabétique revient pour la quatrième fois de l'année. L'équipe soupire : « Il ne fait aucun effort. » Il dit prendre du rā'au tahiti à la place de son traitement.",o:[
+["Tu proposes un temps d'échange avec lui et sa famille pour comprendre, tu associes le médecin, tu organises l'éducation thérapeutique et un relais près de chez lui.",2,"Comprendre, allier, organiser l'après : on traite la cause des retours."],
+["Tu lui expliques fermement qu'il met sa vie en danger.",1,"L'information est due, mais la leçon seule a déjà échoué trois fois."],
+["Tu laisses l'équipe gérer, c'est un habitué.",0,"Tu valides l'étiquette et rien ne change."],
+["Tu lui confisques ses préparations.",0,"Atteinte à ses droits et rupture de confiance."]]},
+{t:"Le projet de trop",s:"La direction te demande de lancer en un mois une nouvelle organisation des repas. Ton équipe sort de trois mois de sous-effectif.",o:[
+["Tu rencontres ta hiérarchie avec des faits (effectifs, charge), tu proposes un calendrier par étapes et un test sur une partie de l'unité, puis tu présentes le projet à l'équipe avec son sens.",2,"Loyauté + lucidité + méthode."],
+["Tu présentes le projet à l'équipe en disant que tu n'es pas d'accord.",0,"Désolidarisation : tu sabotes d'avance."],
+["Tu lances tout en un mois sans rien dire.",1,"Loyal, mais tu risques l'échec et l'épuisement."],
+["Tu ne fais rien et tu attends une relance.",0,"Ni loyal ni responsable."]]}],
+o:[
+["DS","Présentez un projet que vous aimeriez mener dans une unité.",["Un constat de départ, avec des faits","Un objectif mesurable","Des étapes et des acteurs","Des indicateurs d'évaluation","Les freins prévus","Le bénéfice pour le patient"]],
+["CSS","Comment évaluez-vous un projet ?",["Indicateurs définis dès le départ","Mesure avant / après","Indicateurs de résultat et de processus","Avis de l'équipe et des patients","Ajustements, communication des résultats"]],
+["MED","Diabète, obésité : quel rôle pour une unité d'hospitalisation ?",["Le séjour comme occasion de prévention","Éducation thérapeutique adaptée à la culture et à la langue","Associer la famille","Préparer la sortie et le relais de proximité","Cohérence des messages dans l'équipe, jusque dans les repas"]],
+["DRH","Comment mobiliser une équipe fatiguée sur un nouveau projet ?",["Reconnaître la fatigue","Donner le sens et le bénéfice concret","Phaser, commencer petit","S'appuyer sur des volontaires","Alerter la hiérarchie si les moyens manquent"]],
+["DS","Médecine traditionnelle et hôpital : quelle est votre position ?",["Respect des croyances et des pratiques","Sécurité du patient d'abord : interactions, retard de soins","Dialogue sans jugement, médecin informé","Traçabilité","Former l'équipe à poser la question"]]],
+e:["Prévenir plutôt que guérir : quelle place pour l'hôpital dans la prévention au fenua ?",["Poids des maladies chroniques","L'hospitalisation comme moment d'éducation","Liens avec les structures de proximité"]]},
+
+{t:"Le concours et l'entretien",s:"Épreuves, méthode, projet professionnel, oral",
+f:[
+["Le concours d'entrée en IFCS","<ul><li>Conditions : diplôme d'une profession paramédicale listée + <b>4 ans</b> d'exercice en équivalent temps plein.</li><li><b>Admissibilité</b> : écrit anonyme de <b>4 heures</b>, noté sur 20 : commentaire d'un ou plusieurs documents sur un sujet sanitaire ou social. Il faut au moins 10.</li><li><b>Admission</b> : oral de <b>30 minutes</b> noté sur 20, à partir d'un dossier (parcours, projet professionnel) : exposé puis échange avec le jury.</li><li>Classement sur la somme des deux notes.</li><li>Les candidats d'outre-mer peuvent demander à passer les épreuves sur place.</li><li>Formation : 42 semaines, 6 modules, un mémoire.</li></ul>"],
+["Le concours du Pays","<ul><li>Pour devenir <b>fonctionnaire cadre de santé</b> du Pays : concours <b>sur titres</b> avec <b>entretien</b> devant un jury.</li><li>Il faut donc <b>déjà</b> le diplôme de cadre de santé.</li><li>Le jury évalue : motivation, connaissance du statut et du système de santé local, aptitude à encadrer.</li><li>Surveille les avis sur le site de la <b>DTI</b> ; l'hôpital recrute aussi des cadres sous contrat.</li><li>Ordre logique : expérience → IFCS → diplôme → concours du Pays ou contrat.</li></ul>"],
+["Méthode de l'écrit","<ul><li><b>30 min</b> : lire, surligner, dégager les idées clés.</li><li><b>30 min</b> : problématique et plan en 2 ou 3 parties.</li><li><b>2 h 30</b> : rédiger. Introduction (accroche, contexte, problématique, annonce du plan), développement argumenté, conclusion.</li><li><b>30 min</b> : relire.</li><li>Ce qu'on attend : comprendre, analyser, <b>se positionner en futur cadre</b>, écrire clairement.</li><li>Pièges : résumer le texte, réciter un cours, oublier le positionnement.</li></ul>"],
+["Le projet professionnel","<ul><li><b>D'où je viens</b> : parcours, compétences, expériences marquantes.</li><li><b>Pourquoi cadre</b> : le déclencheur, les expériences de coordination, de tutorat, de projet.</li><li><b>Ma conception de la fonction</b> : mes valeurs, mon style.</li><li><b>Où je vais</b> : projet à 3–5 ans, type d'unité, envies.</li><li><b>Lucidité</b> : ce que je dois encore apprendre.</li><li>Un parcours atypique se présente comme une <b>richesse</b>, à condition d'en tirer des compétences précises.</li></ul>"],
+["Réussir l'oral","<ul><li>Exposé <b>structuré et chronométré</b>, sans lire.</li><li>Méthode <b>STAR</b> pour chaque exemple : Situation, Tâche, Action, Résultat.</li><li>Écouter la question jusqu'au bout, prendre deux secondes, répondre en « je ».</li><li>Si on ne sait pas : le dire, et expliquer où l'on chercherait.</li><li>Face à la contradiction : rester calme, argumenter, savoir nuancer.</li><li>Tenue sobre, regard vers tous les membres, conclure en une phrase.</li></ul>"]],
+q:[
+["Durée de l'écrit d'admissibilité en IFCS :",["4 heures","1 heure","2 heures","6 heures"],"Quatre heures, anonyme, sur 20."],
+["En quoi consiste cet écrit ?",["Un commentaire de documents sur un sujet sanitaire ou social","Un QCM de pharmacologie","Une dictée","Un calcul de doses"],"Analyse, synthèse, positionnement."],
+["Note minimale pour être admissible :",["10 sur 20","8 sur 20","12 sur 20","15 sur 20"],"La moyenne."],
+["Durée de l'oral d'admission en IFCS :",["30 minutes","5 minutes","1 heure","2 heures"],"Exposé puis échange, sur 20."],
+["L'oral s'appuie sur…",["un dossier présentant le parcours et le projet professionnel","un cas clinique tiré au sort","une épreuve de langue","un entretien de groupe"],"Le projet professionnel est central."],
+["Le classement final en IFCS se fait sur…",["la somme des notes d'admissibilité et d'admission","la seule note d'oral","l'ancienneté","l'âge"],"Les deux épreuves comptent."],
+["Le concours de cadre de santé du Pays est…",["sur titres, avec entretien","un écrit de 4 heures","ouvert sans diplôme","un stage probatoire"],"Il faut déjà le diplôme de cadre."],
+["Dans STAR, le « R » signifie…",["Résultat","Réunion","Règlement","Risque"],"Situation, Tâche, Action, Résultat."],
+["Dans une introduction d'écrit, on trouve…",["accroche, contexte, problématique, annonce du plan","la conclusion","la liste des sources","son CV"],"La problématique guide tout le devoir."],
+["Le piège principal du commentaire de documents :",["résumer le texte sans se positionner","écrire trop court","faire un plan","citer le texte"],"Le jury veut voir le futur cadre."],
+["Vous ne connaissez pas la réponse à une question du jury. Vous…",["le dites simplement et expliquez où vous chercheriez","inventez","restez silencieux","changez de sujet"],"L'honnêteté est une qualité de cadre."],
+["Le jury vous contredit sèchement. Vous…",["restez calme, argumentez et acceptez de nuancer","cédez immédiatement","haussez le ton","vous excusez d'avoir parlé"],"On teste votre positionnement."],
+["Un bon projet professionnel est d'abord…",["personnel, argumenté et réaliste","copié d'un modèle","le plus long possible","centré sur le salaire"],"Le jury repère vite le récité."],
+["Combien de temps garder pour la relecture sur 4 heures ?",["Environ 30 minutes","Aucune","2 heures","5 minutes"],"L'orthographe et la clarté comptent."],
+["Qui organise les concours de la fonction publique du Pays ?",["La DTI","L'IFCS","La HAS","Le CESEC"],"Direction des talents et de l'innovation."]],
+c:[
+{t:"Le jury contredit",s:"Tu viens d'expliquer ta vision du management participatif. Un membre du jury coupe : « C'est de la théorie. Avec vingt agents et trois absents, vous n'aurez pas le temps de discuter. »",o:[
+["Tu reconnais la contrainte, tu précises que le style s'adapte à la situation (directif dans l'urgence, participatif sur les projets) et tu donnes un exemple.",2,"Calme, nuance, exemple : tu montres ta capacité à tenir une position."],
+["Tu abandonnes ton idée : « Vous avez raison. »",0,"Tu cèdes à la première pression."],
+["Tu répètes la même chose plus fort.",0,"Rigidité."],
+["Tu dis que cela dépend, sans préciser.",1,"La nuance est là, mais vide."]]},
+{t:"Le sigle inconnu",s:"« Pouvez-vous nous parler du SOS ? » Tu as un trou complet.",o:[
+["« Je ne retrouve pas ce sigle à l'instant. Pouvez-vous me le préciser ? » puis, s'il s'agit du schéma d'organisation sanitaire, tu relies à ce que tu sais.",2,"Honnête, et tu te donnes une chance de montrer tes connaissances."],
+["Tu inventes une définition avec aplomb.",0,"Le jury connaît la réponse."],
+["Tu dis « je ne sais pas » et tu te tais.",1,"Honnête, mais tu n'essaies rien."],
+["Tu réponds que ce n'est pas le rôle d'un cadre.",0,"Faux et maladroit."]]},
+{t:"« Vous n'avez jamais managé »",s:"Le jury : « Votre parcours est riche, mais vous n'avez jamais encadré une équipe de soins. Pourquoi vous ? »",o:[
+["Tu cites des expériences précises de responsabilité d'équipe, de coordination ou de formation, ce que tu en as appris, et ce que tu sais devoir encore acquérir.",2,"Compétences transférables + lucidité."],
+["Tu réponds que tout le monde commence un jour.",0,"Vrai, mais ce n'est pas un argument."],
+["Tu affirmes que manager est inné chez toi.",0,"Aucune preuve, et peu de recul."],
+["Tu reconnais que c'est un vrai manque et tu t'arrêtes là.",1,"Lucide, mais tu ne défends pas ta candidature."]]}],
+o:[
+["DS","Exposé : présentez votre projet professionnel en cinq minutes.",["Plan annoncé","Parcours résumé par compétences","Le déclencheur du projet cadre","Ma conception de la fonction","Projet à 3–5 ans","Temps tenu, conclusion nette"]],
+["CSS","Racontez une situation où vous avez dû prendre une décision difficile.",["Situation claire","Mon rôle précis","Ce que j'ai fait et pourquoi","Le résultat","Ce que j'en ai appris"]],
+["MED","Qu'est-ce qui vous fait dire que vous serez un bon cadre ?",["Des faits, pas des adjectifs","Retours reçus de collègues ou de responsables","Qualités reliées aux missions du cadre","Conscience de ce qui reste à apprendre"]],
+["DRH","Où vous voyez-vous dans cinq ans ?",["Diplômé, en poste dans une unité","Un projet d'unité mené","Une envie d'évolution réaliste","Ancrage au fenua","Cohérence avec le reste du discours"]],
+["DS","Que voulez-vous que le jury retienne de vous ?",["Une phrase, pas un discours","Ma motivation","Ma valeur ajoutée","Un remerciement sobre"]]],
+e:["Concours blanc : « Manager, est-ce encore soigner ? » Rédigez une introduction complète et un plan détaillé.",["Le soin indirect : rendre le soin possible","Prendre soin de l'équipe","Risque de s'éloigner du patient et comment y répondre"]]}
+];
+
+/* ===================== ANNALES : thèmes réellement tombés + sujets d'entraînement dans le même esprit ===================== */
+const AN=[
+["Les générations au travail","Document imaginé : une tribune de cadre décrit des équipes où cohabitent quatre générations, avec des rapports différents au planning, à la hiérarchie et à l'engagement. Commentez, puis dites comment un cadre de santé peut faire de cette diversité une force.",["Thème tombé à l'IFCS du Pays d'Aix","Ne pas caricaturer les générations","Accueil, tutorat croisé, règles communes","Reconnaître chacun, construire du collectif"]],
+["L'intelligence artificielle en santé","Document imaginé : un article présente des usages de l'intelligence artificielle dans le dépistage des cancers et l'accompagnement du vieillissement. Commentez, puis interrogez la place du soignant et du cadre face à ces outils.",["Thème présent dans les préparations 2024-2025","Bénéfices : précision, temps gagné","Risques : éthique, données, déshumanisation","Rôle du cadre : former, garder le sens du soin"]],
+["Vieillissement et dépendance","Document imaginé : un rapport alerte sur l'augmentation des personnes âgées hospitalisées faute de solution d'aval. Commentez et proposez des leviers à l'échelle d'une unité de soins.",["Thème classique des annales : personnes âgées","Parcours, sortie préparée, lien ville-hôpital","Bientraitance, prévention des chutes et de la dénutrition","Au fenua : rôle de la famille, projet d'unité de gériatrie"]],
+["Éthique et consentement","Document imaginé : un philosophe rappelle que consentir suppose de comprendre, et que l'urgence ou la langue peuvent vider le consentement de son sens. Commentez à partir de situations de soins.",["Thème classique : philosophie, éthique","Information loyale et adaptée","Langue, culture, vulnérabilité","Rôle du cadre : organiser les conditions du consentement"]],
+["Le sens au travail","Document imaginé : une enquête montre que des soignants quittent l'hôpital moins pour le salaire que pour la perte de sens. Commentez et dégagez les leviers du cadre de proximité.",["Thème classique : le travail","Herzberg : facteurs d'hygiène et facteurs moteurs","Reconnaissance, autonomie, projet d'unité","Limites : ce qui ne dépend pas du cadre"]],
+["Prévention et inégalités de santé","Document imaginé : un texte de santé publique soutient que l'hôpital soigne des maladies que la prévention aurait pu éviter. Commentez, en vous appuyant sur une réalité de santé que vous connaissez.",["Thème classique : santé, santé publique","Maladies chroniques, déterminants de santé","L'hospitalisation comme moment d'éducation","Coordination avec les soins de proximité"]],
+["Le patient partenaire","Document imaginé : une association d'usagers demande que les patients participent aux décisions qui organisent les services. Commentez.",["Thème classique : soignés-soignants, hôpital","Droits des usagers","Recueil de la satisfaction, patient expert","Ce que cela change dans le management d'une unité"]],
+["L'hôpital et ses réformes","Document imaginé : un éditorial décrit un hôpital sommé de faire plus avec moins, entre contraintes budgétaires et exigence de qualité. Commentez et situez le rôle du cadre de santé.",["Thème classique : l'hôpital","Pertinence des soins, durée de séjour","Double loyauté du cadre","Qualité et efficience ne s'opposent pas toujours"]]];
+
+/* ===================== CONDITIONS RÉELLES : questions difficiles, relances, grille, documents ===================== */
+const X=[
+["DRH","Votre parcours comporte un détour ou une interruption. Expliquez-le.",["Je l'assume sans me justifier longuement","Ce que j'y ai appris, en compétences précises","Le lien avec la fonction de cadre","Pourquoi je reviens maintenant"]],
+["DS","Vous avez déjà travaillé dans cet établissement. Comment encadrerez-vous d'anciens collègues ?",["Atout : je connais le terrain","Risque : la proximité","Équité affichée dès le premier jour","Entretien individuel avec chacun","Appui du cadre supérieur"]],
+["MED","Je suis chef de service et je vous dis que le planning, c'est moi qui le décide. Que répondez-vous ?",["Calme, pas d'affrontement","Je demande quel besoin médical est en jeu","Le planning soignant relève de l'encadrement soignant","Je propose un point régulier","Si blocage : cadre supérieur"]],
+["CSS","Citez un échec professionnel et ce que vous en avez fait.",["Un vrai échec","Ma part de responsabilité","Ce que j'ai changé ensuite","Sans accuser les autres"]],
+["DRH","Un agent sous contrat et un fonctionnaire commettent la même faute. Les traitez-vous de la même façon ?",["Même exigence, mêmes faits établis","Procédures différentes selon le statut","Entretien préalable obligatoire pour ANT et ANFA","Je sollicite les ressources humaines","Rapport factuel dans tous les cas"]],
+["DS","Je vous demande d'appliquer une décision que vous jugez mauvaise pour les patients. Que faites-vous ?",["Je vous expose mes arguments, par écrit si besoin","Je propose une alternative","J'applique si la décision est maintenue","Sauf ordre manifestement illégal compromettant gravement un intérêt public","Je ne me désolidarise pas devant l'équipe, je fais remonter les effets"]],
+["MED","Deux infirmières vous disent qu'un médecin leur parle mal. Que faites-vous ?",["Je recueille des faits précis","J'en parle au médecin en privé","J'informe le chef de service et mon cadre supérieur","Je protège les agents","Si cela persiste : signalement formalisé"]],
+["DRH","Un préavis de grève est déposé pour demain dans votre unité. Quel est votre rôle ?",["Le droit de grève est reconnu","Continuité : le service minimum est organisé par la direction","Je recense, j'organise l'effectif de sécurité","Aucune pression sur les grévistes","J'informe ma hiérarchie, je reste neutre"]],
+["CSS","En un quart d'heure : une absence imprévue, une famille en colère, une panne de pousse-seringue. Dans quel ordre agissez-vous ?",["Sécurité du patient d'abord : le matériel","Puis l'effectif","Puis la famille, à qui je donne un horaire","Je délègue ce qui peut l'être","Je trace et j'alerte"]],
+["DS","Qu'avez-vous lu récemment sur la santé en Polynésie française ?",["Une source précise","L'idée principale","Mon avis argumenté","Le lien avec le travail d'un cadre"]],
+["DRH","Combien d'heures par semaine travaille un fonctionnaire du Pays, et pourquoi devez-vous le savoir ?",["39 heures","Base du planning et des heures supplémentaires","Repos à respecter","Les règles diffèrent selon le statut","Je vérifie les règles de l'établissement"]],
+["MED","Pourquoi vous plutôt qu'un autre candidat ?",["Deux ou trois atouts prouvés par des faits","Ce que j'apporte de différent","Sans dénigrer les autres","Court"]],
+["DS","Parlez-vous le reo tahiti ? Qu'est-ce que cela change dans un service ?",["Réponse honnête sur mon niveau","Compréhension, confiance, consentement","Accueil des familles et des anciens","Ressource pour l'équipe"]],
+["CSS","Qu'est-ce qui vous mettrait en difficulté dans ce poste ?",["Une difficulté réelle","Pourquoi","Ce que je mets en place","À qui je demanderais de l'aide"]]];
+const RELANCES=["Concrètement, que faites-vous le lendemain matin ?","Donnez-moi un exemple vécu.","Et si cela ne fonctionne pas ?","Sur quel texte vous appuyez-vous ?","Qui prévenez-vous, et dans quel ordre ?","Vous n'avez pas répondu à ma question.","Soyez plus bref, s'il vous plaît."];
+const CRIT=["Expression : claire, structurée, sans lire","Motivation et projet professionnel","Connaissance de la fonction et de l'environnement (fenua, hôpital, statut)","Positionnement et analyse face aux situations","Écoute, maîtrise de soi, gestion du temps"];
+const DOCS=[
+["Quand l'équipe ne tient plus","<p>On a longtemps cru que les soignants partaient pour de meilleurs salaires. Les entretiens de départ racontent autre chose. Ceux qui quittent l'hôpital parlent d'abord de plannings modifiés la veille, de congés refusés sans explication, de nuits faites à deux là où il en faudrait trois. Ils parlent ensuite de ce qu'ils ne peuvent plus faire : s'asseoir cinq minutes auprès d'un patient inquiet, transmettre correctement, former l'étudiant qui les suit.</p><p>Le salaire compte, bien sûr. Mais il ne retient personne dans un service où l'on a le sentiment de mal travailler. À l'inverse, certaines unités gardent leurs équipes malgré une charge comparable. On y trouve presque toujours les mêmes ingrédients : un planning prévisible, un encadrement présent, des décisions expliquées, et la possibilité de dire qu'une organisation ne fonctionne pas sans passer pour un râleur.</p><p>Le cadre de proximité ne fixe ni les effectifs ni les grilles de rémunération. Il serait injuste de lui faire porter la fidélisation à lui seul. Il serait tout aussi faux de dire qu'il n'y peut rien : c'est lui qui rend le travail tenable ou non, jour après jour. Entre ce qu'il doit obtenir de sa hiérarchie et ce qu'il doit à son équipe, sa marge est étroite. C'est pourtant là que se joue une grande part de l'attractivité d'un hôpital.</p>"],
+["L'hôpital au bout de l'archipel","<p>Dans un territoire d'îles, l'hôpital de référence n'est jamais seulement un hôpital. Il est le dernier recours de patients venus de très loin, qui ont laissé derrière eux leur famille, leur travail, parfois leur langue. Leur séjour ne commence pas aux urgences et ne s'achève pas à la sortie : il commence dans un dispensaire, se poursuit dans un avion, et se termine des semaines plus tard, quand un infirmier isolé reprend le suivi avec les moyens dont il dispose.</p><p>Cette géographie a un coût. Un lit occupé quelques jours de plus faute de vol retour est un lit qui manque à un autre. Une consigne de sortie mal comprise devient une réhospitalisation. Une maladie chronique mal équilibrée, à mille kilomètres de tout spécialiste, finit en évacuation d'urgence.</p><p>On peut y voir une fatalité. On peut aussi y voir une raison d'organiser les soins autrement : préparer la sortie dès l'entrée, parler au soignant de l'île avant le départ du patient, utiliser la télémédecine pour ce qu'elle sait faire, et considérer chaque hospitalisation comme une occasion d'éducation. Aucune de ces idées n'est nouvelle. Ce qui manque le plus souvent n'est pas la technique, mais quelqu'un qui, dans chaque unité, tienne le fil du parcours.</p>"]];
+const SUJET="Dégagez les idées principales de ce texte, puis commentez-les en vous positionnant en futur cadre de santé.";
+
+/* ===================== MOTEUR ===================== */
+const NS=L.length*5,KEY="cadre-fenua-v1",DAYN=["J1","J2","J3","J4","J5"];
+let S={s:{},xp:0,w:[],days:[],free:false,txt:{},ex:[]},tm=null;
+const app=document.getElementById("app"),nav=document.getElementById("nav");
+function load(){try{const r=localStorage.getItem(KEY);if(r)S=Object.assign(S,JSON.parse(r))}catch(e){}}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+const shuf=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+const rng=(a,b)=>Array.from({length:b-a},(_,i)=>a+i);
+const today=()=>new Date().toISOString().slice(0,10);
+function mix(n,l){ // révision : erreurs d'abord, puis tirage dans les niveaux déjà vus
+  const pool=[];for(let i=0;i<=l;i++)L[i].q.forEach((_,k)=>pool.push(i+"."+k));
+  const w=shuf(S.w.filter(k=>pool.includes(k))),rest=shuf(pool.filter(k=>!w.includes(k)));
+  return w.concat(rest).slice(0,n).map(k=>k.split(".").map(Number));}
+function plan(l,d){const Q=a=>a.map(k=>[l,k]);
+  return [
+  [{k:"lire",f:[0,1,2],m:20},{k:"quiz",q:()=>Q(rng(0,8)),m:15},{k:"quiz",q:()=>mix(6,l),m:10,n:"Révision"}],
+  [{k:"lire",f:[3,4],m:15},{k:"quiz",q:()=>Q(rng(8,15)),m:15},{k:"cas",c:[0],m:10},{k:"oral",o:[0],m:10}],
+  [{k:"cas",c:[1,2],m:20},{k:"oral",o:[1,2],m:20},{k:"quiz",q:()=>mix(8,l),m:15,n:"Révision"}],
+  [{k:"oral",o:[3,4],m:20},{k:"quiz",q:()=>mix(10,l),m:15,n:"Révision ciblée"},{k:"lire",f:[0,1,2,3,4],m:15,n:"Relecture des fiches"}],
+  [{k:"quiz",q:()=>shuf(Q(rng(0,15))),m:20,n:"Épreuve du niveau"},{k:"ecrit",m:40}]][d];}
+const LBL={lire:["📖","Fiches à lire"],quiz:["✅","Quiz"],cas:["🧭","Mise en situation"],oral:["🎙️","Devant le Conseil"],ecrit:["✍️","Écrit"]};
+const sk=(l,d,i)=>l+"."+d+"."+i;
+const dayDone=(l,d)=>plan(l,d).every((_,i)=>sk(l,d,i) in S.s);
+function curDay(){for(let n=0;n<NS;n++){const l=Math.floor(n/5),d=n%5;if(!dayDone(l,d))return n}return NS}
+function streak(){let n=0,dt=new Date();const has=x=>S.days.includes(x.toISOString().slice(0,10));
+  if(!has(dt))dt.setDate(dt.getDate()-1);while(has(dt)){n++;dt.setDate(dt.getDate()-1)}return n}
+const RANKS=[[0,"Faisant fonction"],[400,"Cadre stagiaire"],[1000,"Cadre de proximité"],[1800,"Cadre confirmé"],[2700,"Cadre supérieur"],[3600,"Directeur·rice des soins"]];
+function rank(){let r=RANKS[0],nx=null;for(const x of RANKS){if(S.xp>=x[0])r=x;else{nx=x;break}}return{r,nx}}
+function gain(key,score){const first=!(key in S.s);const xp=first?10+Math.round(score/5):5;
+  if(key)S.s[key]=Math.max(S.s[key]||0,score);S.xp+=xp;if(!S.days.includes(today()))S.days.push(today());save();return xp}
+const TTS=("speechSynthesis" in window)&&("SpeechSynthesisUtterance" in window);
+let AU=null,AUSRC=null,AUBLOB={};
+function hush(){try{if(TTS)speechSynthesis.cancel()}catch(e){}try{if(AU){AU.pause();AU=null}}catch(e){}}
+function prefetch(src){AUSRC=src;if(!src||AUBLOB[src])return;try{fetch(src).then(r=>r.ok?r.blob():null).then(b=>{if(b)AUBLOB[src]=URL.createObjectURL(b)}).catch(()=>{})}catch(e){}}
+function toast(t){let d=document.getElementById("tst");if(!d){d=document.createElement("div");d.id="tst";d.style.cssText="position:fixed;left:12px;right:12px;bottom:80px;background:#14323a;color:#fff;padding:12px 14px;border-radius:12px;font-size:14.5px;z-index:9";document.body.appendChild(d)}d.textContent=t;d.style.display="block";clearTimeout(d._t);d._t=setTimeout(()=>d.style.display="none",6000)}
+function playFile(btn){const src=AUBLOB[AUSRC]||AUSRC;try{const a=new Audio(src);AU=a;a.onended=a.onerror=()=>{if(AU===a){AU=null;btn.textContent="🔊 Écouter"}};const pr=a.play();btn.textContent="⏹ Arrêter";if(pr&&pr.catch)pr.catch(()=>{AU=null;btn.textContent="🔊 Écouter";toast("Lecture impossible ici. Ouvre le jeu dans Chrome pour l'écouter.")})}catch(e){toast("Lecture impossible ici.")}}
+function halt(){if(tm){clearInterval(tm);tm=null}hush()}
+function readOut(btn){
+  if(AU||(TTS&&speechSynthesis.speaking)){hush();btn.textContent="🔊 Écouter";return}
+  if(!TTS){if(AUSRC)return playFile(btn);return toast("Sur cet écran, la lecture vocale demande Chrome. Les fiches et les documents de l'écrit, eux, se lisent partout.")}
+  try{
+  const box=document.createElement("div");app.querySelectorAll(".card").forEach(c=>box.appendChild(c.cloneNode(true)));
+  box.querySelectorAll("textarea,.timer,.btn,.tag,.av,input").forEach(x=>x.remove());
+  box.querySelectorAll("li,p,h2,h3,.opt,.fb,label,b").forEach(x=>x.append(". "));
+  const txt=box.textContent.replace(/[✓✗≈«»]/g," ").replace(/\s+/g," ").trim();if(!txt)return;
+  const parts=txt.match(/[^.!?]+[.!?]*/g)||[txt];let n=0;
+  parts.forEach(t=>{const u=new SpeechSynthesisUtterance(t);u.lang="fr-FR";u.rate=.95;
+    const v=speechSynthesis.getVoices().find(v=>/^fr/i.test(v.lang));if(v)u.voice=v;
+    u.onend=u.onerror=()=>{if(++n>=parts.length)btn.textContent="🔊 Écouter"};speechSynthesis.speak(u)});
+  btn.textContent="⏹ Arrêter"}catch(e){}}
+function hdr(title,back){return `<div class="top"><button class="back" id="bk">←</button><b>${title}</b><button class="au" id="au">🔊 Écouter</button></div>`}
+function bindBack(fn){const b=document.getElementById("bk");if(b)b.onclick=()=>{halt();fn()};const a=document.getElementById("au");if(a)a.onclick=()=>readOut(a)}
+function setNav(v){const it=[["home","🏝️","Accueil"],["parcours","🗺️","Parcours"],["fiches","📚","Fiches"],["exam","⏱️","Examens"],["profil","👤","Profil"]];
+  nav.innerHTML=it.map(x=>`<button class="${x[0]===v?"on":""}" data-v="${x[0]}"><span>${x[1]}</span>${x[2]}</button>`).join("");
+  nav.querySelectorAll("button").forEach(b=>b.onclick=()=>go(b.dataset.v))}
+function go(v,a,b){halt();AUSRC=null;window.scrollTo(0,0);setNav(v);({home,parcours,fiches,conseil,profil,day,exam})[v](a,b);try{if(v!=="day")location.hash=v}catch(e){}}
+
+/* ---------- Écrans ---------- */
+function home(){const n=curDay(),l=Math.floor(n/5),d=n%5,{r,nx}=rank(),pct=Math.round(n/NS*100);
+  app.innerHTML=`<div class="band"></div><h1>Cadre Fenua</h1><p class="mut">Objectif cadre de santé · entraînement quotidien</p>
+  <div class="card hero">${n<NS?`<small>Séance ${n+1} sur ${NS} · Niveau ${l+1}</small><h2 style="margin:4px 0">${L[l].t}</h2><small>${DAYN[d]} · environ ${plan(l,d).reduce((s,x)=>s+x.m,0)} min</small><button class="btn wh" id="goDay">Commencer la séance</button>`:`<h2 style="margin:4px 0">Parcours terminé 🎉</h2><small>Continue avec les révisions et le Conseil jusqu'au jour J.</small>`}</div>
+  <div class="card"><div class="row"><div class="stat"><b>${streak()}</b><small>jours de suite</small></div><div class="stat"><b>${S.xp}</b><small>points</small></div><div class="stat"><b>${pct}%</b><small>parcours</small></div></div>
+  <div class="bar"><i style="width:${nx?Math.min(100,(S.xp-r[0])/(nx[0]-r[0])*100):100}%"></i></div><small>Grade : <b>${r[1]}</b>${nx?` · prochain : ${nx[1]} à ${nx[0]} points`:""}</small></div>
+  <button class="btn sec" id="rev">Réviser mes erreurs (${S.w.length})</button>
+  <button class="btn sec" id="cs">Passer devant le Conseil</button>
+  <button class="btn sec" id="exb">Épreuves en conditions réelles</button>
+  <div class="card warn"><h3>Avant de commencer</h3><p class="mut">Vérifie ton éligibilité (diplôme, nationalité, âge) dans <b>Profil → Suis-je éligible ?</b> Ce jeu est un outil d'entraînement : les textes officiels font foi.</p></div>`;
+  const g=document.getElementById("goDay");if(g)g.onclick=()=>go("day",l,d);
+  document.getElementById("rev").onclick=()=>{const it=mix(10,L.length-1);quiz(it,"Révision",sc=>{gain("",sc);go("home")},()=>go("home"))};
+  document.getElementById("cs").onclick=()=>go("conseil");document.getElementById("exb").onclick=()=>go("exam")}
+function parcours(){const cur=curDay();
+  app.innerHTML=`<h1>Parcours</h1><p class="mut">${L.length} niveaux · ${NS} séances d'environ une heure. À 5 séances par semaine : ${L.length} semaines ; tous les jours : environ ${Math.ceil(NS/7)}.</p>`+L.map((x,l)=>`<div class="card"><div class="lvl"><div class="num">${l+1}</div><div style="flex:1"><h3>${x.t}</h3><small>${x.s}</small><div class="days">${DAYN.map((n,d)=>{const i=l*5+d,dn=dayDone(l,d),lk=!S.free&&i>cur;return `<button class="day ${dn?"done":i===cur?"cur":lk?"lock":""}" data-l="${l}" data-d="${d}" ${lk?"disabled":""}>${dn?"✓":n}</button>`}).join("")}</div></div></div></div>`).join("");
+  app.querySelectorAll(".day").forEach(b=>b.onclick=()=>go("day",+b.dataset.l,+b.dataset.d))}
+function day(l,d){const P=plan(l,d);
+  app.innerHTML=hdr(`Niveau ${l+1} · ${DAYN[d]}`)+`<h2>${L[l].t}</h2><p class="mut">Environ ${P.reduce((s,x)=>s+x.m,0)} minutes. Fais les étapes dans l'ordre.</p>`+P.map((p,i)=>{const k=sk(l,d,i),dn=k in S.s;return `<button class="step ${dn?"done":""}" data-i="${i}"><span class="ic">${LBL[p.k][0]}</span><span><b>${p.n||LBL[p.k][1]}</b><br><small>${p.m} min</small></span>${dn?`<span class="sc">${S.s[k]}%</span>`:""}</button>`}).join("")+(dayDone(l,d)?`<div class="card" style="text-align:center"><b>Séance validée ✓</b></div>`:"");
+  bindBack(()=>go("parcours"));
+  app.querySelectorAll(".step").forEach(b=>b.onclick=()=>{const i=+b.dataset.i,p=P[i],k=sk(l,d,i),back=()=>go("day",l,d),fin=sc=>end(k,sc,back);
+    if(p.k==="lire")lire(l,p.f,fin,back);else if(p.k==="quiz")quiz(p.q(),p.n||"Quiz",fin,back);else if(p.k==="cas")cas(l,p.c,fin,back);else if(p.k==="oral")oral(p.o.map(o=>[l,o]),fin,back);else ecrit(l,fin,back)})}
+function end(key,score,back){halt();const xp=gain(key,score);
+  app.innerHTML=`<div class="card" style="text-align:center"><div style="font-size:44px">${score>=80?"🌺":score>=50?"🌿":"🌱"}</div><h2>${score}%</h2><p>+${xp} points</p><p class="mut">${score>=80?"Très solide.":score>=50?"C'est en bonne voie, les erreurs reviendront en révision.":"À retravailler : relis les fiches puis recommence."}</p><button class="btn" id="ok">Continuer</button></div>`;
+  document.getElementById("ok").onclick=back}
+
+/* ---------- Activités ---------- */
+function lire(l,fs,done,back){let i=0;(function show(){hush();prefetch(`audio/f${l}-${fs[i]}.mp3`);const f=L[l].f[fs[i]];window.scrollTo(0,0);
+  app.innerHTML=hdr(`Fiche ${i+1}/${fs.length}`)+`<div class="card fiche"><h2 style="margin-top:0">${f[0]}</h2>${f[1]}</div><button class="btn" id="nx">${i<fs.length-1?"Fiche suivante":"J'ai lu et compris"}</button>`;
+  bindBack(back);document.getElementById("nx").onclick=()=>{i++;i<fs.length?show():done(100)}})()}
+function quiz(items,title,done,back){AUSRC=null;let i=0,ok=0;if(!items.length)return done(100);(function show(){const [l,k]=items[i],Q=L[l].q[k],o=shuf(Q[1].map((t,j)=>[t,j===0]));hush();window.scrollTo(0,0);
+  app.innerHTML=hdr(`${title} · ${i+1}/${items.length}`)+`<div class="card"><span class="tag">Niveau ${l+1}</span><p class="q">${Q[0]}</p>${o.map((x,j)=>`<button class="opt" data-j="${j}">${x[0]}</button>`).join("")}<div id="fb"></div></div>`;
+  bindBack(back);const bs=app.querySelectorAll(".opt");bs.forEach((b,j)=>b.onclick=()=>{const good=o[j][1],key=l+"."+k;bs.forEach((x,m)=>{x.disabled=true;if(o[m][1])x.classList.add("good")});
+    if(good){ok++;S.w=S.w.filter(z=>z!==key)}else{b.classList.add("bad");if(!S.w.includes(key))S.w.push(key)}save();
+    document.getElementById("fb").innerHTML=`<div class="fb"><b>${good?"Exact.":"Pas tout à fait."}</b> ${Q[2]}</div><button class="btn" id="nx">${i<items.length-1?"Suivant":"Terminer"}</button>`;
+    document.getElementById("nx").onclick=()=>{i++;i<items.length?show():done(Math.round(ok/items.length*100))}})})()}
+function cas(l,cs,done,back){AUSRC=null;let i=0,pts=0;(function show(){const C=L[l].c[cs[i]],o=shuf(C.o);hush();window.scrollTo(0,0);
+  app.innerHTML=hdr(`Situation ${i+1}/${cs.length}`)+`<div class="card"><h2 style="margin-top:0">${C.t}</h2><p>${C.s}</p><p class="mut">Que fais-tu ?</p>${o.map((x,j)=>`<button class="opt" data-j="${j}">${x[0]}</button>`).join("")}<div id="fb"></div></div>`;
+  bindBack(back);const bs=app.querySelectorAll(".opt");bs.forEach((b,j)=>b.onclick=()=>{pts+=o[j][1];bs.forEach((x,m)=>{x.disabled=true;x.classList.add(o[m][1]===2?"good":o[m][1]===0?"bad":"");x.innerHTML+=`<br><small>${["✗","≈","✓"][o[m][1]]} ${o[m][2]}</small>`});b.style.outline="3px solid var(--gold)";
+    document.getElementById("fb").innerHTML=`<button class="btn" id="nx">${i<cs.length-1?"Situation suivante":"Terminer"}</button>`;
+    document.getElementById("nx").onclick=()=>{i++;i<cs.length?show():done(Math.round(pts/(cs.length*2)*100))}})})()}
+function timerBox(sec){return `<div class="timer" id="tmr">${fmt(sec)}</div><div class="row"><button class="btn sec" id="tgo" style="margin:0">Démarrer le chrono</button></div>`}
+const fmt=s=>(s>=3600?Math.floor(s/3600)+":"+String(Math.floor(s%3600/60)).padStart(2,"0"):Math.floor(s/60))+":"+String(s%60).padStart(2,"0");
+function bindTimer(sec){let left=sec;const el=document.getElementById("tmr"),b=document.getElementById("tgo");b.onclick=()=>{if(tm){halt();b.textContent="Reprendre";return}b.textContent="Pause";tm=setInterval(()=>{left--;el.textContent=fmt(Math.max(0,left));if(left<=0){halt();el.textContent="Temps écoulé";b.disabled=true}},1000)}}
+function oral(list,done,back){AUSRC=null;let i=0,tot=0;(function show(){const [l,k]=list[i],O=L[l].o[k],j=J[O[0]];halt();window.scrollTo(0,0);
+  app.innerHTML=hdr(`Le Conseil · ${i+1}/${list.length}`)+`<div class="card"><div class="jur"><div class="av" style="background:${j.c}">${j.n.split(" ").pop()[0]}</div><div><b>${j.n}</b><br><small>${j.r}</small></div></div><p class="q">« ${O[1]} »</p><p class="mut">Prends une minute pour réfléchir, puis réponds <b>à voix haute</b> pendant trois minutes, comme devant le jury.</p>${timerBox(240)}<p class="mut" style="margin-top:12px">Notes (facultatif)</p><textarea id="nt" placeholder="Mots-clés de ta réponse…"></textarea><button class="btn" id="rv">Voir ce que le Conseil attend</button><div id="fb"></div></div>`;
+  bindBack(back);bindTimer(240);document.getElementById("rv").onclick=e=>{halt();e.target.remove();
+    document.getElementById("fb").innerHTML=`<div class="fb"><b>Coche ce que tu as vraiment dit :</b></div>${O[2].map((x,m)=>`<label class="ck"><input type="checkbox" data-m="${m}"><span>${x}</span></label>`).join("")}<button class="btn" id="nx">Valider</button>`;
+    document.getElementById("nx").onclick=()=>{tot+=app.querySelectorAll("input:checked").length/O[2].length;i++;i<list.length?show():done(Math.round(tot/list.length*100))}}})()}
+function ecrit(l,done,back,E){AUSRC=null;E=E||L[l].e;window.scrollTo(0,0);
+  app.innerHTML=hdr("Écrit")+`<div class="card"><span class="tag">Sujet</span><p class="q">${E[0]}</p><p class="mut">30 minutes : une introduction rédigée, un plan détaillé, une conclusion. Sur papier ou ci-dessous.</p><p><b>Pistes</b></p><ul>${E[1].map(x=>`<li>${x}</li>`).join("")}</ul>${timerBox(1800)}<textarea id="tx" style="min-height:220px;margin-top:12px" placeholder="Ta copie…"></textarea><button class="btn" id="rv">J'ai fini : m'auto-évaluer</button><div id="fb"></div></div>`;
+  bindBack(back);bindTimer(1800);const tx=document.getElementById("tx");tx.value=S.txt[l]||"";tx.oninput=()=>{S.txt[l]=tx.value;save()};
+  document.getElementById("rv").onclick=e=>{halt();e.target.remove();document.getElementById("fb").innerHTML=`<div class="fb"><b>Grille de relecture :</b> coche ce qui est réussi.</div>${GRILLE.map(x=>`<label class="ck"><input type="checkbox"><span>${x}</span></label>`).join("")}<button class="btn" id="nx">Valider</button>`;
+    document.getElementById("nx").onclick=()=>done(Math.round(app.querySelectorAll("input:checked").length/GRILLE.length*100))}}
+function annales(){AUSRC=null;app.innerHTML=hdr("Annales et sujets")+`<div class="card fiche"><h3>Ce qui est tombé</h3><ul><li><b>Écrit d'entrée en IFCS</b> (4 h) : toujours un commentaire d'un ou plusieurs textes. Les annales publiées se rangent en cinq familles : <b>éthique et philosophie</b>, <b>personnes âgées</b>, <b>santé et santé publique</b>, <b>faits de société</b>, <b>travail</b>, avec un bloc <b>soignés-soignants et hôpital</b>.</li><li>Exemples repérés : la cohabitation des générations dans les services (IFCS du Pays d'Aix), l'intelligence artificielle en santé (préparation 2024-2025).</li><li>Chaque IFCS écrit son propre sujet. Les vrais textes sont dans les recueils d'annales (Elsevier Masson, Vuibert, Foucher, Setes) : ils sont protégés, ce jeu ne les reproduit pas.</li><li><b>Concours du Pays</b> : il n'y a <b>pas d'écrit</b>, donc pas de sujet. Session 2025 : inscriptions du 1er août au 15 septembre, sélection sur titres et entretien. La DTI publie les fiches des postes offerts : lis-les, le jury interroge dessus.</li><li>Dans d'autres concours du Pays, l'entretien porte aussi sur la connaissance de la Polynésie française (institutions, société, histoire, culture), avec parfois un entretien facultatif en tahitien. Révise le niveau 2.</li></ul></div><h2>Sujets d'entraînement</h2><p class="mut">Rédigés pour ce jeu, dans l'esprit de ces thèmes.</p>`+AN.map((a,i)=>`<button class="step ${("an"+i) in S.s?"done":""}" data-i="${i}"><span class="ic">✍️</span><span><b>${a[0]}</b></span>${("an"+i) in S.s?`<span class="sc">${S.s["an"+i]}%</span>`:""}</button>`).join("");
+  bindBack(()=>go("fiches"));app.querySelectorAll(".step").forEach(b=>b.onclick=()=>{const i=+b.dataset.i;ecrit("an"+i,sc=>end("an"+i,sc,annales),annales,[AN[i][1],AN[i][2]])})}
+function fiches(){app.innerHTML=`<h1>Fiches</h1><p class="mut">Tout le cours, à relire quand tu veux.</p><button class="btn sec" id="an">Annales et sujets d'entraînement</button>`+L.map((x,l)=>`<div class="card"><h3>${l+1}. ${x.t}</h3>${x.f.map((f,i)=>`<button class="opt" data-l="${l}" data-i="${i}">${f[0]}</button>`).join("")}</div>`).join("");
+  document.getElementById("an").onclick=annales;
+  app.querySelectorAll(".opt").forEach(b=>b.onclick=()=>lire(+b.dataset.l,[+b.dataset.i],()=>go("fiches"),()=>go("fiches")))}
+function conseil(){app.innerHTML=`<h1>Le Conseil</h1><p class="mut">Ton jury d'entraînement (personnages fictifs). Choisis qui t'interroge, ou laisse le hasard décider.</p>`+Object.keys(J).map(k=>`<button class="step" data-k="${k}"><span class="av" style="background:${J[k].c};flex:0 0 40px;height:40px">${J[k].n.split(" ").pop()[0]}</span><span><b>${J[k].n}</b><br><small>${J[k].r}</small></span></button>`).join("")+`<button class="btn" id="all">Entretien complet : 4 questions</button>`;
+  const pick=(k,n)=>{const p=[];L.forEach((x,l)=>x.o.forEach((o,i)=>{if(!k||o[0]===k)p.push([l,i])}));return shuf(p).slice(0,n)};
+  const run=list=>oral(list,sc=>end("",sc,()=>go("conseil")),()=>go("conseil"));
+  app.querySelectorAll(".step").forEach(b=>b.onclick=()=>run(pick(b.dataset.k,2)));
+  document.getElementById("all").onclick=()=>run(Object.keys(J).map(k=>pick(k,1)[0]))}
+/* ---------- Conditions réelles ---------- */
+function say(t){if(!TTS)return;try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang="fr-FR";u.rate=.97;const v=speechSynthesis.getVoices().find(v=>/^fr/i.test(v.lang));if(v)u.voice=v;speechSynthesis.speak(u)}catch(e){}}
+function count(sec,el,onEnd){let left=sec;el.textContent=fmt(left);if(tm)clearInterval(tm);tm=setInterval(()=>{left--;el.textContent=fmt(Math.max(0,left));if(left<=0){clearInterval(tm);tm=null;onEnd()}},1000)}
+function note20(title,n,back){S.ex.unshift([today(),title,n]);S.ex=S.ex.slice(0,30);end("",Math.round(n*5),back)}
+function exam(){app.innerHTML=`<h1>Conditions réelles</h1><p class="mut">Durées officielles, chrono sans pause, aucune correction avant la fin. Installe-toi comme le jour J : seul, debout ou assis face à l'écran, téléphone en silencieux.</p>
+  <button class="step" id="e1"><span class="ic">🎙️</span><span><b>Oral d'admission IFCS</b><br><small>30 min : exposé de 10 min puis 20 min de questions</small></span></button>
+  <button class="step" id="e2"><span class="ic">🏛️</span><span><b>Entretien type concours du Pays</b><br><small>20 min : 5 min de présentation, puis questions sur le fenua, le statut, le poste (durée indicative)</small></span></button>
+  <button class="step" id="e3"><span class="ic">✍️</span><span><b>Écrit d'admissibilité</b><br><small>4 h : commentaire d'un document</small></span></button>
+  <button class="step" id="e4"><span class="ic">✅</span><span><b>QCM de connaissances</b><br><small>30 questions en 20 min, correction à la fin</small></span></button>
+  <button class="btn sec" id="e5">Entraînement libre devant le Conseil</button>
+  <div class="card"><h3>Mes résultats</h3>${S.ex.length?S.ex.map(x=>`<p style="display:flex;justify-content:space-between"><span>${x[0]} · ${x[1]}</span><b>${x[2]}/20</b></p>`).join(""):`<p class="mut">Aucune épreuve passée pour l'instant.</p>`}</div>
+  <div class="card warn"><h3>Ce que le jeu ne remplace pas</h3><p class="mut">Tu t'évalues toi-même : sois sévère. Avant le jour J, fais au moins deux oraux blancs devant de vraies personnes (un cadre de santé si possible) et enregistre-toi une fois avec le dictaphone du téléphone pour t'écouter.</p></div>`;
+  const all=()=>{const p=X.slice();L.forEach(x=>x.o.forEach(o=>p.push(o)));return p};
+  const pays=()=>{const p=X.slice();[1,2,3].forEach(l=>L[l].o.forEach(o=>p.push(o)));return p};
+  document.getElementById("e1").onclick=()=>examOral({t:"Oral IFCS",expo:10,total:30,pool:all});
+  document.getElementById("e2").onclick=()=>examOral({t:"Entretien du Pays",expo:5,total:20,pool:pays});
+  document.getElementById("e3").onclick=examEcrit;document.getElementById("e4").onclick=examQCM;document.getElementById("e5").onclick=()=>go("conseil")}
+function examOral(o){AUSRC=null;const back=()=>go("exam"),asked=[];
+  app.innerHTML=hdr(o.t)+`<div class="card fiche"><h2 style="margin-top:0">Déroulement</h2><ul><li><b>${o.expo} minutes</b> d'exposé : ton parcours et ton projet. À la fin du temps, le jury te coupe.</li><li>Puis des questions jusqu'à <b>${o.total} minutes</b> au total, sans préparation, avec des relances.</li><li>Réponds <b>à voix haute</b>. Tu ne verras les attendus qu'au débriefing.</li><li>Aucune pause. Quitter l'écran annule l'épreuve.</li></ul><label class="ck" style="border:0"><input type="checkbox" id="vx" ${TTS?"checked":"disabled"}><span>Le jury pose ses questions à voix haute${TTS?"":" (indisponible sur cet appareil)"}</span></label><button class="btn" id="st">Entrer dans la salle</button></div>`;
+  bindBack(back);document.getElementById("st").onclick=()=>p1(document.getElementById("vx").checked);
+  function p1(voice){const line=`Bonjour. Installez-vous. Vous avez ${o.expo} minutes pour vous présenter, nous vous écoutons.`,t0=Date.now();window.scrollTo(0,0);
+    app.innerHTML=`<div class="card"><span class="tag">Exposé</span><p class="q">« ${line} »</p><div class="timer" id="tmr"></div><p class="mut">Regarde l'écran comme tu regarderais le jury. Ne lis pas tes notes.</p><button class="btn" id="nx">J'ai terminé mon exposé</button></div>`;
+    if(voice)say(line);const nx=cut=>{clearInterval(tm);tm=null;p2(voice,cut,Math.round((Date.now()-t0)/1000))};
+    count(o.expo*60,document.getElementById("tmr"),()=>nx(true));document.getElementById("nx").onclick=()=>nx(false)}
+  function p2(voice,cut,used){const qs=shuf(o.pool()).slice(0,16);let i=-1,rel=false,over=false;window.scrollTo(0,0);
+    const fin=()=>{if(over)return;over=true;clearInterval(tm);tm=null;hush();debrief(cut,used)};
+    app.innerHTML=`<div class="card"><span class="tag">Entretien</span><div class="timer" id="tmr"></div><div id="qz"></div><button class="btn" id="nx">J'ai répondu : question suivante</button></div>`;
+    count(Math.max(60,o.total*60-used),document.getElementById("tmr"),fin);
+    const put=(q,txt,pre)=>{const j=J[q[0]];document.getElementById("qz").innerHTML=`<div class="jur"><div class="av" style="background:${j.c}">${j.n.split(" ").pop()[0]}</div><div><b>${j.n}</b><br><small>${j.r}</small></div></div><p class="q">« ${pre||""}${txt} »</p>`;if(voice)say((pre||"")+txt)};
+    const nxt=()=>{if(!rel&&i>=0&&Math.random()<.35){rel=true;put(qs[i],RELANCES[Math.floor(Math.random()*RELANCES.length)])}else{rel=false;i++;if(i>=qs.length)return fin();asked.push(qs[i]);put(qs[i],qs[i][1],i===0&&cut?"Je vous interromps, le temps de l'exposé est écoulé. ":"")}};
+    document.getElementById("nx").onclick=nxt;nxt()}
+  function debrief(cut,used){const tgt=o.expo*60,msg=cut?"interrompu par le jury : exposé trop long ou mal minuté":used<tgt*.6?"nettement trop court : tu laisses du temps aux questions difficiles":"durée correcte";window.scrollTo(0,0);
+    app.innerHTML=hdr("Débriefing")+`<div class="card"><p><b>Exposé : ${fmt(used)}</b> sur ${o.expo}:00, ${msg}.</p><p><b>${asked.length} questions</b> traitées. Ouvre chacune et compare avec ce que tu as réellement dit.</p></div>`+asked.map(q=>`<details class="card"><summary><b>${J[q[0]].n} :</b> ${q[1]}</summary><ul>${q[2].map(k=>`<li>${k}</li>`).join("")}</ul></details>`).join("")+`<div class="card"><h3>Grille du jury</h3><p class="mut">Note-toi comme un jury le ferait : 0 = absent, 2 = moyen, 4 = excellent.</p>${CRIT.map(c=>`<label class="ck"><span style="flex:1">${c}</span><select>${[0,1,2,3,4].map(n=>`<option ${n===2?"selected":""}>${n}</option>`).join("")}</select></label>`).join("")}<button class="btn" id="ok">Calculer ma note</button></div>`;
+    bindBack(back);document.getElementById("ok").onclick=()=>{let n=0;app.querySelectorAll("select").forEach(x=>n+=+x.value);note20(o.t,n,back)}}}
+function examQCM(){AUSRC=null;const back=()=>go("exam"),pool=[];L.forEach((x,l)=>x.q.forEach((_,k)=>pool.push([l,k])));const items=shuf(pool).slice(0,30),res=[];let i=0,over=false;
+  app.innerHTML=hdr("QCM · 30 questions")+`<div class="timer" id="tmr"></div><div id="qz"></div>`;bindBack(back);
+  const fin=()=>{if(over)return;over=true;clearInterval(tm);tm=null;const ok=res.filter(r=>r[2]).length,n=Math.round(ok/items.length*40)/2,ko=res.filter(r=>!r[2]);window.scrollTo(0,0);
+    app.innerHTML=hdr("Correction")+`<div class="card" style="text-align:center"><h2>${n}/20</h2><p>${ok} bonnes réponses sur ${items.length}${res.length<items.length?` · ${items.length-res.length} non traitées`:""}</p><button class="btn" id="ok">Enregistrer</button></div>`+ko.map(r=>{const Q=L[r[0]].q[r[1]];return `<div class="card"><p class="q">${Q[0]}</p><p>✓ ${Q[1][0]}</p><p class="mut">Ta réponse : ${r[3]}</p><div class="fb">${Q[2]}</div></div>`}).join("");
+    bindBack(back);ko.forEach(r=>{const k=r[0]+"."+r[1];if(!S.w.includes(k))S.w.push(k)});document.getElementById("ok").onclick=()=>note20("QCM",n,back)};
+  count(1200,document.getElementById("tmr"),fin);
+  (function show(){if(i>=items.length)return fin();const [l,k]=items[i],Q=L[l].q[k],o=shuf(Q[1].map((t,j)=>[t,j===0]));hush();
+    document.getElementById("qz").innerHTML=`<div class="card"><span class="tag">${i+1}/${items.length}</span><p class="q">${Q[0]}</p>${o.map((x,j)=>`<button class="opt" data-j="${j}">${x[0]}</button>`).join("")}</div>`;
+    document.querySelectorAll("#qz .opt").forEach((b,j)=>b.onclick=()=>{res.push([l,k,o[j][1],o[j][0]]);i++;show()})})()}
+function examEcrit(){const back=()=>go("exam"),di=Math.floor(Math.random()*DOCS.length),D=DOCS[di];prefetch(`audio/d${di}.mp3`);
+  app.innerHTML=hdr("Écrit · 4 heures")+`<div class="card fiche"><span class="tag">Document</span><h2>${D[0]}</h2>${D[1]}<small>Texte rédigé pour l'entraînement.</small></div><div class="card"><p class="q">${SUJET}</p><div class="timer" id="tmr"></div><p class="mut">Rédige sur papier, comme au concours, ou ci-dessous. Repère conseillé : 30 min de lecture, 30 min de plan, 2 h 30 de rédaction, 30 min de relecture. Le chrono ne s'arrête pas.</p><textarea id="tx" style="min-height:260px" placeholder="Ta copie…"></textarea><button class="btn" id="rv">Je rends ma copie</button><div id="fb"></div></div>`;
+  bindBack(back);const tx=document.getElementById("tx");tx.value=S.txt.exam||"";tx.oninput=()=>{S.txt.exam=tx.value;save()};
+  const rendre=()=>{clearInterval(tm);tm=null;tx.readOnly=true;document.getElementById("rv").remove();document.getElementById("fb").innerHTML=`<div class="fb"><b>Relis ta copie à froid</b> (idéalement demain, ou fais-la lire) puis coche ce qui est réussi.</div>${GRILLE.concat(["Les idées du texte sont reformulées, pas recopiées","Copie terminée dans le temps"]).map(x=>`<label class="ck"><input type="checkbox"><span>${x}</span></label>`).join("")}<button class="btn" id="ok">Calculer ma note</button>`;
+    document.getElementById("ok").onclick=()=>{const c=app.querySelectorAll("input:checked").length,t=app.querySelectorAll("input[type=checkbox]").length;note20("Écrit 4 h",Math.round(c/t*40)/2,back)}};
+  count(14400,document.getElementById("tmr"),rendre);document.getElementById("rv").onclick=rendre}
+function profil(){const done=Object.keys(S.s).length,{r}=rank();
+  app.innerHTML=`<h1>Profil</h1><div class="card"><b>${r[1]}</b> · ${S.xp} points · ${done} étapes validées · ${S.days.length} jours d'entraînement<label class="ck" style="border:0;margin-top:8px"><input type="checkbox" id="fr" ${S.free?"checked":""}><span>Mode libre : débloquer toutes les séances</span></label></div>
+  <div class="card warn"><h3>Suis-je éligible ?</h3><ul class="mut" style="padding-left:18px;margin:6px 0"><li><b>IFCS</b> : diplôme d'une profession paramédicale listée par le décret de 1995 (infirmier, kinésithérapeute, manipulateur radio, technicien de laboratoire, etc.) + 4 ans d'exercice.</li><li>La <b>sage-femme</b> est une profession médicale : elle n'est pas dans cette liste. Son encadrement passe par la coordination en maïeutique.</li><li><b>Concours du Pays (avis 2025)</b> : nationalité française, 18 à 62 ans, diplôme de cadre de santé avec un diplôme infirmier, de rééducation ou médico-technique.</li><li>Les conditions changent : lis l'arrêté d'ouverture de la session visée et pose la question à la DTI (concours.dti@administration.gov.pf).</li></ul></div>
+  <div class="card"><h3>Sauvegarde</h3><p class="mut">Ta progression reste dans ce navigateur. Pour changer d'appareil, copie ce code et colle-le sur l'autre.</p><textarea id="ex" style="min-height:70px" readonly></textarea><button class="btn sec" id="cp">Copier mon code</button><textarea id="im" style="min-height:70px;margin-top:10px" placeholder="Colle ici un code de sauvegarde…"></textarea><button class="btn sec" id="imb">Restaurer</button><p id="msg" class="mut"></p></div>
+  <div class="card"><h3>Sources à consulter</h3><ul class="mut" style="padding-left:18px;margin:6px 0"><li><a href="https://www.service-public.pf/dti/category/concours/">DTI – concours de la fonction publique du Pays</a></li><li><a href="https://lexpol.cloud.pf/">Lexpol – textes officiels de Polynésie française</a></li><li><a href="https://www.chpf.pf/">CHPF – site et rapports d'activité</a></li><li><a href="https://www.ccomptes.fr/fr/publications/centre-hospitalier-de-la-polynesie-francaise">Chambre territoriale des comptes – rapport CHPF 2025</a></li><li><a href="https://www.legifrance.gouv.fr/loda/id/JORFTEXT000000738028/">Arrêté du 18 août 1995 – diplôme de cadre de santé</a></li><li><a href="https://www.service-public.pf/dsp/">Direction de la santé</a></li><li><a href="https://www.education.pf/wp-content/uploads/2024/05/01-Deliberation-n%C2%B0-95-215-AT-du-14-decembre-1995-portant-statut-general-FPT.pdf">Statut général de la fonction publique du Pays (délibération n° 95-215 AT)</a></li><li><a href="https://www.fonction-publique.gov.pf/wp-content/uploads/2022/05/03.guide_de_la_discipline-1.pdf">Guide de la discipline (fonction publique du Pays)</a></li><li><a href="https://www.service-public.pf/trav/">Direction du travail – code du travail polynésien</a></li></ul><small>Contenu rédigé en novembre 2026. Chiffres et conditions à revérifier avant un concours.</small></div>
+  <div class="card"><button class="btn sec" id="rs" style="border-color:var(--ko);color:var(--ko);margin:0">Tout remettre à zéro</button><div id="rc"></div></div>`;
+  const enc=()=>{try{return btoa(unescape(encodeURIComponent(JSON.stringify(S))))}catch(e){return""}};
+  document.getElementById("ex").value=enc();const msg=t=>document.getElementById("msg").textContent=t;
+  document.getElementById("fr").onchange=e=>{S.free=e.target.checked;save()};
+  document.getElementById("cp").onclick=()=>{const t=document.getElementById("ex");t.select();try{navigator.clipboard.writeText(t.value).then(()=>msg("Code copié."),()=>msg("Sélectionne le code et copie-le à la main."))}catch(e){msg("Sélectionne le code et copie-le à la main.")}};
+  document.getElementById("imb").onclick=()=>{try{const o=JSON.parse(decodeURIComponent(escape(atob(document.getElementById("im").value.trim()))));if(typeof o.xp!=="number")throw 0;S=Object.assign({s:{},xp:0,w:[],days:[],free:false,txt:{},ex:[]},o);save();msg("Progression restaurée.");go("profil")}catch(e){msg("Code invalide.")}};
+  document.getElementById("rs").onclick=()=>{document.getElementById("rc").innerHTML=`<p class="mut">Toute la progression sera effacée.</p><button class="btn" id="rsy">Oui, effacer</button>`;document.getElementById("rsy").onclick=()=>{S={s:{},xp:0,w:[],days:[],free:false,txt:{},ex:[]};save();go("home")}}}
+
+load();
+const h0=(location.hash||"").slice(1);go(["home","parcours","fiches","conseil","profil","exam"].includes(h0)?h0:"home");
+window.addEventListener("hashchange",()=>{const h=location.hash.slice(1);if(["home","parcours","fiches","conseil","profil","exam"].includes(h)&&!document.querySelector(`nav button.on[data-v="${h}"]`))go(h)});
+</script>
+</body>
+</html>
