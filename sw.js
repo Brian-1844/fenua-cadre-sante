@@ -1,5 +1,5 @@
 /* Cadre Fenua : fonctionne hors connexion. Change VERSION à chaque mise à jour publiée. */
-const VERSION="cadre-fenua-2026.11.14.3";
+const VERSION="cadre-fenua-2026.11.15.2";
 const CORE=["./","index.html","manifest.webmanifest","icon-192.png","icon-512.png","version.json"];
 self.addEventListener("install",e=>{e.waitUntil(caches.open(VERSION).then(c=>c.addAll(CORE)))});
 self.addEventListener("activate",e=>{e.waitUntil(caches.keys().then(k=>Promise.all(k.filter(n=>n!==VERSION).map(n=>caches.delete(n)))).then(()=>self.clients.claim()))});
