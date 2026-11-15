@@ -1086,7 +1086,7 @@ function simHub(){const back=()=>go("exam");
   document.getElementById("sw").onclick=()=>simu(sc=>end("simw",sc,simHub),simHub);document.getElementById("dl").onclick=()=>dilem(sc=>end("dil",sc,simHub),simHub)}
 
 /* ===================== INSTALLATION ET MISE À JOUR ===================== */
-const APP_V="2026.11.15.5";let INST=null,SWR=null;
+const APP_V="2026.11.15.6";let INST=null,SWR=null;
 const standalone=()=>{try{return matchMedia("(display-mode: standalone)").matches||navigator.standalone===true}catch(e){return false}};
 try{window.addEventListener("beforeinstallprompt",e=>{e.preventDefault();INST=e;const b=document.getElementById("inst");if(b)b.style.display="block"})}catch(e){}
 try{if("serviceWorker" in navigator&&location.protocol==="https:"&&!/claude\.ai|claudeusercontent/.test(location.host))navigator.serviceWorker.register("sw.js").then(r=>{SWR=r;r.addEventListener("updatefound",()=>{const w=r.installing;if(w)w.addEventListener("statechange",()=>{if(w.state==="installed"&&navigator.serviceWorker.controller)toast("Nouvelle version disponible : Profil → Mettre à jour.")})})}).catch(()=>{})}catch(e){}
@@ -1227,7 +1227,7 @@ function atelier(n,done,back){const A=AT[n],D=dif(),tmax=D===2?60:D===1?120:0;le
     const fin=(sc,msg)=>{halt();pts+=sc;z.querySelectorAll("button,input").forEach(x=>x.disabled=true);
       fb.innerHTML=`<div class="fb" style="border-color:${sc===1?"var(--ok)":sc>0?"var(--gold)":"var(--ko)"}"><b>${msg}</b> ${Q.x}</div><button class="btn" id="nx">${i<A.it.length-1?"Suivant":"Terminer"}</button>`;
       document.getElementById("nx").onclick=()=>{i++;i<A.it.length?show():done(Math.round(pts/A.it.length*100))}};
-    if(Q.k==="xl"&&typeof XLQ==="function"){XLQ(Q,z,fin);return}
+    if(typeof XK!=="undefined"&&XK[Q.k]){XK[Q.k](Q,z,fin);return}
     if(Q.k==="num"){z.innerHTML=`<div class="row"><input id="ans" type="text" inputmode="decimal" placeholder="Ta réponse" style="flex:2;padding:13px;border-radius:11px;border:1.5px solid var(--line);font:inherit;background:var(--bg);color:var(--ink)"><span style="flex:0 0 auto;font-weight:700">${Q.u}</span></div><button class="btn" id="val">Valider</button>`;
       const check=()=>{const raw=document.getElementById("ans").value.replace(/\s/g,"").replace(",",".");const v=parseFloat(raw);if(isNaN(v))return toast("Entre un nombre.");const ok=Math.abs(v-Q.a)<=Q.tol+1e-9;fin(ok?1:0,ok?"Exact.":`La bonne réponse : ${fmtn(Q.a)} ${Q.u}.`)};
       document.getElementById("val").onclick=check;document.getElementById("ans").onkeydown=e=>{if(e.key==="Enter")check()};
@@ -2585,7 +2585,7 @@ function simHub(){const back=()=>go("exam");
   document.getElementById("sw").onclick=()=>simu(sc=>end("simw",sc,simHub),simHub);document.getElementById("dl").onclick=()=>dilem(sc=>end("dil",sc,simHub),simHub)}
 
 /* ===================== INSTALLATION ET MISE À JOUR ===================== */
-const APP_V="2026.11.15.5";let INST=null,SWR=null;
+const APP_V="2026.11.15.6";let INST=null,SWR=null;
 const standalone=()=>{try{return matchMedia("(display-mode: standalone)").matches||navigator.standalone===true}catch(e){return false}};
 try{window.addEventListener("beforeinstallprompt",e=>{e.preventDefault();INST=e;const b=document.getElementById("inst");if(b)b.style.display="block"})}catch(e){}
 try{if("serviceWorker" in navigator&&location.protocol==="https:"&&!/claude\.ai|claudeusercontent/.test(location.host))navigator.serviceWorker.register("sw.js").then(r=>{SWR=r;r.addEventListener("updatefound",()=>{const w=r.installing;if(w)w.addEventListener("statechange",()=>{if(w.state==="installed"&&navigator.serviceWorker.controller)toast("Nouvelle version disponible : Profil → Mettre à jour.")})})}).catch(()=>{})}catch(e){}
@@ -3043,7 +3043,7 @@ function atelier(n,done,back){const A=AT[n],D=dif(),tmax=D===2?60:D===1?120:0;le
     const fin=(sc,msg)=>{halt();pts+=sc;z.querySelectorAll("button,input").forEach(x=>x.disabled=true);
       fb.innerHTML=`<div class="fb" style="border-color:${sc===1?"var(--ok)":sc>0?"var(--gold)":"var(--ko)"}"><b>${msg}</b> ${Q.x}</div><button class="btn" id="nx">${i<A.it.length-1?"Suivant":"Terminer"}</button>`;
       document.getElementById("nx").onclick=()=>{i++;i<A.it.length?show():done(Math.round(pts/A.it.length*100))}};
-    if(Q.k==="xl"&&typeof XLQ==="function"){XLQ(Q,z,fin);return}
+    if(typeof XK!=="undefined"&&XK[Q.k]){XK[Q.k](Q,z,fin);return}
     if(Q.k==="num"){z.innerHTML=`<div class="row"><input id="ans" type="text" inputmode="decimal" placeholder="Ta réponse" style="flex:2;padding:13px;border-radius:11px;border:1.5px solid var(--line);font:inherit;background:var(--bg);color:var(--ink)"><span style="flex:0 0 auto;font-weight:700">${Q.u}</span></div><button class="btn" id="val">Valider</button>`;
       const check=()=>{const raw=document.getElementById("ans").value.replace(/\s/g,"").replace(",",".");const v=parseFloat(raw);if(isNaN(v))return toast("Entre un nombre.");const ok=Math.abs(v-Q.a)<=Q.tol+1e-9;fin(ok?1:0,ok?"Exact.":`La bonne réponse : ${fmtn(Q.a)} ${Q.u}.`)};
       document.getElementById("val").onclick=check;document.getElementById("ans").onkeydown=e=>{if(e.key==="Enter")check()};
@@ -3259,7 +3259,7 @@ function simHub(){const back=()=>go("exam");
   document.getElementById("dl").onclick=()=>dilem(sc=>end("dil",sc,simHub),simHub)}
 
 /* ===================== INSTALLATION ET MISE À JOUR ===================== */
-const APP_V="2026.11.15.5";let INST=null,SWR=null;
+const APP_V="2026.11.15.6";let INST=null,SWR=null;
 const standalone=()=>{try{return matchMedia("(display-mode: standalone)").matches||navigator.standalone===true}catch(e){return false}};
 try{window.addEventListener("beforeinstallprompt",e=>{e.preventDefault();INST=e;const b=document.getElementById("inst");if(b)b.style.display="block"})}catch(e){}
 try{if("serviceWorker" in navigator&&location.protocol==="https:"&&!/claude\.ai|claudeusercontent/.test(location.host))navigator.serviceWorker.register("sw.js").then(r=>{SWR=r;r.addEventListener("updatefound",()=>{const w=r.installing;if(w)w.addEventListener("statechange",()=>{if(w.state==="installed"&&navigator.serviceWorker.controller)toast("Nouvelle version disponible : Profil → Mettre à jour.")})})}).catch(()=>{})}catch(e){}
@@ -4191,6 +4191,104 @@ REP.push(["Morsures, chutes, plongée, plaies",[
  ["Sens du nettoyage","du propre vers le sale ; une compresse = un passage",""],
  ["Brûlure","eau tempérée ≈ 15 min ; règle des 9 ; paume ≈ 1 % ; grave > 10 % adulte, > 5 % enfant",""]]]);
 
+// ===== Simulateur de suture : placer de vrais points sur une plaie =====
+// Question à choix (k:"ch") : o[0] est la bonne réponse
+function CHQ(Q,z,fin){const opts=shuf(Q.o.map((t,k)=>[t,k]));
+  z.innerHTML=opts.map(([t,k])=>`<button class="opt" data-c="${k}">${t}</button>`).join("");
+  z.querySelectorAll("[data-c]").forEach(b=>b.onclick=()=>{const k=+b.dataset.c;
+    z.querySelectorAll("[data-c]").forEach(x=>{x.disabled=true;if(+x.dataset.c===0)x.classList.add("good");else if(x===b)x.classList.add("bad")});
+    fin(k===0?1:0,k===0?"Bonne décision.":"Ce n'est pas le meilleur choix.")})}
+
+// Géométrie de la plaie
+function sutGeo(pts){const seg=[];let L=0;for(let i=0;i<pts.length-1;i++){const [x1,y1]=pts[i],[x2,y2]=pts[i+1],l=Math.hypot(x2-x1,y2-y1);seg.push({x1,y1,x2,y2,l,s0:L});L+=l}
+  const proj=(px,py)=>{let best=null;for(const g of seg){const dx=g.x2-g.x1,dy=g.y2-g.y1;let t=((px-g.x1)*dx+(py-g.y1)*dy)/(g.l*g.l);t=Math.max(0,Math.min(1,t));
+      const qx=g.x1+t*dx,qy=g.y1+t*dy,d=Math.hypot(px-qx,py-qy),side=Math.sign(dx*(py-g.y1)-dy*(px-g.x1))||1;
+      if(!best||d<best.d)best={d,side,s:g.s0+t*g.l,tx:dx/g.l,ty:dy/g.l,qx,qy}}return best};
+  return {L,proj}}
+
+function SUTQ(Q,z,fin){const W=360,H=240,mm=Q.mm,G=sutGeo(Q.pts);let st=[],pend=null,done=false;
+  const b0=Q.bite[0],b1=Q.bite[1],g0=Q.gap[0],g1=Q.gap[1];
+  const path="M"+Q.pts.map(p=>p.join(",")).join(" L");
+  const guide=()=>{if(!Q.guide)return "";let o="";const off=(b0+b1)/2*mm;
+    // bandes de prise idéale de chaque côté
+    const shift=k=>Q.pts.map((p,i)=>{const a=Q.pts[Math.max(0,i-1)],c=Q.pts[Math.min(Q.pts.length-1,i+1)],tx=c[0]-a[0],ty=c[1]-a[1],n=Math.hypot(tx,ty);return [p[0]-ty/n*off*k,p[1]+tx/n*off*k].map(v=>v.toFixed(1)).join(",")}).join(" ");
+    o+=`<polyline points="${shift(1)}" fill="none" stroke="#2c8a57" stroke-width="1.2" stroke-dasharray="4 4" opacity=".8"/><polyline points="${shift(-1)}" fill="none" stroke="#2c8a57" stroke-width="1.2" stroke-dasharray="4 4" opacity=".8"/>`;
+    return o};
+  const land=Q.first?`<circle cx="${Q.first.x}" cy="${Q.first.y}" r="${Q.first.r}" fill="none" stroke="#e0a200" stroke-width="2" stroke-dasharray="3 3"/><text x="${Q.first.tx}" y="${Q.first.ty}" font-size="11" fill="#9a6f00">${Q.first.label}</text>`:"";
+  const scale=`<line x1="12" y1="${H-14}" x2="${12+10*mm}" y2="${H-14}" stroke="#14323a" stroke-width="2"/><text x="12" y="${H-20}" font-size="10" fill="#14323a">1 cm</text>`;
+  const draw=(res)=>{const sv=z.querySelector("#sv");
+    const sts=st.map((p,i)=>{const c=res?res.per[i].col:"#1d4ed8";return `<line x1="${p[0][0]}" y1="${p[0][1]}" x2="${p[1][0]}" y2="${p[1][1]}" stroke="${c}" stroke-width="2.6" stroke-linecap="round"/><circle cx="${p[0][0]}" cy="${p[0][1]}" r="3" fill="${c}"/><circle cx="${p[1][0]}" cy="${p[1][1]}" r="3" fill="${c}"/><path d="M${p[1][0]+3},${p[1][1]-2} l9,-6 M${p[1][0]+3},${p[1][1]+1} l10,-1" stroke="${c}" stroke-width="1.6" fill="none"/>`+(res?`<text x="${p[1][0]+6}" y="${p[1][1]+14}" font-size="10" fill="${c}" font-weight="700">${i+1}</text>`:"")}).join("");
+    sv.innerHTML=`<rect x="0" y="0" width="${W}" height="${H}" rx="14" fill="${Q.skin||"#f2c9a8"}"/>${Q.decor||""}<path d="${path}" fill="none" stroke="#7a1f14" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/><path d="${path}" fill="none" stroke="#d2554a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>${guide()}${land}${scale}${sts}${pend?`<circle cx="${pend[0]}" cy="${pend[1]}" r="5" fill="#1d4ed8" opacity=".8"/>`:""}`;
+    z.querySelector("#cnt").textContent=`${st.length} point${st.length>1?"s":""} posé${st.length>1?"s":""}${pend?" · touche l'autre berge pour sortir l'aiguille":""}`};
+  z.innerHTML=`<p class="mut" style="margin:4px 0 8px">${Q.zone} · Touche un point d'entrée sur une berge, puis le point de sortie sur l'autre berge. Chaque paire = un point de suture.</p><svg id="sv" viewBox="0 0 ${W} ${H}" width="100%" style="touch-action:manipulation;border-radius:14px;display:block;cursor:crosshair" xmlns="http://www.w3.org/2000/svg" font-family="system-ui,sans-serif"></svg><div class="mut" id="cnt" style="margin:6px 0"></div><div class="row"><button class="btn sec" id="und" style="flex:1">↩ Annuler</button><button class="btn" id="end" style="flex:1">Terminer la suture</button></div><div id="sres"></div>`;
+  const sv=z.querySelector("#sv");
+  sv.addEventListener("click",e=>{if(done)return;const pt=sv.createSVGPoint();pt.x=e.clientX;pt.y=e.clientY;const m=sv.getScreenCTM();if(!m)return;const q=pt.matrixTransform(m.inverse());
+    const P=[Math.round(q.x),Math.round(q.y)];if(!pend){pend=P}else{st.push([pend,P]);pend=null}draw()});
+  z.querySelector("#und").onclick=()=>{if(done)return;if(pend)pend=null;else st.pop();draw()};
+  z.querySelector("#end").onclick=()=>{if(done)return;if(st.length<1)return toast("Pose au moins un point.");done=true;pend=null;
+    const onLand=i=>{if(!Q.first||i!==0)return false;const a=st[0],cx=(a[0][0]+a[1][0])/2,cy=(a[0][1]+a[1][1])/2;return Math.hypot(cx-Q.first.x,cy-Q.first.y)<=Q.first.r+6};
+    const per=st.map(([A,B],i)=>{const pa=G.proj(A[0],A[1]),pb=G.proj(B[0],B[1]),pr=[];let ok=0,n=0;
+      if(onLand(i)&&Q.first.angle){const m=G.proj((A[0]+B[0])/2,(A[1]+B[1])/2);return {s:m.s,sc:1,pr:[],col:"#2c8a57",i,land:true}}
+      const cross=pa.side!==pb.side;
+      const da=pa.d/mm,db=pb.d/mm,mid=G.proj((A[0]+B[0])/2,(A[1]+B[1])/2);
+      const vx=B[0]-A[0],vy=B[1]-A[1],vl=Math.hypot(vx,vy)||1,cos=Math.abs((vx*mid.tx+vy*mid.ty)/vl);
+      if(!cross)pr.push("ne traverse pas la plaie");
+      const bite=da>=b0&&da<=b1&&db>=b0&&db<=b1;n++;if(bite&&cross)ok++;else if(cross)pr.push(da<b0||db<b0?"prise trop près du bord (la berge risque de se déchirer)":"prise trop loin du bord (point qui étrangle)");
+      const sym=Math.abs(da-db)<=Q.sym;n++;if(sym&&cross)ok++;else if(cross)pr.push("prises inégales des deux côtés (berges décalées)");
+      const perp=cos<=0.42;n++;if(perp&&cross)ok++;else if(cross)pr.push("point trop oblique : il doit être perpendiculaire à la plaie");
+      const sc=cross?ok/n:0;return {s:mid.s,sc,pr,col:sc===1?"#2c8a57":sc>=0.6?"#d48a00":"#c0392b",i}});
+    const good=per.filter(p=>p.sc>0).sort((a,b)=>a.s-b.s),gp=[];let gOk=0,gN=0;
+    if(good.length){const ends=[good[0].s/mm,(G.L-good[good.length-1].s)/mm];
+      ends.forEach(e=>{gN++;if(e>=Q.end[0]&&e<=Q.end[1])gOk++;else gp.push(e<Q.end[0]?"un point trop près d'une extrémité":"une extrémité de la plaie reste ouverte")});
+      for(let k=1;k<good.length;k++){const g=(good[k].s-good[k-1].s)/mm,lo=(good[k].land||good[k-1].land)?g0*0.5:g0;gN++;if(g>=lo&&g<=g1)gOk++;else gp.push(g<g0?`points ${good[k-1].i+1} et ${good[k].i+1} trop serrés (${g.toFixed(1).replace(".",",")} mm)`:`trou entre les points ${good[k-1].i+1} et ${good[k].i+1} (${g.toFixed(1).replace(".",",")} mm)`)}}
+    const nOk=st.length>=Q.n[0]&&st.length<=Q.n[1];if(!nOk)gp.push(st.length<Q.n[0]?`pas assez de points (${Q.n[0]} à ${Q.n[1]} attendus)`:`trop de points (${Q.n[0]} à ${Q.n[1]} attendus) : chaque point en plus est une marque et un risque`);
+    let land=1;if(Q.first){const a=st[0],cx=(a[0][0]+a[1][0])/2,cy=(a[0][1]+a[1][1])/2;land=Math.hypot(cx-Q.first.x,cy-Q.first.y)<=Q.first.r+6?1:0;if(!land)gp.push(Q.first.miss)}
+    const mean=per.reduce((s,p)=>s+p.sc,0)/per.length,gs=gN?gOk/gN:0;
+    let score=Q.first?0.45*mean+0.25*gs+0.15*(nOk?1:0)+0.15*land:0.5*mean+0.3*gs+0.2*(nOk?1:0);score*=Math.min(1,good.length/Q.n[0]);score=Math.round(score*100)/100;
+    draw({per});
+    z.querySelector("#sres").innerHTML=`<div class="card" style="margin-top:10px"><h3 style="margin:0 0 6px">Bilan de ta suture : ${Math.round(score*100)} %</h3><p class="mut" style="margin:0 0 6px">Points : ${Math.round(mean*100)} % · Espacement et extrémités : ${Math.round(gs*100)} % · Nombre : ${nOk?"correct":"à revoir"}${Q.first?` · Premier point au repère : ${land?"oui":"non"}`:""}</p><ul style="margin:0;padding-left:18px">${per.filter(p=>p.pr.length).map(p=>`<li><b>Point ${p.i+1}</b> : ${p.pr.join(", ")}</li>`).join("")}${gp.map(t=>`<li>${t}</li>`).join("")}${!per.some(p=>p.pr.length)&&!gp.length?"<li>Suture régulière, berges bien affrontées.</li>":""}</ul><p class="mut" style="margin:8px 0 0">Vert : point correct · orange : à améliorer · rouge : point à refaire.</p></div>`;
+    z.querySelectorAll("#und,#end").forEach(x=>x.disabled=true);
+    fin(score>=0.85?1:score,score>=0.85?"Belle suture.":score>=0.6?"Suture acceptable, à améliorer.":"Suture à reprendre.")};
+  draw()}
+const XK={ch:CHQ,sut:SUTQ};
+
+// Décor : peau, plis, sourcil, lèvre
+const SKINLINES=`<path d="M20,40 Q180,30 340,44 M20,200 Q180,212 340,198" stroke="#e0b393" stroke-width="1.2" fill="none"/>`;
+const LIPDECOR=`<path d="M0,150 Q90,128 180,140 Q270,128 360,150 L360,240 L0,240 Z" fill="#d9837a"/><path d="M0,150 Q90,128 180,140 Q270,128 360,150" stroke="#b5655c" stroke-width="2" fill="none"/><text x="250" y="200" font-size="11" fill="#7a2f28">lèvre (rouge)</text><text x="250" y="40" font-size="11" fill="#8c6a4f">peau</text>`;
+
+AT.push(
+{t:"Simulateur de suture · 1. Avant-bras (facile)",lv:"Facile",it:[
+ {k:"ch",q:"Plaie nette de 4 cm à l'avant-bras, faite il y a une heure avec un couteau de cuisine, un peu béante, sans atteinte des tendons. Que décide le médecin ?",o:["Suturer en points simples séparés après lavage et anesthésie locale","La laisser ouverte et cicatriser seule","La refermer avec du sparadrap ordinaire","L'évacuer d'urgence vers Tahiti"],x:"Plaie récente, propre, nette : la suture donne la meilleure cicatrice."},
+ {k:"ord",q:"Remets dans l'ordre la préparation de la suture.",it:["Friction des mains et gants","Lavage abondant au sérum physiologique","Antisepsie de la plaie et autour","Anesthésie locale","Pose des points","Pansement et consignes écrites"],x:"Le lavage abondant est le geste qui prévient le plus l'infection."},
+ {k:"ch",q:"Quel fil pour la peau de l'avant-bras ?",o:["Non résorbable 4/0","Non résorbable 6/0","Résorbable 2/0","Fil de couture stérilisé à l'eau bouillante"],x:"3/0 ou 4/0 pour le corps ; 5/0 ou 6/0 pour le visage."},
+ {k:"sut",q:"Pose les points sur cette plaie de 4 cm. Les pointillés verts montrent la bonne distance de prise.",zone:"Avant-bras",guide:true,mm:6,pts:[[60,120],[300,120]],bite:[2,6],sym:1.5,gap:[4.5,10],end:[2,8],n:[4,8],decor:SKINLINES,x:"Repères : prise à 3 à 5 mm du bord, identique des deux côtés ; un point tous les 5 à 10 mm ; points perpendiculaires à la plaie."},
+ {k:"num",q:"Repère habituel pour retirer les fils de l'avant-bras, en jours ?",a:12,tol:2,u:"jours",x:"Tronc et membres : 10 à 14 jours. La prescription fait foi."}]},
+{t:"Simulateur de suture · 2. Jambe, plaie courbe (moyen)",lv:"Moyen",it:[
+ {k:"ch",q:"Plaie courbe de la jambe, un peu sous tension. Quelle technique de peau privilégier ?",o:["Points simples séparés","Un surjet unique serré","Pas de suture, seulement de la colle","Des agrafes de cuir chevelu"],x:"Points séparés : si un point lâche ou s'infecte, les autres tiennent, et on peut en retirer un pour drainer."},
+ {k:"ch",q:"Le patient a reçu son dernier rappel antitétanique il y a 15 ans. Que fais-tu ?",o:["Le signaler au médecin pour la mise à jour selon le protocole et tracer","Rien, la plaie est propre","Lui dire qu'il est protégé à vie","Attendre qu'il ait de la fièvre"],x:"Vérifier et tracer le statut vaccinal est systématique."},
+ {k:"sut",q:"Pose les points sur cette plaie courbe, sans guide cette fois.",zone:"Jambe",guide:false,mm:6,pts:[[50,90],[110,130],[180,150],[250,140],[310,105]],bite:[2,6],sym:1.5,gap:[4.5,10],end:[2,8],n:[6,11],decor:SKINLINES,x:"Sur une courbe, chaque point reste perpendiculaire à la plaie à l'endroit où il est posé."},
+ {k:"num",q:"Repère pour retirer les fils d'une jambe, en jours ?",a:12,tol:2,u:"jours",x:"Membres : 10 à 14 jours ; plus si la zone est sous tension."}]},
+{t:"Simulateur de suture · 3. Lèvre (difficile)",lv:"Difficile",it:[
+ {k:"ch",q:"Plaie qui traverse la limite entre la lèvre rouge et la peau. Quel est le point le plus important ?",o:["Le premier point aligne exactement la limite lèvre rouge-peau","Le premier point au milieu de la plaie","Le premier point au coin de la bouche","L'ordre des points n'a pas d'importance"],x:"Un décalage d'un millimètre de cette limite se voit toute la vie."},
+ {k:"ch",q:"Quel fil pour la peau du visage ?",o:["5/0 ou 6/0 non résorbable","3/0 non résorbable","2/0 résorbable","Agrafes"],x:"Fil fin, points rapprochés, ablation précoce."},
+ {k:"ch",q:"Avant de suturer une plaie du sourcil, on…",o:["ne rase jamais le sourcil","rase le sourcil pour mieux voir","coupe les poils à ras avec des ciseaux puis rase","applique de la crème dépilatoire"],x:"Le sourcil sert de repère et peut mal repousser."},
+ {k:"sut",q:"Pose les points. Le premier point doit tomber sur la limite entre la peau et la lèvre rouge (cercle jaune).",zone:"Lèvre supérieure",guide:false,mm:10,pts:[[172,40],[178,110],[188,200]],bite:[1,3.2],sym:0.8,gap:[2.5,6],end:[1,4.5],n:[4,7],skin:"#f2c9a8",decor:LIPDECOR,first:{x:181,y:140,r:9,label:"repère",tx:198,ty:132,miss:"le premier point n'est pas posé sur la limite lèvre rouge-peau : la lèvre sera décalée"},x:"Visage : prises de 1 à 3 mm, points tous les 3 à 5 mm ; le premier point fixe le repère anatomique."},
+ {k:"num",q:"Repère pour retirer les fils du visage, en jours ?",a:5,tol:1,u:"jours",x:"Visage : environ 5 jours, pour limiter les marques."}]},
+{t:"Simulateur de suture · 4. Poste isolé : décider avant de suturer (expert)",lv:"Expert",it:[
+ {k:"ch",q:"Morsure de chien sur le dos de la main, il y a 8 heures. Que fais-tu ?",o:["Laver longuement à l'eau et au savon, désinfecter, ne pas fermer, appeler le médecin régulateur (antibiotique, tétanos, suivi)","Suturer serré pour arrêter le saignement","Mettre de la colle cutanée","Ne rien faire, ce n'est qu'un chien"],x:"Les morsures de la main s'infectent souvent : on les laisse en général ouvertes, sauf décision médicale (visage notamment)."},
+ {k:"ch",q:"Plaie de la paume ; le patient ne peut plus plier un doigt. Que fais-tu ?",o:["Ne pas suturer, pansement, immobiliser, avis chirurgical et transfert","Suturer la peau et revoir dans 10 jours","Faire bouger le doigt de force","Mettre des bandelettes adhésives"],x:"Atteinte probable d'un tendon : réparation chirurgicale."},
+ {k:"ch",q:"Plaie du pied souillée par du corail, vue au bout de 20 heures. Que fais-tu ?",o:["Lavage très abondant, retirer les débris, laisser ouvert ou suture différée sur avis médical","Suturer tout de suite pour protéger","Couvrir sans laver","Appliquer du citron"],x:"Plaie souillée et tardive : risque d'infection élevé si on la ferme."},
+ {k:"sut",q:"Plaie en angle sur le genou (lambeau). Le premier point doit fixer la pointe de l'angle (cercle jaune), puis on ferme les deux branches.",zone:"Genou",guide:false,mm:6,pts:[[50,80],[180,150],[310,80]],bite:[2,6],sym:1.5,gap:[4.5,10],end:[2,8],n:[6,12],decor:SKINLINES,first:{x:180,y:150,r:12,angle:true,label:"pointe du lambeau",tx:195,ty:178,miss:"la pointe du lambeau n'a pas été fixée en premier : le lambeau risque de mal se replacer"},x:"Plaie en angle : on replace d'abord la pointe du lambeau (au mieux par un point d'angle), puis on ferme chaque branche."},
+ {k:"num",q:"Repère pour retirer les fils d'un genou (zone de tension), en jours ?",a:14,tol:1,u:"jours",x:"Articulations et zones de tension : 14 jours ou plus."}]}
+);
+SIMMAP[2]="at"+(AT.length-4);
+REP.push(["Simulateur de suture",[
+ ["Prise","3 à 5 mm du bord sur le corps ; 1 à 3 mm au visage ; identique des deux côtés",""],
+ ["Espacement","5 à 10 mm sur le corps ; 3 à 5 mm au visage",""],
+ ["Orientation","chaque point perpendiculaire à la plaie",""],
+ ["Premier point","sur le repère : limite lèvre-peau, pointe d'un lambeau",""],
+ ["Ne pas suturer d'emblée","morsure de la main, plaie souillée et tardive, atteinte d'un tendon : avis médical",""]]]);
+
 const IND={},EV=[],CHAINS=[],SIMCFG={st:{},w:{},crit:[],cap:()=>false,none:{},grades:["","","",""],title:"",head:"",intro:"",start:""};
 function atelier(n,done,back){const A=AT[n],D=dif(),tmax=D===2?60:D===1?120:0;let i=0,pts=0;AUSRC=null;
   const fmtn=v=>String(v).replace(".",",").replace(/\B(?=(\d{3})+(?!\d))/g," ");
@@ -4200,7 +4298,7 @@ function atelier(n,done,back){const A=AT[n],D=dif(),tmax=D===2?60:D===1?120:0;le
     const fin=(sc,msg)=>{halt();pts+=sc;z.querySelectorAll("button,input").forEach(x=>x.disabled=true);
       fb.innerHTML=`<div class="fb" style="border-color:${sc===1?"var(--ok)":sc>0?"var(--gold)":"var(--ko)"}"><b>${msg}</b> ${Q.x}</div><button class="btn" id="nx">${i<A.it.length-1?"Suivant":"Terminer"}</button>`;
       document.getElementById("nx").onclick=()=>{i++;i<A.it.length?show():done(Math.round(pts/A.it.length*100))}};
-    if(Q.k==="xl"&&typeof XLQ==="function"){XLQ(Q,z,fin);return}
+    if(typeof XK!=="undefined"&&XK[Q.k]){XK[Q.k](Q,z,fin);return}
     if(Q.k==="num"){z.innerHTML=`<div class="row"><input id="ans" type="text" inputmode="decimal" placeholder="Ta réponse" style="flex:2;padding:13px;border-radius:11px;border:1.5px solid var(--line);font:inherit;background:var(--bg);color:var(--ink)"><span style="flex:0 0 auto;font-weight:700">${Q.u}</span></div><button class="btn" id="val">Valider</button>`;
       const check=()=>{const raw=document.getElementById("ans").value.replace(/\s/g,"").replace(",",".");const v=parseFloat(raw);if(isNaN(v))return toast("Entre un nombre.");const ok=Math.abs(v-Q.a)<=Q.tol+1e-9;fin(ok?1:0,ok?"Exact.":`La bonne réponse : ${fmtn(Q.a)} ${Q.u}.`)};
       document.getElementById("val").onclick=check;document.getElementById("ans").onkeydown=e=>{if(e.key==="Enter")check()};
@@ -4416,7 +4514,7 @@ function simHub(){const back=()=>go("exam");
   document.getElementById("dl").onclick=()=>dilem(sc=>end("dil",sc,simHub),simHub)}
 
 /* ===================== INSTALLATION ET MISE À JOUR ===================== */
-const APP_V="2026.11.15.5";let INST=null,SWR=null;
+const APP_V="2026.11.15.6";let INST=null,SWR=null;
 const standalone=()=>{try{return matchMedia("(display-mode: standalone)").matches||navigator.standalone===true}catch(e){return false}};
 try{window.addEventListener("beforeinstallprompt",e=>{e.preventDefault();INST=e;const b=document.getElementById("inst");if(b)b.style.display="block"})}catch(e){}
 try{if("serviceWorker" in navigator&&location.protocol==="https:"&&!/claude\.ai|claudeusercontent/.test(location.host))navigator.serviceWorker.register("sw.js").then(r=>{SWR=r;r.addEventListener("updatefound",()=>{const w=r.installing;if(w)w.addEventListener("statechange",()=>{if(w.state==="installed"&&navigator.serviceWorker.controller)toast("Nouvelle version disponible : Profil → Mettre à jour.")})})}).catch(()=>{})}catch(e){}
@@ -5157,7 +5255,7 @@ function atelier(n,done,back){const A=AT[n],D=dif(),tmax=D===2?60:D===1?120:0;le
     const fin=(sc,msg)=>{halt();pts+=sc;z.querySelectorAll("button,input").forEach(x=>x.disabled=true);
       fb.innerHTML=`<div class="fb" style="border-color:${sc===1?"var(--ok)":sc>0?"var(--gold)":"var(--ko)"}"><b>${msg}</b> ${Q.x}</div><button class="btn" id="nx">${i<A.it.length-1?"Suivant":"Terminer"}</button>`;
       document.getElementById("nx").onclick=()=>{i++;i<A.it.length?show():done(Math.round(pts/A.it.length*100))}};
-    if(Q.k==="xl"&&typeof XLQ==="function"){XLQ(Q,z,fin);return}
+    if(typeof XK!=="undefined"&&XK[Q.k]){XK[Q.k](Q,z,fin);return}
     if(Q.k==="num"){z.innerHTML=`<div class="row"><input id="ans" type="text" inputmode="decimal" placeholder="Ta réponse" style="flex:2;padding:13px;border-radius:11px;border:1.5px solid var(--line);font:inherit;background:var(--bg);color:var(--ink)"><span style="flex:0 0 auto;font-weight:700">${Q.u}</span></div><button class="btn" id="val">Valider</button>`;
       const check=()=>{const raw=document.getElementById("ans").value.replace(/\s/g,"").replace(",",".");const v=parseFloat(raw);if(isNaN(v))return toast("Entre un nombre.");const ok=Math.abs(v-Q.a)<=Q.tol+1e-9;fin(ok?1:0,ok?"Exact.":`La bonne réponse : ${fmtn(Q.a)} ${Q.u}.`)};
       document.getElementById("val").onclick=check;document.getElementById("ans").onkeydown=e=>{if(e.key==="Enter")check()};
@@ -5373,7 +5471,7 @@ function simHub(){const back=()=>go("exam");
   document.getElementById("dl").onclick=()=>dilem(sc=>end("dil",sc,simHub),simHub)}
 
 /* ===================== INSTALLATION ET MISE À JOUR ===================== */
-const APP_V="2026.11.15.5";let INST=null,SWR=null;
+const APP_V="2026.11.15.6";let INST=null,SWR=null;
 const standalone=()=>{try{return matchMedia("(display-mode: standalone)").matches||navigator.standalone===true}catch(e){return false}};
 try{window.addEventListener("beforeinstallprompt",e=>{e.preventDefault();INST=e;const b=document.getElementById("inst");if(b)b.style.display="block"})}catch(e){}
 try{if("serviceWorker" in navigator&&location.protocol==="https:"&&!/claude\.ai|claudeusercontent/.test(location.host))navigator.serviceWorker.register("sw.js").then(r=>{SWR=r;r.addEventListener("updatefound",()=>{const w=r.installing;if(w)w.addEventListener("statechange",()=>{if(w.state==="installed"&&navigator.serviceWorker.controller)toast("Nouvelle version disponible : Profil → Mettre à jour.")})})}).catch(()=>{})}catch(e){}
@@ -5759,7 +5857,7 @@ function atelier(n,done,back){const A=AT[n],D=dif(),tmax=D===2?60:D===1?120:0;le
     const fin=(sc,msg)=>{halt();pts+=sc;z.querySelectorAll("button,input").forEach(x=>x.disabled=true);
       fb.innerHTML=`<div class="fb" style="border-color:${sc===1?"var(--ok)":sc>0?"var(--gold)":"var(--ko)"}"><b>${msg}</b> ${Q.x}</div><button class="btn" id="nx">${i<A.it.length-1?"Suivant":"Terminer"}</button>`;
       document.getElementById("nx").onclick=()=>{i++;i<A.it.length?show():done(Math.round(pts/A.it.length*100))}};
-    if(Q.k==="xl"&&typeof XLQ==="function"){XLQ(Q,z,fin);return}
+    if(typeof XK!=="undefined"&&XK[Q.k]){XK[Q.k](Q,z,fin);return}
     if(Q.k==="num"){z.innerHTML=`<div class="row"><input id="ans" type="text" inputmode="decimal" placeholder="Ta réponse" style="flex:2;padding:13px;border-radius:11px;border:1.5px solid var(--line);font:inherit;background:var(--bg);color:var(--ink)"><span style="flex:0 0 auto;font-weight:700">${Q.u}</span></div><button class="btn" id="val">Valider</button>`;
       const check=()=>{const raw=document.getElementById("ans").value.replace(/\s/g,"").replace(",",".");const v=parseFloat(raw);if(isNaN(v))return toast("Entre un nombre.");const ok=Math.abs(v-Q.a)<=Q.tol+1e-9;fin(ok?1:0,ok?"Exact.":`La bonne réponse : ${fmtn(Q.a)} ${Q.u}.`)};
       document.getElementById("val").onclick=check;document.getElementById("ans").onkeydown=e=>{if(e.key==="Enter")check()};
@@ -5975,7 +6073,7 @@ function simHub(){const back=()=>go("exam");
   document.getElementById("dl").onclick=()=>dilem(sc=>end("dil",sc,simHub),simHub)}
 
 /* ===================== INSTALLATION ET MISE À JOUR ===================== */
-const APP_V="2026.11.15.5";let INST=null,SWR=null;
+const APP_V="2026.11.15.6";let INST=null,SWR=null;
 const standalone=()=>{try{return matchMedia("(display-mode: standalone)").matches||navigator.standalone===true}catch(e){return false}};
 try{window.addEventListener("beforeinstallprompt",e=>{e.preventDefault();INST=e;const b=document.getElementById("inst");if(b)b.style.display="block"})}catch(e){}
 try{if("serviceWorker" in navigator&&location.protocol==="https:"&&!/claude\.ai|claudeusercontent/.test(location.host))navigator.serviceWorker.register("sw.js").then(r=>{SWR=r;r.addEventListener("updatefound",()=>{const w=r.installing;if(w)w.addEventListener("statechange",()=>{if(w.state==="installed"&&navigator.serviceWorker.controller)toast("Nouvelle version disponible : Profil → Mettre à jour.")})})}).catch(()=>{})}catch(e){}
@@ -6377,7 +6475,7 @@ function atelier(n,done,back){const A=AT[n],D=dif(),tmax=D===2?60:D===1?120:0;le
     const fin=(sc,msg)=>{halt();pts+=sc;z.querySelectorAll("button,input").forEach(x=>x.disabled=true);
       fb.innerHTML=`<div class="fb" style="border-color:${sc===1?"var(--ok)":sc>0?"var(--gold)":"var(--ko)"}"><b>${msg}</b> ${Q.x}</div><button class="btn" id="nx">${i<A.it.length-1?"Suivant":"Terminer"}</button>`;
       document.getElementById("nx").onclick=()=>{i++;i<A.it.length?show():done(Math.round(pts/A.it.length*100))}};
-    if(Q.k==="xl"&&typeof XLQ==="function"){XLQ(Q,z,fin);return}
+    if(typeof XK!=="undefined"&&XK[Q.k]){XK[Q.k](Q,z,fin);return}
     if(Q.k==="num"){z.innerHTML=`<div class="row"><input id="ans" type="text" inputmode="decimal" placeholder="Ta réponse" style="flex:2;padding:13px;border-radius:11px;border:1.5px solid var(--line);font:inherit;background:var(--bg);color:var(--ink)"><span style="flex:0 0 auto;font-weight:700">${Q.u}</span></div><button class="btn" id="val">Valider</button>`;
       const check=()=>{const raw=document.getElementById("ans").value.replace(/\s/g,"").replace(",",".");const v=parseFloat(raw);if(isNaN(v))return toast("Entre un nombre.");const ok=Math.abs(v-Q.a)<=Q.tol+1e-9;fin(ok?1:0,ok?"Exact.":`La bonne réponse : ${fmtn(Q.a)} ${Q.u}.`)};
       document.getElementById("val").onclick=check;document.getElementById("ans").onkeydown=e=>{if(e.key==="Enter")check()};
@@ -6593,7 +6691,7 @@ function simHub(){const back=()=>go("exam");
   document.getElementById("dl").onclick=()=>dilem(sc=>end("dil",sc,simHub),simHub)}
 
 /* ===================== INSTALLATION ET MISE À JOUR ===================== */
-const APP_V="2026.11.15.5";let INST=null,SWR=null;
+const APP_V="2026.11.15.6";let INST=null,SWR=null;
 const standalone=()=>{try{return matchMedia("(display-mode: standalone)").matches||navigator.standalone===true}catch(e){return false}};
 try{window.addEventListener("beforeinstallprompt",e=>{e.preventDefault();INST=e;const b=document.getElementById("inst");if(b)b.style.display="block"})}catch(e){}
 try{if("serviceWorker" in navigator&&location.protocol==="https:"&&!/claude\.ai|claudeusercontent/.test(location.host))navigator.serviceWorker.register("sw.js").then(r=>{SWR=r;r.addEventListener("updatefound",()=>{const w=r.installing;if(w)w.addEventListener("statechange",()=>{if(w.state==="installed"&&navigator.serviceWorker.controller)toast("Nouvelle version disponible : Profil → Mettre à jour.")})})}).catch(()=>{})}catch(e){}
@@ -6951,6 +7049,7 @@ function XLQ(Q,z,fin){const g=Q.grid,tc=XL_COLS.indexOf(Q.cell[0]),tr=+Q.cell.sl
     fx.disabled=true;fin(ok?1:0,ok?`Exact : ${xlFmt(v)}.`:`Ta formule donne ${xlFmt(v)} ; le résultat attendu est ${xlFmt(Q.a)}.`)};
   document.getElementById("val").onclick=check;fx.onkeydown=e=>{if(e.key==="Enter")check()}}
 
+const XK={xl:XLQ};
 const XG_VENTES=[["Île","Ventes (F)","Vendeur"],["Tahiti",120000,"Hina"],["Moorea",85000,"Teva"],["Tahiti",64000,"Moana"],["Raiatea",47000,"Hina"],["Moorea",93000,"Hina"],["Bora Bora",150000,"Teva"]];
 const XG_NOTES=[["Nom","Note","Résultat"],["Tehani",14],["Mana",8.5],["Rahiti",11],["Vai",9.5]];
 const XG_PROD=[["Code","Produit","Prix (F)","","Code cherché","Prix"],["P01","Riz 1 kg",250,"","P03"],["P02","Huile 1 L",480],["P03","Lait 1 L",210],["P04","Thon en boîte",390]];
@@ -6979,7 +7078,7 @@ function atelier(n,done,back){const A=AT[n],D=dif(),tmax=D===2?60:D===1?120:0;le
     const fin=(sc,msg)=>{halt();pts+=sc;z.querySelectorAll("button,input").forEach(x=>x.disabled=true);
       fb.innerHTML=`<div class="fb" style="border-color:${sc===1?"var(--ok)":sc>0?"var(--gold)":"var(--ko)"}"><b>${msg}</b> ${Q.x}</div><button class="btn" id="nx">${i<A.it.length-1?"Suivant":"Terminer"}</button>`;
       document.getElementById("nx").onclick=()=>{i++;i<A.it.length?show():done(Math.round(pts/A.it.length*100))}};
-    if(Q.k==="xl"&&typeof XLQ==="function"){XLQ(Q,z,fin);return}
+    if(typeof XK!=="undefined"&&XK[Q.k]){XK[Q.k](Q,z,fin);return}
     if(Q.k==="num"){z.innerHTML=`<div class="row"><input id="ans" type="text" inputmode="decimal" placeholder="Ta réponse" style="flex:2;padding:13px;border-radius:11px;border:1.5px solid var(--line);font:inherit;background:var(--bg);color:var(--ink)"><span style="flex:0 0 auto;font-weight:700">${Q.u}</span></div><button class="btn" id="val">Valider</button>`;
       const check=()=>{const raw=document.getElementById("ans").value.replace(/\s/g,"").replace(",",".");const v=parseFloat(raw);if(isNaN(v))return toast("Entre un nombre.");const ok=Math.abs(v-Q.a)<=Q.tol+1e-9;fin(ok?1:0,ok?"Exact.":`La bonne réponse : ${fmtn(Q.a)} ${Q.u}.`)};
       document.getElementById("val").onclick=check;document.getElementById("ans").onkeydown=e=>{if(e.key==="Enter")check()};
@@ -7195,7 +7294,7 @@ function simHub(){const back=()=>go("exam");
   document.getElementById("dl").onclick=()=>dilem(sc=>end("dil",sc,simHub),simHub)}
 
 /* ===================== INSTALLATION ET MISE À JOUR ===================== */
-const APP_V="2026.11.15.5";let INST=null,SWR=null;
+const APP_V="2026.11.15.6";let INST=null,SWR=null;
 const standalone=()=>{try{return matchMedia("(display-mode: standalone)").matches||navigator.standalone===true}catch(e){return false}};
 try{window.addEventListener("beforeinstallprompt",e=>{e.preventDefault();INST=e;const b=document.getElementById("inst");if(b)b.style.display="block"})}catch(e){}
 try{if("serviceWorker" in navigator&&location.protocol==="https:"&&!/claude\.ai|claudeusercontent/.test(location.host))navigator.serviceWorker.register("sw.js").then(r=>{SWR=r;r.addEventListener("updatefound",()=>{const w=r.installing;if(w)w.addEventListener("statechange",()=>{if(w.state==="installed"&&navigator.serviceWorker.controller)toast("Nouvelle version disponible : Profil → Mettre à jour.")})})}).catch(()=>{})}catch(e){}
@@ -7244,7 +7343,7 @@ window.__CF={L:L,AT:typeof AT!=="undefined"?AT:null,open:(l,i)=>lire(l,[i],()=>g
 /* ===================== ÉCRAN D'ENTRÉE : CHOIX DE LA VOIE ===================== */
 (function(){
 "use strict";
-const V="2026.11.15.5",app=document.getElementById("app");
+const V="2026.11.15.6",app=document.getElementById("app");
 const ls=k=>{try{return localStorage.getItem(k)}catch(e){return null}};
 const js=k=>{try{return JSON.parse(ls(k)||"null")}catch(e){return null}};
 function toast(t){let d=document.getElementById("tst");if(!d){d=document.createElement("div");d.id="tst";d.style.cssText="position:fixed;left:12px;right:12px;bottom:24px;background:#14323a;color:#fff;padding:12px 14px;border-radius:12px;font-size:14.5px;z-index:9";document.body.appendChild(d)}d.textContent=t;d.style.display="block";clearTimeout(d._t);d._t=setTimeout(()=>d.style.display="none",4200)}
