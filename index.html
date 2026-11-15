@@ -1086,7 +1086,7 @@ function simHub(){const back=()=>go("exam");
   document.getElementById("sw").onclick=()=>simu(sc=>end("simw",sc,simHub),simHub);document.getElementById("dl").onclick=()=>dilem(sc=>end("dil",sc,simHub),simHub)}
 
 /* ===================== INSTALLATION ET MISE À JOUR ===================== */
-const APP_V="2026.11.14.2";let INST=null,SWR=null;
+const APP_V="2026.11.14.3";let INST=null,SWR=null;
 const standalone=()=>{try{return matchMedia("(display-mode: standalone)").matches||navigator.standalone===true}catch(e){return false}};
 try{window.addEventListener("beforeinstallprompt",e=>{e.preventDefault();INST=e;const b=document.getElementById("inst");if(b)b.style.display="block"})}catch(e){}
 try{if("serviceWorker" in navigator&&location.protocol==="https:"&&!/claude\.ai|claudeusercontent/.test(location.host))navigator.serviceWorker.register("sw.js").then(r=>{SWR=r;r.addEventListener("updatefound",()=>{const w=r.installing;if(w)w.addEventListener("statechange",()=>{if(w.state==="installed"&&navigator.serviceWorker.controller)toast("Nouvelle version disponible : Profil → Mettre à jour.")})})}).catch(()=>{})}catch(e){}
@@ -2531,7 +2531,7 @@ function simHub(){const back=()=>go("exam");
   document.getElementById("sw").onclick=()=>simu(sc=>end("simw",sc,simHub),simHub);document.getElementById("dl").onclick=()=>dilem(sc=>end("dil",sc,simHub),simHub)}
 
 /* ===================== INSTALLATION ET MISE À JOUR ===================== */
-const APP_V="2026.11.14.2";let INST=null,SWR=null;
+const APP_V="2026.11.14.3";let INST=null,SWR=null;
 const standalone=()=>{try{return matchMedia("(display-mode: standalone)").matches||navigator.standalone===true}catch(e){return false}};
 try{window.addEventListener("beforeinstallprompt",e=>{e.preventDefault();INST=e;const b=document.getElementById("inst");if(b)b.style.display="block"})}catch(e){}
 try{if("serviceWorker" in navigator&&location.protocol==="https:"&&!/claude\.ai|claudeusercontent/.test(location.host))navigator.serviceWorker.register("sw.js").then(r=>{SWR=r;r.addEventListener("updatefound",()=>{const w=r.installing;if(w)w.addEventListener("statechange",()=>{if(w.state==="installed"&&navigator.serviceWorker.controller)toast("Nouvelle version disponible : Profil → Mettre à jour.")})})}).catch(()=>{})}catch(e){}
@@ -3024,7 +3024,7 @@ function simHub(){const back=()=>go("exam");
   document.getElementById("dl").onclick=()=>dilem(sc=>end("dil",sc,simHub),simHub)}
 
 /* ===================== INSTALLATION ET MISE À JOUR ===================== */
-const APP_V="2026.11.14.2";let INST=null,SWR=null;
+const APP_V="2026.11.14.3";let INST=null,SWR=null;
 const standalone=()=>{try{return matchMedia("(display-mode: standalone)").matches||navigator.standalone===true}catch(e){return false}};
 try{window.addEventListener("beforeinstallprompt",e=>{e.preventDefault();INST=e;const b=document.getElementById("inst");if(b)b.style.display="block"})}catch(e){}
 try{if("serviceWorker" in navigator&&location.protocol==="https:"&&!/claude\.ai|claudeusercontent/.test(location.host))navigator.serviceWorker.register("sw.js").then(r=>{SWR=r;r.addEventListener("updatefound",()=>{const w=r.installing;if(w)w.addEventListener("statechange",()=>{if(w.state==="installed"&&navigator.serviceWorker.controller)toast("Nouvelle version disponible : Profil → Mettre à jour.")})})}).catch(()=>{})}catch(e){}
@@ -3069,7 +3069,7 @@ const h0=(location.hash||"").slice(1);go(["home","parcours","fiches","conseil","
 window.addEventListener("hashchange",()=>{const h=location.hash.slice(1);if(["home","parcours","fiches","conseil","profil","exam"].includes(h)&&!document.querySelector(`nav button.on[data-v="${h}"]`))go(h)});
 
 }}));
-TRACKS.push(Object.assign({"id": "ide", "key": "fenua-ide-v1", "ic": "💉", "name": "Soins infirmiers et urgences", "sub": "Gestes d'urgence, voie veineuse, plaies et sutures, médicaments", "col": ["#b8402a", "#f9e4de", "#f39a85", "#4c2a24"]},{run:function(){
+TRACKS.push(Object.assign({"id": "ide", "key": "fenua-ide-v1", "ic": "💉", "name": "Soins infirmiers et urgences", "sub": "Urgences, voie veineuse, sutures, bandages, plaies et cicatrisation, médicaments", "col": ["#b8402a", "#f9e4de", "#f39a85", "#4c2a24"]},{run:function(){
 "use strict";
 const J={
 MED:{n:"Dr Teriitahi",r:"Médecin urgentiste",c:"#b8402a"},
@@ -3297,6 +3297,267 @@ const REP=[
  ["Transfusion","contrôle ultime au lit ; surveillance des 15 premières minutes",""]]]
 ];
 
+// ===== Schémas techniques : sutures, bandages, sparadrap =====
+const FIG=(w,h,body,cap)=>`<figure style='margin:14px 0;background:#fff;border:1px solid #e2dbcb;border-radius:12px;padding:8px'><svg viewBox='0 0 ${w} ${h}' width='100%' role='img' aria-label='${cap}' xmlns='http://www.w3.org/2000/svg' font-family='system-ui,-apple-system,sans-serif' font-size='10.5' fill='#14323a'><defs><marker id='ar' viewBox='0 0 10 10' refX='9' refY='5' markerWidth='7' markerHeight='7' orient='auto-start-reverse'><path d='M0,0 L10,5 L0,10 z' fill='#14323a'/></marker></defs>${body}</svg><figcaption style='color:#5d7379;font-size:13px;margin-top:4px'>${cap}</figcaption></figure>`;
+const TX=(x,y,s,a)=>`<text x='${x}' y='${y}'${a?" "+a:""}>${s}</text>`;
+const LINES=(x,y,arr,a,step)=>arr.map((s,i)=>TX(x,y+i*(step||13),s,a)).join("");
+const SKIN=(x0,x1)=>`<rect x='${x0}' y='60' width='${x1-x0}' height='12' fill='#e3a982'/><rect x='${x0}' y='72' width='${x1-x0}' height='40' fill='#f2c9a8'/><rect x='${x0}' y='112' width='${x1-x0}' height='45' fill='#fbe3b5'/>`+TX(x0+4,69,"Épiderme","font-size='8.5'")+TX(x0+4,96,"Derme","font-size='9'")+TX(x0+4,140,"Hypoderme","font-size='9'");
+const WOUND=`<path d='M118,60 L142,60 L131,132 L129,132 Z' fill='#fff' stroke='#c0392b' stroke-width='1.2'/>`;
+const TH="stroke='#1d4ed8' stroke-width='2.2' fill='none' stroke-linecap='round'";
+const KNOT=(x,y)=>`<circle cx='${x}' cy='${y}' r='3.6' fill='#1d4ed8'/><path d='M${x+2},${y-2} l11,-8 M${x+3},${y+1} l12,-2' ${TH}/>`;
+const TOPSKIN=(h)=>`<rect x='10' y='18' width='340' height='${h}' rx='10' fill='#f2c9a8'/>`;
+const BAND=(x1,y1,x2,y2,w)=>`<line x1='${x1}' y1='${y1}' x2='${x2}' y2='${y2}' stroke='#7f9bb5' stroke-width='${w+3}' stroke-linecap='butt'/><line x1='${x1}' y1='${y1}' x2='${x2}' y2='${y2}' stroke='#eef3f8' stroke-width='${w}' stroke-linecap='butt'/>`;
+
+const SCH={
+simple:FIG(410,175,SKIN(20,240)+WOUND+
+ `<path d='M108,60 C105,112 117,130 130,130 C143,130 155,112 152,60' ${TH}/><path d='M108,60 C110,44 132,38 154,43 M152,60 C153,52 154,47 154,43' ${TH}/>`+KNOT(156,43)+
+ `<path d='M108,52 L118,52 M108,48 L108,56 M118,48 L118,56' stroke='#14323a'/>`+TX(30,40,"3 à 5 mm du bord")+TX(30,52,"(1 à 2 mm au visage)","font-size='9'")+
+ `<path d='M164,43 L246,40' stroke='#14323a' stroke-dasharray='2 2'/>`+LINES(250,36,["Nœud sur le côté,","jamais sur la plaie"])+
+ TX(250,82,"Règles","font-weight='700'")+LINES(250,96,["• même distance du bord","• même profondeur","• aiguille perpendiculaire","  à la peau","• berges légèrement","  éversées"],"font-size='10'",12.5),
+ "Point simple séparé, vu en coupe. Le fil (en bleu) forme une boucle de même profondeur des deux côtés."),
+dessus:FIG(360,150,TOPSKIN(115)+`<line x1='40' y1='75' x2='320' y2='75' stroke='#c0392b' stroke-width='2.5'/>`+
+ [60,100,140,180,220,260,300].map(x=>`<line x1='${x}' y1='60' x2='${x}' y2='90' ${TH}/><circle cx='${x}' cy='58' r='3' fill='#1d4ed8'/>`).join("")+
+ `<path d='M60,108 L100,108 M60,103 L60,113 M100,103 L100,113' stroke='#14323a'/>`+TX(80,124,"5 à 10 mm","text-anchor='middle'")+
+ TX(180,40,"Nœuds alignés du même côté de la plaie","text-anchor='middle'")+TX(250,124,"Plaie","font-size='10' fill='#c0392b'"),
+ "Points séparés vus de dessus : écart régulier, à peu près égal à la distance au bord."),
+surjet:FIG(360,150,TOPSKIN(115)+`<line x1='40' y1='75' x2='320' y2='75' stroke='#c0392b' stroke-width='2.5'/>`+
+ [60,100,140,180,220,260,300].map(x=>`<line x1='${x}' y1='60' x2='${x}' y2='90' stroke='#1d4ed8' stroke-width='1.6' stroke-dasharray='3 3'/>`).join("")+
+ [60,100,140,180,220,260].map(x=>`<line x1='${x}' y1='90' x2='${x+40}' y2='60' ${TH}/>`).join("")+`<circle cx='60' cy='58' r='3.6' fill='#1d4ed8'/><circle cx='300' cy='92' r='3.6' fill='#1d4ed8'/>`+
+ TX(40,40,"Trait plein : fil visible, en oblique")+TX(40,120,"Pointillé : trajet sous la peau, perpendiculaire à la plaie","font-size='10'"),
+ "Surjet simple : un seul fil, noué à chaque extrémité. Rapide, pour une plaie nette."),
+blair:FIG(400,180,SKIN(20,240)+WOUND+
+ `<path d='M96,60 C92,125 115,142 130,142 C145,142 168,125 164,60' ${TH}/><path d='M164,60 C162,49 150,49 148,60' ${TH}/><path d='M148,60 C149,78 140,86 130,86 C120,86 111,78 112,60' stroke='#0e9f6e' stroke-width='2.2' fill='none'/><path d='M112,60 C110,48 100,46 98,46 M96,60 C96,52 97,48 98,46' ${TH}/>`+KNOT(98,45)+
+ TX(250,62,"Petit point superficiel","fill='#0e9f6e' font-weight='700'")+TX(250,75,"(près – près)","fill='#0e9f6e'")+
+ TX(250,118,"Grand point profond","fill='#1d4ed8' font-weight='700'")+TX(250,131,"(loin – loin)","fill='#1d4ed8'")+LINES(250,155,["Plaies sous tension :","berges bien affrontées"],"font-size='10'"),
+ "Point de Blair-Donati (point vertical en U), vu en coupe : un grand point profond puis un petit point superficiel."),
+intra:FIG(360,150,TOPSKIN(115)+`<line x1='50' y1='75' x2='310' y2='75' stroke='#c0392b' stroke-width='2.5'/>`+
+ `<path d='M30,60 L50,68 L80,68 L80,82 L110,82 L110,68 L140,68 L140,82 L170,82 L170,68 L200,68 L200,82 L230,82 L230,68 L260,68 L260,82 L290,82 L310,75 L330,60' stroke='#1d4ed8' stroke-width='1.8' fill='none' stroke-dasharray='4 3'/>`+
+ `<rect x='18' y='52' width='18' height='12' fill='#fbfaf5' stroke='#9a8f75'/><rect x='324' y='52' width='18' height='12' fill='#fbfaf5' stroke='#9a8f75'/>`+
+ TX(180,40,"Le fil passe dans le derme, de part et d'autre de la plaie","text-anchor='middle'")+TX(180,120,"Extrémités fixées par un adhésif (ou un nœud)","text-anchor='middle' font-size='10'"),
+ "Surjet intradermique vu de dessus : aucun point ne traverse la surface, la cicatrice est plus discrète."),
+noeud:FIG(360,190,[0,120,240].map((x0,i)=>{
+ const loops=i===0?2:1,dir=i===1?-1:1;
+ let s=`<rect x='${x0+4}' y='6' width='112' height='128' rx='8' fill='#f7f7f2' stroke='#e2dbcb'/>`+TX(x0+12,24,String(i+1),"font-weight='700' font-size='14'");
+ s+=`<path d='M${x0+30},118 C${x0+40},128 ${x0+70},128 ${x0+80},118' ${TH}/><path d='M${x0+80},118 L${x0+104},104' ${TH}/>`+TX(x0+66,131,"chef court","font-size='8.5'");
+ s+=`<line x1='${x0+14}' y1='100' x2='${x0+62}' y2='62' stroke='#8a8f98' stroke-width='4' stroke-linecap='round'/><line x1='${x0+62}' y1='62' x2='${x0+70}' y2='56' stroke='#8a8f98' stroke-width='2.5'/>`;
+ for(let k=0;k<loops;k++)s+=`<ellipse cx='${x0+58-k*7}' cy='${66+k*5}' rx='9' ry='4.5' transform='rotate(-38 ${x0+58-k*7} ${66+k*5})' fill='none' stroke='#1d4ed8' stroke-width='2'/>`;
+ s+=`<path d='M${x0+30},118 C${x0+30},95 ${x0+44},82 ${x0+52},72' ${TH}/><path d='M${x0+(dir>0?72:40)},44 a14,14 0 0 ${dir>0?1:0} ${dir*18},14' fill='none' stroke='#14323a' marker-end='url(#ar)'/>`;
+ return s}).join("")+
+ LINES(8,152,["Deux tours du fil autour","du porte-aiguille, saisir","le chef court, serrer à plat"],"font-size='9.5'",11)+
+ LINES(128,152,["Un tour en sens","inverse, saisir le chef","court, serrer"],"font-size='9.5'",11)+
+ LINES(248,152,["Un tour dans le premier","sens, serrer ; couper","les chefs à 3–5 mm"],"font-size='9.5'",11),
+ "Nœud au porte-aiguille : trois demi-nœuds de sens alternés, le premier à double tour."),
+ablation:FIG(360,190,SKIN(20,240)+`<line x1='130' y1='60' x2='130' y2='124' stroke='#c0392b' stroke-width='1.5'/>`+
+ `<path d='M112,60 C110,110 120,124 130,124 C140,124 150,110 148,60' ${TH}/><path d='M112,60 C116,40 136,32 150,36 M148,60 L150,38' ${TH}/><circle cx='151' cy='35' r='3.6' fill='#1d4ed8'/>`+
+ `<path d='M153,33 L196,8 M156,37 L200,14' stroke='#8a8f98' stroke-width='2.5'/>`+
+ `<path d='M140,56 L156,56' stroke='#c0392b' stroke-width='2'/><text x='158' y='60' font-size='13'>✂</text>`+
+ `<path d='M150,30 C140,20 125,18 112,22' fill='none' stroke='#14323a' marker-end='url(#ar)'/>`+
+ LINES(250,40,["1. Soulever le nœud","   avec la pince"],"font-size='10'",12)+LINES(250,80,["2. Couper au ras de","   la peau, sous le nœud"],"font-size='10'",12)+LINES(250,120,["3. Tirer vers la plaie :","   le fil extérieur ne","   traverse pas la peau"],"font-size='10'",12),
+ "Ablation d'un point séparé : la partie du fil qui était à l'extérieur ne doit pas repasser dans la peau."),
+strips:FIG(360,175,TOPSKIN(140)+`<line x1='60' y1='88' x2='300' y2='88' stroke='#c0392b' stroke-width='2.5'/>`+
+ [70,92,114,136,158,180,202,224,246,268,290].map(x=>`<rect x='${x-5}' y='50' width='10' height='76' fill='#fbfaf5' stroke='#9a8f75'/>`).join("")+
+ `<rect x='55' y='44' width='250' height='10' fill='#efe9d8' stroke='#9a8f75'/><rect x='55' y='122' width='250' height='10' fill='#efe9d8' stroke='#9a8f75'/>`+
+ [[180,"1"],[114,"2"],[246,"3"]].map(([x,n])=>`<circle cx='${x}' cy='88' r='7' fill='#0f6e78'/>`+TX(x,92,n,"text-anchor='middle' fill='#fff' font-size='9.5' font-weight='700'")).join("")+
+ TX(180,150,"Commencer au milieu, puis aux quarts ; espacer d'environ 3 mm","text-anchor='middle' font-size='10'"),
+ "Bandelettes adhésives : peau propre et sèche, berges rapprochées sans tension, deux bandes parallèles pour tenir les extrémités."),
+spirale:(()=>{const yT=x=>73-(x-70)*10/230,yB=x=>107+(x-70)*10/230;let s=`<ellipse cx='48' cy='90' rx='26' ry='19' fill='#f2c9a8' stroke='#c99a78'/>`+[0,1,2,3].map(k=>`<rect x='${6+k*0}' y='${76+k*8}' width='26' height='7' rx='3.5' fill='#f2c9a8' stroke='#c99a78'/>`).join("")+
+ `<path d='M70,${yT(70)} L300,${yT(300)} L300,${yB(300)} L70,${yB(70)} Z' fill='#f2c9a8' stroke='#c99a78'/>`;
+ s+=BAND(80,yT(80),80,yB(80),12)+BAND(86,yT(86),86,yB(86),12);
+ for(let x=94;x<=262;x+=16)s+=BAND(x,yT(x),x+18,yB(x+18),14);
+ s+=BAND(290,yT(290),290,yB(290),12);
+ s+=`<path d='M90,42 L285,42' stroke='#14323a' marker-end='url(#ar)'/>`+TX(188,36,"du poignet vers le coude (distal → proximal)","text-anchor='middle' font-size='10'");
+ s+=LINES(40,140,["1. Deux tours","d'ancrage"],"font-size='9.5'",11)+LINES(140,140,["2. Chaque tour recouvre","1/2 à 2/3 du précédent"],"font-size='9.5'",11)+LINES(272,140,["3. Tour final,","fixer"],"font-size='9.5'",11)+TX(8,60,"Doigts visibles","font-size='9.5' font-weight='700'");
+ return FIG(360,170,s,"Bandage en spirale de l'avant-bras : régulier, sans plis, ni trop serré ni trop lâche.")})(),
+huit:FIG(360,170,`<rect x='30' y='70' width='300' height='40' rx='14' fill='#f2c9a8' stroke='#c99a78'/><ellipse cx='180' cy='90' rx='16' ry='22' fill='none' stroke='#c99a78' stroke-dasharray='3 3'/>`+
+ BAND(95,70,95,110,12)+BAND(265,70,265,110,12)+[70,50,30].map(d=>BAND(180-d,70,180+d,110,12)+BAND(180-d,110,180+d,70,12)).join("")+
+ TX(180,40,"Les tours se croisent en X au pli de l'articulation","text-anchor='middle'")+TX(180,54,"et montent ou descendent en alternance","text-anchor='middle' font-size='10'")+
+ TX(95,130,"ancrage","text-anchor='middle' font-size='9.5'")+TX(265,130,"tour final","text-anchor='middle' font-size='9.5'")+TX(180,150,"Articulation en position de fonction","text-anchor='middle' font-size='10' font-weight='700'"),
+ "Bandage en huit (cheville, coude, genou, poignet) : il maintient l'articulation sans la bloquer."),
+recurrent:FIG(360,175,`<path d='M30,58 L222,58 A32,32 0 0 1 222,122 L30,122 Z' fill='#f2c9a8' stroke='#c99a78'/>`+
+ [[64,116],[74,106],[84,96]].map(([a,b])=>`<path d='M100,${a} L222,${a} Q262,90 222,${b} L100,${b}' fill='none' stroke='#7f9bb5' stroke-width='12'/><path d='M100,${a} L222,${a} Q262,90 222,${b} L100,${b}' fill='none' stroke='#eef3f8' stroke-width='9'/>`).join("")+
+ BAND(110,56,110,124,12)+BAND(124,56,124,124,12)+BAND(138,56,138,124,12)+
+ LINES(150,146,["1. Allers-retours par-dessus","l'extrémité, tenus d'une main"],"font-size='10'",12)+LINES(20,30,["2. Tours circulaires pour fixer les allers-retours"],"font-size='10'"),
+ "Bandage récurrent : bout de doigt, moignon ; sur la tête, c'est la capeline."),
+kt:FIG(360,200,`<rect x='10' y='40' width='340' height='130' rx='12' fill='#f2c9a8'/>`+
+ `<rect x='92' y='76' width='96' height='66' rx='6' fill='rgba(150,200,240,.25)' stroke='#5a8fb8' stroke-dasharray='5 3'/>`+
+ `<line x1='112' y1='112' x2='142' y2='110' stroke='#8a8f98' stroke-width='2'/><circle cx='112' cy='112' r='2.5' fill='#c0392b'/><rect x='142' y='103' width='26' height='14' rx='3' fill='#2c8a57'/>`+
+ `<path d='M168,110 C210,110 240,90 250,110 C260,135 215,140 220,118 C226,98 280,100 340,104' fill='none' stroke='#9fb3c8' stroke-width='4'/>`+
+ `<rect x='228' y='102' width='34' height='14' rx='2' transform='rotate(-8 245 109)' fill='#fbfaf5' stroke='#9a8f75'/>`+
+ `<rect x='150' y='82' width='34' height='12' rx='2' fill='#fff' stroke='#5a8fb8'/>`+TX(167,91,"date","text-anchor='middle' font-size='8.5'")+
+ `<path d='M70,150 L108,116' stroke='#14323a' marker-end='url(#ar)'/>`+LINES(16,160,["Point de ponction visible"],"font-size='9.5'")+
+ LINES(16,24,["Pansement transparent stérile, daté"],"font-size='10'")+LINES(222,18,["Boucle de sécurité fixée :","une traction ne tire pas","sur le cathéter"],"font-size='9.5'",11)+
+ TX(180,188,"Jamais de sparadrap qui fait le tour du membre","text-anchor='middle' font-size='10' font-weight='700'"),
+ "Fixation d'un cathéter veineux périphérique : surveiller le point de ponction sans défaire le pansement."),
+compresse:FIG(360,170,`<rect x='10' y='20' width='160' height='130' rx='10' fill='#f2c9a8'/>`+
+ `<rect x='48' y='52' width='84' height='68' fill='#fff' stroke='#c8c8c8'/>`+[60,72,84,96,108,120].map(x=>`<line x1='${x}' y1='52' x2='${x}' y2='120' stroke='#e5e5e5'/>`).join("")+
+ `<rect x='34' y='42' width='112' height='12' fill='#fbfaf5' stroke='#9a8f75'/><rect x='34' y='118' width='112' height='12' fill='#fbfaf5' stroke='#9a8f75'/><rect x='36' y='42' width='12' height='88' fill='#fbfaf5' stroke='#9a8f75'/><rect x='132' y='42' width='12' height='88' fill='#fbfaf5' stroke='#9a8f75'/>`+
+ LINES(14,142,["Déborder de 2 à 3 cm,","poser sans tendre"],"font-size='9.5'",11)+
+ `<rect x='190' y='20' width='160' height='130' rx='10' fill='#f7f7f2'/><line x1='198' y1='118' x2='342' y2='118' stroke='#c99a78' stroke-width='3'/><rect x='198' y='118' width='144' height='24' fill='#f2c9a8'/>`+
+ `<circle cx='270' cy='94' r='12' fill='#cfe3f2' stroke='#5a8fb8' stroke-width='2'/><path d='M200,118 L250,118 L258,112 C252,98 255,80 270,80 C285,80 288,98 282,112 L290,118 L340,118' fill='none' stroke='#9a8f75' stroke-width='5'/>`+
+ TX(270,40,"Fixation en oméga (Ω)","text-anchor='middle' font-weight='700' font-size='10'")+LINES(200,56,["le tuyau est tenu sans","appuyer sur la peau"],"font-size='9.5'",11)+TX(270,138,"peau","text-anchor='middle' font-size='9'"),
+ "À gauche : sparadrap sur une compresse, en cadre. À droite : fixation en oméga d'une sonde ou d'une tubulure, vue en coupe."),
+doigts:FIG(360,170,`<rect x='120' y='20' width='44' height='130' rx='20' fill='#f2c9a8' stroke='#c99a78'/><rect x='170' y='12' width='44' height='138' rx='20' fill='#f2c9a8' stroke='#c99a78'/>`+
+ [[120,62],[120,100],[170,58],[170,98]].map(([x,y])=>`<line x1='${x+6}' y1='${y}' x2='${x+38}' y2='${y}' stroke='#c99a78' stroke-dasharray='3 2'/>`).join("")+
+ `<rect x='163' y='30' width='8' height='112' fill='#fff' stroke='#c8c8c8'/>`+
+ `<rect x='112' y='72' width='110' height='16' fill='#fbfaf5' stroke='#9a8f75'/><rect x='112' y='112' width='110' height='16' fill='#fbfaf5' stroke='#9a8f75'/>`+
+ LINES(232,82,["Bandes entre les","articulations,","jamais dessus"],"font-size='9.5'",11)+LINES(14,40,["Compresse entre","les doigts"],"font-size='9.5'",11)+`<path d='M80,46 L162,60' stroke='#14323a' marker-end='url(#ar)'/>`+LINES(14,150,["Pointillés : plis","des articulations"],"font-size='9'",10),
+ "Syndactylie : un doigt blessé tenu par son voisin. Surveiller couleur, chaleur et sensibilité.")
+};
+
+L.push(
+{t:"Sutures, bandages et sparadrap en images",s:"Les schémas techniques pour comprendre, assister et surveiller.",
+f:[
+["Les points de suture en schémas","<p>La suture cutanée est un acte médical : ces schémas servent à comprendre le geste, à préparer, à assister et à surveiller. Pratique seulement dans le cadre prévu par ton poste.</p>"+SCH.simple+SCH.dessus+SCH.surjet+SCH.blair+"<ul><li><b>Point simple séparé</b> : le plus courant ; si un point lâche, les autres tiennent.</li><li><b>Surjet</b> : rapide, mais si le fil casse, tout s'ouvre.</li><li><b>Blair-Donati</b> : pour les plaies sous tension.</li><li>On serre pour <b>rapprocher</b> les berges, pas pour les écraser : un point trop serré étrangle la peau et laisse des marques.</li></ul>"],
+["Nœud, surjet intradermique et ablation des fils","<p>Le nœud et l'ablation des fils sont les gestes que tu verras le plus.</p>"+SCH.noeud+"<ul><li>Le premier demi-nœud à <b>double tour</b> ne glisse pas pendant qu'on fait le second.</li><li>Chaque demi-nœud se fait en <b>sens inverse</b> du précédent ; on serre à plat.</li></ul>"+SCH.intra+SCH.ablation+"<ul><li><b>Avant</b> : vérifier la prescription et l'aspect de la cicatrice ; une cicatrice rouge, chaude ou qui suinte, on ne retire pas : on prévient.</li><li><b>Matériel</b> : pince, ciseaux ou lame à fils, compresses, antiseptique.</li><li>On peut retirer <b>un point sur deux</b> d'abord, sur prescription, si la cicatrice est fragile.</li><li>Après : bandelettes si besoin, consignes, trace dans le dossier.</li></ul>"],
+["Les bandages","<p>Un bandage maintient un pansement, comprime légèrement ou soutient une articulation. Il ne doit <b>jamais</b> gêner la circulation.</p>"+SCH.spirale+SCH.huit+SCH.recurrent+"<ul><li><b>Toujours</b> : partir de la partie la plus éloignée (distal) vers le corps (proximal) ; commencer par deux tours circulaires d'ancrage.</li><li>Recouvrir chaque tour de la <b>moitié aux deux tiers</b> ; pas de plis, tension régulière.</li><li>Laisser le bout des doigts ou des orteils <b>visible</b>.</li><li><b>Surveiller</b> : couleur, chaleur, sensibilité, mobilité, douleur, gonflement. Au moindre doute : on desserre et on refait.</li><li>Ne pas fixer l'extrémité du bandage sur une plaie ou sur un point d'appui.</li></ul>"],
+["Sparadrap et fixations","<p>Le sparadrap fixe sans blesser : la peau fragile (personne âgée, nourrisson) s'arrache facilement.</p>"+SCH.strips+SCH.compresse+SCH.kt+SCH.doigts+"<ul><li><b>Poser</b> sur une peau propre et sèche, <b>sans tendre</b> l'adhésif : tendu, il crée des cloques.</li><li><b>Retirer</b> lentement, en repliant l'adhésif sur lui-même, au ras de la peau, en maintenant la peau avec l'autre main.</li><li>Peau fragile : adhésif doux (silicone), ou bande de maintien plutôt que sparadrap.</li><li>Allergie connue au sparadrap : la noter et utiliser un autre adhésif.</li></ul>"]],
+q:[
+["Dans un point simple séparé, le nœud se place…",["sur le côté de la plaie","juste au-dessus de la plaie","sous la peau","n'importe où"],"Un nœud sur la plaie gêne la cicatrisation."],
+["L'aiguille entre dans la peau…",["perpendiculairement, à la même distance du bord des deux côtés","en biais, au hasard","toujours à 1 cm du bord","en passant sous la plaie à des profondeurs différentes"],"Les berges se rejoignent alors à la même hauteur."],
+["Le point de Blair-Donati associe…",["un grand point profond et un petit point superficiel","deux surjets","un nœud sans fil","une agrafe et un fil"],"Loin–loin, puis près–près."],
+["Dans un surjet intradermique, le fil…",["passe dans le derme sans traverser la surface","est noué à chaque point","ressort entre chaque point","est agrafé"],"La cicatrice est plus discrète."],
+["Pourquoi le premier demi-nœud est-il à double tour ?",["Pour qu'il ne glisse pas pendant le second","Pour faire joli","Pour économiser du fil","Ce n'est jamais le cas"],"Les suivants se font en sens alterné."],
+["Pour retirer un point séparé, on coupe le fil…",["au ras de la peau, sous le nœud","au milieu du nœud","le plus loin possible de la peau","on ne coupe pas, on tire"],"La partie extérieure ne repasse pas dans la peau."],
+["Les bandelettes adhésives se posent en commençant…",["par le milieu de la plaie","par une extrémité","dans le sens de la plaie","par-dessus une plaie humide"],"Puis aux quarts, avec environ 3 mm d'écart."],
+["Un bandage du membre se pose…",["du distal vers le proximal","du proximal vers le distal","dans n'importe quel sens","en partant du milieu"],"Du poignet vers le coude, par exemple."],
+["Chaque tour d'un bandage en spirale recouvre le précédent de…",["la moitié aux deux tiers","quelques millimètres","rien du tout","quatre fois sa largeur"],"Tension régulière, sans plis."],
+["Pour une articulation, on utilise plutôt…",["le bandage en huit","le bandage circulaire serré","la capeline","aucun bandage"],"Les tours se croisent au pli de l'articulation."],
+["Doigts froids et bleutés sous un bandage : tu…",["desserres et tu refais le bandage, puis tu surveilles","attends le lendemain","serres davantage","donnes un antalgique"],"La circulation passe avant tout."],
+["La fixation en oméga sert à…",["tenir un tuyau sans qu'il appuie sur la peau","fermer une plaie","bander une cheville","coller une compresse"],"Elle évite les plaies de frottement."]],
+c:[
+{t:"Le bandage trop serré",s:"Une heure après la pose d'un bandage de l'avant-bras, la patiente se plaint de fourmillements. Ses doigts sont pâles et froids.",o:[
+ ["Tu défais le bandage, tu vérifies la circulation des doigts, tu le refais moins serré du poignet vers le coude, tu surveilles et tu traces.",2,"Les fourmillements et la pâleur signent une compression."],
+ ["Tu lui demandes de bouger les doigts et tu repasses plus tard.",0,"La compression continue pendant ce temps."],
+ ["Tu ajoutes une couche pour mieux maintenir.",0,"Tu aggraves la compression."],
+ ["Tu desserres seulement le dernier tour.",1,"C'est mieux, mais la compression vient souvent de tout le bandage."]]},
+{t:"Les fils à retirer au 10e jour",s:"Tu dois retirer les points séparés d'une plaie de l'avant-bras, sur prescription. Un des points est entouré d'une rougeur et suinte.",o:[
+ ["Tu ne retires pas ce point, tu préviens le médecin, tu notes l'aspect ; pour les autres, tu attends son avis.",2,"Une cicatrice qui suinte n'est pas une ablation de routine."],
+ ["Tu retires tout comme prévu.",0,"Tu risques d'ouvrir une plaie infectée."],
+ ["Tu retires les points et tu mets une pommade sans rien dire.",0,"Ni avis ni trace."],
+ ["Tu retires les points sains et tu laisses celui qui suinte, sans prévenir personne.",1,"Le geste est prudent, mais le médecin doit savoir."]]}],
+o:[
+["IDE","Expliquez comment poser un bandage en spirale sur un avant-bras et comment le surveiller.",["Distal vers proximal","Deux tours d'ancrage","Recouvrement de la moitié aux deux tiers","Doigts visibles","Couleur, chaleur, sensibilité, mobilité"]],
+["MED","Vous retirez des fils de suture. Décrivez le geste et ce qui vous ferait arrêter.",["Prescription et aspect de la cicatrice","Soulever le nœud","Couper au ras de la peau, sous le nœud","Tirer vers la plaie","Rougeur, chaleur, écoulement : on prévient"]]],
+e:["Rédige une fiche illustrée, en mots simples, pour les aides-soignants de ton service : « Bien poser et surveiller un bandage ».",["But du bandage","Matériel","Distal vers proximal, ancrage","Recouvrement régulier","Signes de compression","Que faire en cas de doute","Traçabilité"]]}
+);
+AT.push({t:"Sutures, bandages et sparadrap dans l'ordre",lv:"Moyen",it:[
+ {k:"ord",q:"Bandage en spirale de l'avant-bras : remets les étapes dans l'ordre.",it:["Installer le membre en position de fonction","Deux tours circulaires d'ancrage au poignet","Monter en spirale vers le coude","Recouvrir chaque tour de la moitié aux deux tiers","Tour circulaire final et fixation","Contrôler couleur, chaleur et sensibilité des doigts"],x:"Toujours du distal vers le proximal."},
+ {k:"ord",q:"Pose de bandelettes adhésives : remets les étapes dans l'ordre.",it:["Nettoyer et sécher la peau","Rapprocher les berges sans tension","Poser la première bandelette au milieu","Poser les suivantes aux quarts, environ 3 mm d'écart","Poser deux bandes parallèles aux extrémités"],x:"Sur une peau humide, elles ne tiennent pas."},
+ {k:"ord",q:"Ablation d'un point séparé : remets les gestes dans l'ordre.",it:["Vérifier la prescription et l'aspect de la cicatrice","Nettoyer avec un antiseptique","Soulever le nœud avec la pince","Couper le fil au ras de la peau, sous le nœud","Tirer le fil vers la plaie","Noter le geste et l'aspect de la cicatrice"],x:"La partie extérieure ne repasse pas dans la peau."},
+ {k:"ord",q:"Nœud au porte-aiguille : remets les temps dans l'ordre.",it:["Deux tours du chef long autour du porte-aiguille","Saisir le chef court et serrer à plat","Un tour en sens inverse et serrer","Un tour dans le premier sens et serrer","Couper les chefs à 3 à 5 mm"],x:"Trois demi-nœuds de sens alternés."},
+ {k:"num",q:"Sur le corps, à quelle distance du bord l'aiguille entre-t-elle, au maximum, en mm ?",a:5,tol:0,u:"mm",x:"3 à 5 mm ; 1 à 2 mm au visage."},
+ {k:"num",q:"Écart à laisser entre deux bandelettes adhésives, environ, en mm ?",a:3,tol:0,u:"mm",x:"Pour laisser s'écouler les sérosités."},
+ {k:"num",q:"De combien de centimètres, au maximum, le sparadrap déborde-t-il sur la peau saine autour d'une compresse ?",a:3,tol:0,u:"cm",x:"2 à 3 cm."}]});
+SIMMAP.push("at2");
+REP.push(["Sutures, bandages, sparadrap",[
+ ["Point simple","3 à 5 mm du bord (1 à 2 mm au visage) ; nœud sur le côté",""],
+ ["Nœud au porte-aiguille","3 demi-nœuds alternés, le premier à double tour",""],
+ ["Ablation des fils","couper au ras de la peau sous le nœud, tirer vers la plaie",""],
+ ["Bandelettes","du milieu vers les extrémités ; 3 mm d'écart ; peau sèche",""],
+ ["Bandage","distal → proximal ; recouvrement 1/2 à 2/3 ; extrémités visibles",""],
+ ["Surveillance d'un bandage","couleur, chaleur, sensibilité, mobilité, douleur",""],
+ ["Sparadrap","sans tendre ; retirer lentement en maintenant la peau",""]]]);
+
+// ===== Plaies et cicatrisation en images =====
+const SCH2={
+phases:FIG(360,170,`<line x1='20' y1='70' x2='345' y2='70' stroke='#14323a' stroke-width='1.5' marker-end='url(#ar)'/>`+
+ [[20,40,"#c0392b","Hémostase","minutes"],[40,110,"#e67e22","Inflammation","J1 à J4 environ"],[110,210,"#e8505b","Prolifération","J4 à J21 environ"],[210,340,"#a56cc1","Remodelage","3 semaines à 1–2 ans"]].map(([a,b,c,t,d],i)=>
+ `<rect x='${a}' y='52' width='${b-a}' height='16' fill='${c}' opacity='.85'/>`+TX((a+b)/2,i%2?100:40,t,"text-anchor='middle' font-weight='700' font-size='10'")+TX((a+b)/2,i%2?112:28,d,"text-anchor='middle' font-size='9'")).join("")+
+ LINES(20,132,["Caillot, puis nettoyage par les globules blancs ;","bourgeon rouge qui comble la plaie ; la peau recouvre ;","la cicatrice se resserre et pâlit pendant des mois."],"font-size='9.5'",12),
+ "Les quatre phases de la cicatrisation. Elles se chevauchent ; les durées varient selon la plaie et le patient."),
+couleurs:FIG(360,175,[["#1d1d1d","Noir","nécrose","Détersion sur avis","(ne pas laisser sécher)"],["#e3c34a","Jaune","fibrine","Détersion, milieu","humide"],["#d83a3a","Rouge","bourgeon","Garder humide,","protéger"],["#f2a5b5","Rose","épithélialisation","Protéger","(pansement mince)"]].map(([c,n,t,a,b],i)=>{const x=12+i*87;
+ return `<rect x='${x}' y='12' width='78' height='56' rx='10' fill='${c}'/>`+TX(x+39,86,n,"text-anchor='middle' font-weight='700'")+TX(x+39,99,t,"text-anchor='middle' font-size='9.5'")+TX(x+39,124,a,"text-anchor='middle' font-size='9'")+TX(x+39,136,b,"text-anchor='middle' font-size='9'")}).join("")+
+ `<line x1='14' y1='150' x2='344' y2='150' stroke='#14323a' marker-end='url(#ar)'/>`+TX(180,166,"La plaie évolue normalement du noir vers le rose","text-anchor='middle' font-size='10'"),
+ "Lecture d'une plaie par sa couleur. On note le pourcentage de chaque couleur, par exemple : 50 % fibrine, 50 % bourgeon."),
+intention:FIG(360,180,
+ `<rect x='10' y='10' width='165' height='130' rx='10' fill='#f7f7f2'/>`+TX(92,28,"Première intention","text-anchor='middle' font-weight='700'")+
+ `<rect x='30' y='50' width='125' height='10' fill='#e3a982'/><rect x='30' y='60' width='125' height='30' fill='#f2c9a8'/><rect x='30' y='90' width='125' height='25' fill='#fbe3b5'/><line x1='92' y1='50' x2='92' y2='105' stroke='#c0392b' stroke-width='1.5'/>`+
+ [70,92,114].map(x=>`<path d='M${x-8},50 C${x-9},80 ${x+9},80 ${x+8},50' fill='none' stroke='#1d4ed8' stroke-width='1.6'/>`).join("")+LINES(20,128,["Berges rapprochées (suture) :","cicatrice fine, en 1 à 2 semaines"],"font-size='9'",11)+
+ `<rect x='185' y='10' width='165' height='130' rx='10' fill='#f7f7f2'/>`+TX(267,28,"Seconde intention","text-anchor='middle' font-weight='700'")+
+ `<path d='M205,50 L240,50 L252,96 L282,96 L294,50 L330,50 L330,115 L205,115 Z' fill='#f2c9a8'/><rect x='205' y='50' width='35' height='10' fill='#e3a982'/><rect x='294' y='50' width='36' height='10' fill='#e3a982'/><path d='M240,50 L252,96 L282,96 L294,50' fill='none' stroke='#c0392b'/>`+
+ `<path d='M246,74 Q267,64 288,74 L282,96 L252,96 Z' fill='#d83a3a' opacity='.8'/><path d='M267,70 L267,58' stroke='#14323a' marker-end='url(#ar)'/>`+LINES(195,128,["Plaie ouverte : le bourgeon","comble par le fond (semaines)"],"font-size='9'",11)+
+ TX(180,165,"Plaie souillée, morsure, perte de substance : souvent seconde intention","text-anchor='middle' font-size='9.5'"),
+ "Deux façons de cicatriser."),
+escarre:FIG(360,200,[0,1,2,3].map(i=>{const x=8+i*88,w=80;let s=`<rect x='${x}' y='20' width='${w}' height='9' fill='#e3a982'/><rect x='${x}' y='29' width='${w}' height='26' fill='#f2c9a8'/><rect x='${x}' y='55' width='${w}' height='30' fill='#fbe3b5'/><rect x='${x}' y='85' width='${w}' height='22' fill='#d98a8a'/><rect x='${x}' y='107' width='${w}' height='14' fill='#e8e2d0'/>`;
+ const c=x+w/2;
+ if(i===0)s+=`<rect x='${c-18}' y='20' width='36' height='9' fill='#c0392b' opacity='.75'/>`;
+ if(i===1)s+=`<path d='M${c-16},20 Q${c},40 ${c+16},20 Z' fill='#fff' stroke='#c0392b'/>`;
+ if(i===2)s+=`<path d='M${c-20},20 L${c-14},68 L${c+14},68 L${c+20},20 Z' fill='#fff' stroke='#c0392b'/>`;
+ if(i===3)s+=`<path d='M${c-22},20 L${c-14},116 L${c+14},116 L${c+22},20 Z' fill='#fff' stroke='#c0392b'/>`;
+ s+=TX(c,140,"Stade "+(i+1),"text-anchor='middle' font-weight='700'")+LINES(c,153,[["Rougeur qui ne","blanchit pas,","peau intacte"],["Perte du derme","superficiel,","phlyctène"],["Toute la peau,","graisse","visible"],["Muscle, tendon","ou os","exposés"]][i],"text-anchor='middle' font-size='8.8'",10.5);return s}).join(""),
+ "Stades de l'escarre, vus en coupe (couches : épiderme, derme, graisse, muscle, os)."),
+appui:FIG(360,170,`<rect x='20' y='96' width='320' height='10' rx='4' fill='#d9d2c0'/>`+
+ `<path d='M40,92 C40,72 60,64 78,66 L120,72 C150,58 190,58 230,66 L292,70 C310,72 322,80 322,92 Z' fill='#f2c9a8' stroke='#c99a78'/><circle cx='54' cy='70' r='18' fill='#f2c9a8' stroke='#c99a78'/>`+
+ [[46,90,"occiput"],[110,92,"omoplates"],[178,92,"sacrum"],[248,92,"fesses, coccyx"],[316,92,"talons"]].map(([x,y,t])=>`<circle cx='${x}' cy='${y}' r='6' fill='#c0392b' opacity='.8'/>`+TX(x,126,t,"text-anchor='middle' font-size='9'")).join("")+
+ TX(180,30,"Sur le dos : points d'appui à surveiller","text-anchor='middle' font-weight='700' font-size='10'")+LINES(180,146,["Sur le côté : oreille, épaule, hanche (trochanter), genou, malléole."],"text-anchor='middle' font-size='9.5'"),
+ "Zones à risque d'escarre chez une personne allongée. Changer la position, soulager les appuis, inspecter la peau chaque jour."),
+mesure:FIG(360,190,TOPSKIN(150)+`<ellipse cx='150' cy='92' rx='70' ry='42' fill='#d83a3a' opacity='.85'/><ellipse cx='130' cy='84' rx='22' ry='14' fill='#e3c34a'/>`+
+ `<line x1='150' y1='44' x2='150' y2='140' stroke='#14323a' stroke-dasharray='4 3'/><line x1='76' y1='92' x2='224' y2='92' stroke='#14323a' stroke-dasharray='4 3'/>`+
+ TX(150,40,"12 h (vers la tête)","text-anchor='middle' font-size='9.5'")+TX(230,96,"3 h","font-size='9.5'")+TX(150,156,"6 h","text-anchor='middle' font-size='9.5'")+TX(52,96,"9 h","font-size='9.5'")+
+ TX(158,66,"L","font-weight='700'")+TX(190,88,"l","font-weight='700'")+
+ LINES(245,40,["L : longueur, dans","l'axe tête-pieds","l : largeur, à angle droit","P : profondeur, avec","un écouvillon stérile","","Décollement : noter","son heure (ex. à 2 h)","Photo datée, avec","une réglette"],"font-size='9.5'",12),
+ "Mesurer une plaie : toujours de la même façon, pour comparer d'une semaine à l'autre."),
+cicatrices:FIG(360,170,[["Normale","plane, fine,","pâlit en quelques mois",`<path d='M24,70 L96,70' stroke='#e0a0a0' stroke-width='3'/>`],["Hypertrophique","épaisse, dans les limites,","s'améliore souvent",`<path d='M146,70 L214,70' stroke='#c0392b' stroke-width='9' stroke-linecap='round'/>`],["Chéloïde","déborde de la plaie,","ne régresse pas seule",`<path d='M262,70 C270,52 330,52 338,70 C330,88 270,88 262,70 Z' fill='#b0413e'/><path d='M282,70 L318,70' stroke='#ffd' stroke-width='1' stroke-dasharray='2 2'/>`]].map(([t,a,b,d],i)=>{const x=10+i*118;
+ return `<rect x='${x}' y='30' width='108' height='80' rx='10' fill='#f2c9a8'/>`+d+TX(x+54,22,t,"text-anchor='middle' font-weight='700'")+TX(x+54,128,a,"text-anchor='middle' font-size='9'")+TX(x+54,140,b,"text-anchor='middle' font-size='9'")}).join("")+
+ TX(180,162,"Pointillés : limite de la plaie d'origine","text-anchor='middle' font-size='9'"),
+ "Normale, hypertrophique ou chéloïde : la différence tient au débordement hors de la plaie d'origine.")
+};
+
+L.push(
+{t:"Plaies et cicatrisation en images",s:"Comprendre, évaluer, mesurer et suivre une plaie jusqu'à la cicatrice.",
+f:[
+["Comment une plaie cicatrise","<p>Connaître les phases permet de savoir si une plaie évolue normalement.</p>"+SCH2.phases+SCH2.intention+"<ul><li><b>Plaie aiguë</b> : coupure, brûlure, plaie opératoire ; elle suit les phases normalement.</li><li><b>Plaie chronique</b> : pas de progrès après <b>4 à 6 semaines</b> ; escarre, ulcère de jambe, plaie du pied diabétique.</li><li><b>Ce qui ralentit</b> : diabète déséquilibré, dénutrition, tabac, mauvaise circulation, infection, appui, âge, certains médicaments (corticoïdes).</li><li>Au fenua, le <b>diabète</b> est fréquent : toute plaie du pied d'un diabétique se montre rapidement.</li></ul>"],
+["Évaluer une plaie : couleurs, exsudat, infection","<p>On décrit une plaie avec des mots précis, toujours dans le même ordre.</p>"+SCH2.couleurs+"<ul><li><b>Exsudat</b> (écoulement) : quantité (sec, faible, modéré, abondant), aspect (clair, trouble, purulent), odeur.</li><li><b>Bords</b> : nets, décollés, macérés (blancs et mous), calleux.</li><li><b>Peau autour</b> : rougeur, chaleur, eczéma, macération.</li><li><b>Signes d'infection</b> : rougeur qui s'étend, chaleur, douleur qui augmente, gonflement, pus, mauvaise odeur, fièvre, plaie qui se dégrade. On prévient le médecin.</li><li><b>Choix du pansement</b>, en grandes lignes : plaie qui coule beaucoup → pansement absorbant (alginate, mousse, hydrofibre) ; plaie sèche → pansement qui hydrate (hydrogel) ; bourgeon → maintenir humide et protéger (interface, hydrocolloïde) ; épithélialisation → pansement mince protecteur. Le protocole du service et la prescription décident.</li></ul>"],
+["Mesurer et suivre","<p>Une plaie se mesure et se photographie toujours de la même façon : sinon, on ne peut pas dire si elle s'améliore.</p>"+SCH2.mesure+"<ul><li><b>Surface approchée</b> = longueur × largeur. Exemple : 4 cm × 3 cm ≈ 12 cm².</li><li><b>Suivi</b> : mesurer chaque semaine. Une surface qui diminue de <b>moitié environ en 4 semaines</b> laisse prévoir une bonne évolution ; sinon, on réévalue la prise en charge avec le médecin.</li><li><b>Douleur</b> : l'évaluer avant, pendant et après le soin ; prévoir un antalgique avant si besoin, sur prescription.</li><li><b>Traçabilité</b> : date, mesures, couleurs en %, exsudat, peau autour, pansement posé, prochaine réfection.</li></ul>"],
+["Escarres et cicatrices","<p>L'escarre est une plaie évitable dans la grande majorité des cas.</p>"+SCH2.escarre+SCH2.appui+"<ul><li><b>Prévenir</b> : changer de position régulièrement, matelas adapté, protéger les talons, peau propre et sèche, alimentation et hydratation suffisantes.</li><li><b>Stade 1</b> : appuyer du doigt sur la rougeur ; si elle ne blanchit pas, c'est déjà une escarre. On supprime l'appui.</li><li>On <b>ne masse pas</b> une rougeur d'appui.</li></ul>"+SCH2.cicatrices+"<ul><li><b>Prendre soin d'une cicatrice</b> : hydrater, masser doucement une fois fermée (sur avis), <b>protéger du soleil</b> pendant au moins un an.</li><li><b>Chéloïdes</b> : plus fréquentes sur certaines zones (épaules, haut du dos, poitrine, lobes d'oreille) et chez les personnes à peau foncée ; un antécédent de chéloïde se signale avant une chirurgie ou un piercing.</li></ul>"]],
+q:[
+["Dans quel ordre se succèdent les phases de la cicatrisation ?",["Hémostase, inflammation, prolifération, remodelage","Remodelage, prolifération, inflammation, hémostase","Inflammation, remodelage, hémostase","Prolifération, hémostase, remodelage"],"Elles se chevauchent en partie."],
+["Le remodelage d'une cicatrice peut durer…",["jusqu'à un à deux ans","une semaine","trois jours","toujours moins d'un mois"],"La cicatrice pâlit et s'assouplit lentement."],
+["Une plaie suturée cicatrise en…",["première intention","seconde intention","troisième intention","aucune intention"],"Les berges sont rapprochées."],
+["Un tissu jaune, collant, au fond d'une plaie, c'est…",["de la fibrine","du bourgeon","de l'épithélialisation","de la nécrose"],"Il gêne la cicatrisation."],
+["Un tissu rouge, granuleux, qui saigne facilement, c'est…",["le bourgeon","la nécrose","la fibrine","une infection obligatoirement"],"C'est bon signe ; on le protège."],
+["Une plaie qui coule beaucoup appelle un pansement…",["absorbant (alginate, mousse, hydrofibre)","qui hydrate (hydrogel)","sec et serré","aucun pansement"],"Selon le protocole."],
+["Bords d'une plaie blancs et mous : on parle de…",["macération","nécrose","bourgeon","chéloïde"],"Trop d'humidité sur la peau autour."],
+["Plaie de 5 cm de long sur 2 cm de large : surface approchée ?",["10 cm²","7 cm²","25 cm²","2,5 cm²"],"5 × 2."],
+["Dans la méthode horaire, 12 h indique…",["la direction de la tête","l'heure du soin","le côté gauche","la profondeur maximale"],"On repère ainsi un décollement."],
+["Rougeur au sacrum qui ne blanchit pas sous la pression du doigt : c'est…",["une escarre de stade 1","une peau normale","un hématome sans importance","une allergie"],"On supprime l'appui."],
+["Une escarre avec os ou tendon visible est de stade…",["4","1","2","3"],"Stade 3 : graisse visible, sans os ni tendon."],
+["Une chéloïde…",["déborde de la plaie d'origine","reste dans les limites et s'améliore toujours","est une infection","est une cicatrice normale"],"La cicatrice hypertrophique, elle, reste dans les limites."]],
+c:[
+{t:"Le talon de M. Teriitehau",s:"M. Teriitehau, 82 ans, diabétique, alité depuis une semaine. Son talon droit présente une zone noire et sèche de 2 cm, entourée de rougeur.",o:[
+ ["Tu supprimes tout appui sur le talon, tu mesures, tu photographies, tu notes, et tu préviens le médecin sans toucher à la nécrose.",2,"Diabète et nécrose du talon : avis médical ; on soulage l'appui."],
+ ["Tu enlèves la croûte noire pour nettoyer.",0,"Une détersion se décide et se fait sur avis, surtout chez un diabétique."],
+ ["Tu masses le talon pour faire circuler le sang.",0,"Le massage abîme les tissus déjà fragiles."],
+ ["Tu poses un pansement et tu reviendras demain.",1,"Le soin est fait, mais l'appui et l'avis médical manquent."]]},
+{t:"La plaie qui ne bouge pas",s:"Une plaie de jambe mesure 6 cm × 4 cm depuis cinq semaines. Elle est couverte de fibrine à 70 %, sans signe d'infection.",o:[
+ ["Tu signales au médecin une plaie qui ne progresse pas depuis plus d'un mois et tu demandes une réévaluation (cause, circulation, pansement).",2,"Sans progrès en 4 à 6 semaines, on recherche la cause."],
+ ["Tu continues le même pansement : c'est long, une plaie.",0,"Cinq semaines sans progrès, ce n'est pas normal."],
+ ["Tu changes de pansement chaque jour, au hasard.",0,"Sans évaluation ni cause recherchée."],
+ ["Tu notes les mesures sans rien dire.",1,"La trace est bonne, mais personne ne réagit."]]}],
+o:[
+["IDE","Décrivez comment vous évaluez une plaie à chaque réfection.",["Mesures et localisation","Couleurs en pourcentage","Exsudat et odeur","Bords et peau autour","Douleur, signes d'infection, traçabilité"]],
+["CDS","Comment prévenez-vous les escarres dans votre service ?",["Évaluation du risque à l'entrée","Changements de position","Matelas et protection des talons","Peau, nutrition, hydratation","Inspection quotidienne et traçabilité"]]],
+e:["Rédige la transmission écrite d'une plaie de sacrum que tu viens de refaire, puis le plan de prévention pour ce patient.",["Localisation, mesures, stade","Couleurs en %, exsudat, odeur","Bords, peau autour, douleur","Pansement posé et prochaine réfection","Suppression de l'appui, positions","Nutrition et hydratation","Avis demandé si besoin"]]}
+);
+AT.push({t:"Plaies : évaluer et mesurer",lv:"Moyen",it:[
+ {k:"num",q:"Plaie de 4 cm × 3 cm. Surface approchée en cm² ?",a:12,tol:0,u:"cm²",x:"Longueur × largeur."},
+ {k:"num",q:"Une semaine plus tard : 3 cm × 2 cm. Surface en cm² ?",a:6,tol:0,u:"cm²",x:"Elle a diminué de moitié : bonne évolution."},
+ {k:"num",q:"Diminution de surface entre 12 et 6 cm², en % ?",a:50,tol:0,u:"%",x:"(12 − 6) ÷ 12 × 100."},
+ {k:"num",q:"Sans progrès au bout de combien de semaines, au plus, parle-t-on de plaie chronique ?",a:6,tol:0,u:"semaines",x:"4 à 6 semaines."},
+ {k:"num",q:"Stade d'une escarre où la graisse est visible, sans os ni tendon ?",a:3,tol:0,u:"",x:"Stade 4 : muscle, tendon ou os exposés."},
+ {k:"ord",q:"Évolution normale des couleurs d'une plaie : remets dans l'ordre.",it:["Noir : nécrose","Jaune : fibrine","Rouge : bourgeon","Rose : épithélialisation"],x:"Du noir vers le rose."},
+ {k:"ord",q:"Phases de la cicatrisation : remets dans l'ordre.",it:["Hémostase","Inflammation","Prolifération","Remodelage"],x:"Le remodelage dure des mois."},
+ {k:"ord",q:"Réfection d'un pansement de plaie : remets dans l'ordre.",it:["Évaluer la douleur, antalgique si prescrit","Retirer l'ancien pansement et regarder ce qu'il contient","Nettoyer la plaie","Évaluer : mesures, couleurs, exsudat, bords","Poser le pansement adapté","Tracer et prévoir la prochaine réfection"],x:"On évalue avant de choisir le pansement."}]});
+SIMMAP.push("at3");
+REP.push(["Plaies et cicatrisation",[
+ ["Phases","hémostase, inflammation (J1–J4), prolifération (J4–J21), remodelage (jusqu'à 1–2 ans)",""],
+ ["Couleurs","noir nécrose · jaune fibrine · rouge bourgeon · rose épithélialisation",""],
+ ["Plaie chronique","pas de progrès en 4 à 6 semaines",""],
+ ["Mesure","longueur (axe tête-pieds) × largeur ; profondeur ; méthode horaire, 12 h vers la tête",""],
+ ["Bonne évolution","surface environ divisée par deux en 4 semaines",""],
+ ["Escarre","stade 1 rougeur qui ne blanchit pas → stade 4 os, tendon, muscle",""],
+ ["Cicatrice","protéger du soleil au moins un an ; chéloïde : déborde de la plaie",""]]]);
+
 const IND={},EV=[],CHAINS=[],SIMCFG={st:{},w:{},crit:[],cap:()=>false,none:{},grades:["","","",""],title:"",head:"",intro:"",start:""};
 function atelier(n,done,back){const A=AT[n],D=dif(),tmax=D===2?60:D===1?120:0;let i=0,pts=0;AUSRC=null;
   const fmtn=v=>String(v).replace(".",",").replace(/\B(?=(\d{3})+(?!\d))/g," ");
@@ -3382,7 +3643,7 @@ function go(v,a,b){halt();AUSRC=null;window.scrollTo(0,0);setNav(v);({home,parco
 
 /* ---------- Écrans ---------- */
 function home(){const n=curDay(),l=Math.floor(n/5),d=n%5,{r,nx}=rank(),pct=Math.round(n/NS*100);
-  app.innerHTML=`<div class="band"></div><button class="chg" id="chg">⇄ Voies</button><h1>Soins infirmiers et urgences</h1><p class="mut">Gestes d'urgence, voie veineuse, plaies et sutures, médicaments</p>
+  app.innerHTML=`<div class="band"></div><button class="chg" id="chg">⇄ Voies</button><h1>Soins infirmiers et urgences</h1><p class="mut">Urgences, voie veineuse, sutures, bandages, plaies et cicatrisation, médicaments</p>
   <div class="card hero">${n<NS?`<small>Séance ${n+1} sur ${NS} · Niveau ${l+1}</small><h2 style="margin:4px 0">${L[l].t}</h2><small>${DAYN[d]} · environ ${plan(l,d).reduce((s,x)=>s+x.m,0)} min</small><button class="btn wh" id="goDay">Commencer la séance</button>`:`<h2 style="margin:4px 0">Parcours terminé 🎉</h2><small>Continue avec les révisions, les ateliers et les entretiens.</small>`}</div>
   <div class="card"><div class="row"><div class="stat"><b>${streak()}</b><small>jours de suite</small></div><div class="stat"><b>${S.xp}</b><small>points</small></div><div class="stat"><b>${pct}%</b><small>parcours</small></div></div>
   <div class="bar"><i style="width:${nx?Math.min(100,(S.xp-r[0])/(nx[0]-r[0])*100):100}%"></i></div><small>Grade : <b>${r[1]}</b>${nx?` · prochain : ${nx[1]} à ${nx[0]} points`:""}</small></div>
@@ -3521,7 +3782,7 @@ function simHub(){const back=()=>go("exam");
   document.getElementById("dl").onclick=()=>dilem(sc=>end("dil",sc,simHub),simHub)}
 
 /* ===================== INSTALLATION ET MISE À JOUR ===================== */
-const APP_V="2026.11.14.2";let INST=null,SWR=null;
+const APP_V="2026.11.14.3";let INST=null,SWR=null;
 const standalone=()=>{try{return matchMedia("(display-mode: standalone)").matches||navigator.standalone===true}catch(e){return false}};
 try{window.addEventListener("beforeinstallprompt",e=>{e.preventDefault();INST=e;const b=document.getElementById("inst");if(b)b.style.display="block"})}catch(e){}
 try{if("serviceWorker" in navigator&&location.protocol==="https:"&&!/claude\.ai|claudeusercontent/.test(location.host))navigator.serviceWorker.register("sw.js").then(r=>{SWR=r;r.addEventListener("updatefound",()=>{const w=r.installing;if(w)w.addEventListener("statechange",()=>{if(w.state==="installed"&&navigator.serviceWorker.controller)toast("Nouvelle version disponible : Profil → Mettre à jour.")})})}).catch(()=>{})}catch(e){}
@@ -4192,7 +4453,7 @@ function simHub(){const back=()=>go("exam");
   document.getElementById("dl").onclick=()=>dilem(sc=>end("dil",sc,simHub),simHub)}
 
 /* ===================== INSTALLATION ET MISE À JOUR ===================== */
-const APP_V="2026.11.14.2";let INST=null,SWR=null;
+const APP_V="2026.11.14.3";let INST=null,SWR=null;
 const standalone=()=>{try{return matchMedia("(display-mode: standalone)").matches||navigator.standalone===true}catch(e){return false}};
 try{window.addEventListener("beforeinstallprompt",e=>{e.preventDefault();INST=e;const b=document.getElementById("inst");if(b)b.style.display="block"})}catch(e){}
 try{if("serviceWorker" in navigator&&location.protocol==="https:"&&!/claude\.ai|claudeusercontent/.test(location.host))navigator.serviceWorker.register("sw.js").then(r=>{SWR=r;r.addEventListener("updatefound",()=>{const w=r.installing;if(w)w.addEventListener("statechange",()=>{if(w.state==="installed"&&navigator.serviceWorker.controller)toast("Nouvelle version disponible : Profil → Mettre à jour.")})})}).catch(()=>{})}catch(e){}
@@ -4808,7 +5069,7 @@ function simHub(){const back=()=>go("exam");
   document.getElementById("dl").onclick=()=>dilem(sc=>end("dil",sc,simHub),simHub)}
 
 /* ===================== INSTALLATION ET MISE À JOUR ===================== */
-const APP_V="2026.11.14.2";let INST=null,SWR=null;
+const APP_V="2026.11.14.3";let INST=null,SWR=null;
 const standalone=()=>{try{return matchMedia("(display-mode: standalone)").matches||navigator.standalone===true}catch(e){return false}};
 try{window.addEventListener("beforeinstallprompt",e=>{e.preventDefault();INST=e;const b=document.getElementById("inst");if(b)b.style.display="block"})}catch(e){}
 try{if("serviceWorker" in navigator&&location.protocol==="https:"&&!/claude\.ai|claudeusercontent/.test(location.host))navigator.serviceWorker.register("sw.js").then(r=>{SWR=r;r.addEventListener("updatefound",()=>{const w=r.installing;if(w)w.addEventListener("statechange",()=>{if(w.state==="installed"&&navigator.serviceWorker.controller)toast("Nouvelle version disponible : Profil → Mettre à jour.")})})}).catch(()=>{})}catch(e){}
@@ -5308,7 +5569,7 @@ function simHub(){const back=()=>go("exam");
   document.getElementById("dl").onclick=()=>dilem(sc=>end("dil",sc,simHub),simHub)}
 
 /* ===================== INSTALLATION ET MISE À JOUR ===================== */
-const APP_V="2026.11.14.2";let INST=null,SWR=null;
+const APP_V="2026.11.14.3";let INST=null,SWR=null;
 const standalone=()=>{try{return matchMedia("(display-mode: standalone)").matches||navigator.standalone===true}catch(e){return false}};
 try{window.addEventListener("beforeinstallprompt",e=>{e.preventDefault();INST=e;const b=document.getElementById("inst");if(b)b.style.display="block"})}catch(e){}
 try{if("serviceWorker" in navigator&&location.protocol==="https:"&&!/claude\.ai|claudeusercontent/.test(location.host))navigator.serviceWorker.register("sw.js").then(r=>{SWR=r;r.addEventListener("updatefound",()=>{const w=r.installing;if(w)w.addEventListener("statechange",()=>{if(w.state==="installed"&&navigator.serviceWorker.controller)toast("Nouvelle version disponible : Profil → Mettre à jour.")})})}).catch(()=>{})}catch(e){}
@@ -5356,7 +5617,7 @@ window.addEventListener("hashchange",()=>{const h=location.hash.slice(1);if(["ho
 /* ===================== ÉCRAN D'ENTRÉE : CHOIX DE LA VOIE ===================== */
 (function(){
 "use strict";
-const V="2026.11.14.2",app=document.getElementById("app");
+const V="2026.11.14.3",app=document.getElementById("app");
 const ls=k=>{try{return localStorage.getItem(k)}catch(e){return null}};
 const js=k=>{try{return JSON.parse(ls(k)||"null")}catch(e){return null}};
 function toast(t){let d=document.getElementById("tst");if(!d){d=document.createElement("div");d.id="tst";d.style.cssText="position:fixed;left:12px;right:12px;bottom:24px;background:#14323a;color:#fff;padding:12px 14px;border-radius:12px;font-size:14.5px;z-index:9";document.body.appendChild(d)}d.textContent=t;d.style.display="block";clearTimeout(d._t);d._t=setTimeout(()=>d.style.display="none",4200)}
