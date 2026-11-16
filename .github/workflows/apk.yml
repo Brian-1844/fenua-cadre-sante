@@ -33,7 +33,7 @@ jobs:
           echo "KS_PASS=${{ secrets.KEYSTORE_PASS }}" >> $GITHUB_ENV
           echo "KS_ALIAS=${{ secrets.KEYSTORE_ALIAS }}" >> $GITHUB_ENV
       - name: Construire
-        run: gradle -p android assembleRelease -PappUrl="$URL" -PvName="$V" -PvCode="${{ github.run_number }}"
+        run: gradle -p android assembleRelease -PappUrl="$URL" -PvName="$V" -PvCode="$(date -u +%y%j%H%M)"
       - name: Publier la Release
         env: { GH_TOKEN: '${{ github.token }}' }
         run: |
